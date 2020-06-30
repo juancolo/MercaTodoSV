@@ -75,6 +75,24 @@
                                     <a class="dropdown-item" href="login.html"> Registrate</a>
                                 </div>
                             </li>
+
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown_5" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        Cerrar sesión
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+                                </div>
+                            </li>
                                 @endguest
                             <li class="nav-item">
                                 <a class="nav-link" href="contact.html">Contactanos</a>
@@ -95,19 +113,7 @@
             </div>
         </div>
     </div>
-    <div class="search_input" id="search_input_box">
-        <div class="container ">
-            <form class="d-flex justify-content-between search-inner">
-                <input type="text" class="form-control" id="search_input" placeholder="Encuentra lo que deseas">
-                <button type="submit" class="btn"></button>
-                <span class="ti-close" id="close_search" title="Close Search"></span>
-            </form>
-        </div>
-        <br>
-        <br>
-        <br>
-        <br>
-    </div>
+
     @yield('header')
 </header>
 <!-- Header part end-->
