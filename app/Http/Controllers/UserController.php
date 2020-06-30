@@ -16,15 +16,10 @@ class UserController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+public function __construct()
+{
+$this->middleware('admin');
+}
 
 public function index()
 {
@@ -55,7 +50,7 @@ public function index()
 
         $user->update();
 
-        return redirect('admin.index');
+        return redirect(route('admin.index'));
 
 
     }
