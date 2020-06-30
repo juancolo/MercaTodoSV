@@ -33,7 +33,7 @@
         <div class="row align-items-center">
             <div class="container">
                 <nav class="navbar navbar-expand-lg navbar-dark">
-                    <a class="navbar-brand" href="{{route('store.landing')}}"> <img src="img/logo.png" alt="logo"></a>
+                    <a class="navbar-brand" href="{{route('store.landing')}}"> <img src="{{asset('img/logo.png')}}" alt="logo"></a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse"
                             data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
@@ -50,7 +50,7 @@
                                 <a class="nav-link"></a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="template.blade.php">Inicio</a>
+                                <a class="nav-link" href="{{route('store.landing')}}">Inicio</a>
                             </li>
 
                             <li class="nav-item dropdown">
@@ -74,7 +74,7 @@
                                     <a class="dropdown-item" href="login.html"> login</a>
                                     <a class="dropdown-item" href="login.html"> Registrate</a>
                                 </div>
-                            </li>
+
                                 @endguest
                             <li class="nav-item">
                                 <a class="nav-link" href="contact.html">Contactanos</a>
@@ -87,7 +87,12 @@
                                     Salir
                                 </a>
                             </li>
+                                @elseif(Auth::user()->role =='Administrador')
+                                    <a href="{{ route('admin.index')}}" class="btn btn-default"> Administrador</a>s
+
                             @endif
+
+
 
                         </ul>
                     </div>
@@ -95,19 +100,7 @@
             </div>
         </div>
     </div>
-    <div class="search_input" id="search_input_box">
-        <div class="container ">
-            <form class="d-flex justify-content-between search-inner">
-                <input type="text" class="form-control" id="search_input" placeholder="Encuentra lo que deseas">
-                <button type="submit" class="btn"></button>
-                <span class="ti-close" id="close_search" title="Close Search"></span>
-            </form>
-        </div>
-        <br>
-        <br>
-        <br>
-        <br>
-    </div>
+
     @yield('header')
 </header>
 <!-- Header part end-->

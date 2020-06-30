@@ -10,62 +10,62 @@ use Symfony\Component\Console\Input\Input;
 class UserController extends Controller
 {
 
-/*public function __construct()
+public function __construct()
 {
 $this->middleware('admin');
-}*/
+}
 
 public function index()
 {
-$users = User::get();
+    $users = User::get();
 
-return view('admin.usermanage',['users'=>$users]);
+    return view('admin.usermanage',['users'=>$users]);
 }
 
-public function create()
-{
-return view('admin.create');
-}
+    public function create()
+    {
+        return view('admin.create');
+    }
 
-public function store(Request $request)
-{
-//
-}
+    public function store(Request $request)
+    {
+    //
+    }
 
-public function update(Request $request, $id)
-{
-$user = User::findOrFail($id);
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
 
-$user->name = $request->get('name');
-$user->email = $request->get('email');
-$user->role = $request->get('role_id');
-//$user->role = request('role_id');
-//$user->name = $request->get('name');
+        $user->name = $request->get('name');
+        $user->email = $request->get('email');
+        $user->role = $request->get('role_id');
+        //$user->role = request('role_id');
+        //$user->name = $request->get('name');
 
-$user->update();
+        $user->update();
 
-return redirect('admin');
+        return redirect(route('admin.index'));
 
 
-}
+    }
 
-public function show($id)
-{
-//
-}
+    public function show($id)
+    {
+        //
+    }
 
-public function edit($id)
-{
-return view('admin/edit', ['user'=> User::findOrFail($id)]);
+    public function edit($id)
+    {
+        return view('admin.editusers', ['user'=> User::findOrFail($id)]);
 
-}
+    }
 
-public function destroy($id)
-{
-$user = User::findOrFail($id);
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
 
-$user->delete();
+        $user->delete();
 
-return redirect('admin');
-}
+        return redirect('');
+    }
 }
