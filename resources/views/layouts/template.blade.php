@@ -71,8 +71,8 @@
                                     Ingresar
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown_2">
-                                    <a class="dropdown-item" href="login.html"> login</a>
-                                    <a class="dropdown-item" href="login.html"> Registrate</a>
+                                    <a class="dropdown-item" href="{{route('login')}}"> login</a>
+                                    <a class="dropdown-item" href="{{route('register')}}"> Registrate</a>
                                 </div>
 
                                 @endguest
