@@ -9,5 +9,11 @@ Route::get('/', function () {
 
 Auth::routes(['verify'=>true]);
 
+<<<<<<< Updated upstream
 Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
-Route::view('/index', 'layouts.landing');
+=======
+Route::get('/', 'HomeController@index')->name('home')->middleware('verified');
+Route::view('/home', 'store.landing')->name('store.landing');
+Route::resource('/admin', 'UserController');
+
+>>>>>>> Stashed changes
