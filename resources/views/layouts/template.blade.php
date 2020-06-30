@@ -33,7 +33,7 @@
         <div class="row align-items-center">
             <div class="container">
                 <nav class="navbar navbar-expand-lg navbar-dark">
-                    <a class="navbar-brand" href="{{route('store.landing')}}"> <img src="img/logo.png" alt="logo"></a>
+                    <a class="navbar-brand" href="{{route('store.landing')}}"> <img src="{{asset('img/logo.png')}}" alt="logo"></a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse"
                             data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
@@ -50,7 +50,7 @@
                                 <a class="nav-link"></a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="template.blade.php">Inicio</a>
+                                <a class="nav-link" href="{{route('store.landing')}}">Inicio</a>
                             </li>
 
                             <li class="nav-item dropdown">
@@ -74,25 +74,7 @@
                                     <a class="dropdown-item" href="login.html"> login</a>
                                     <a class="dropdown-item" href="login.html"> Registrate</a>
                                 </div>
-                            </li>
 
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown_5" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        Cerrar sesión
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
                                 @endguest
                             <li class="nav-item">
                                 <a class="nav-link" href="contact.html">Contactanos</a>
@@ -105,7 +87,12 @@
                                     Salir
                                 </a>
                             </li>
+                                @elseif(Auth::user()->role =='Administrador')
+                                    <a href="{{ route('admin.index')}}" class="btn btn-default"> Administrador</a>s
+
                             @endif
+
+
 
                         </ul>
                     </div>

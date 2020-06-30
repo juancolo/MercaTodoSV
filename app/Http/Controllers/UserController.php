@@ -10,10 +10,10 @@ use Symfony\Component\Console\Input\Input;
 class UserController extends Controller
 {
 
-/*public function __construct()
+public function __construct()
 {
 $this->middleware('admin');
-}*/
+}
 
 public function index()
 {
@@ -44,7 +44,7 @@ public function index()
 
         $user->update();
 
-        return redirect('admin.index');
+        return redirect(route('admin.index'));
 
 
     }
