@@ -9,4 +9,6 @@ Route::get('/', function () {
 
 Auth::routes(['verify'=>true]);
 
-Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
+Route::get('/', 'HomeController@index')->name('home')->middleware('verified');
+Route::view('/home', 'store.landing')->name('store.landing');
+Route::resource('/admin', 'UserController');
