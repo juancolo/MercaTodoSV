@@ -10,6 +10,7 @@
                 <th scope="col">#</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Correo Electrónico</th>
+                <th scope="col">Rol</th>
                 <th scope="col">Opciones</th>
 
             </tr>
@@ -21,6 +22,8 @@
 
                     <td>{{$info->name}}</td>
                     <td>{{$info->email}}</td>
+                    <td>{{$info->role}}</td>
+
                     <td>
 
 
