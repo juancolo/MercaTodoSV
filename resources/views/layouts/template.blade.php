@@ -87,8 +87,8 @@
                                     Salir
                                 </a>
                             </li>
-                                @elseif(Auth::user()->role =='Administrador')
-                                    <a href="{{ route('admin.index')}}" class="btn btn-default"> Administrador</a>s
+
+                                    <a href="{{ route('admin.index')}}" class="btn btn-default"> Administrador</a>
 
                             @endif
 
