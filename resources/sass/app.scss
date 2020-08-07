@@ -1,8 +1,10 @@
-// Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@charset "utf-8";
 
 // Variables
-@import 'variables';
+@import "components/variables";
 
-// Bootstrap
-@import '~bootstrap/scss/bootstrap';
+//  Layouts
+@import "layout/main";
+
+// Components
+@import "components/breadcrumbs";

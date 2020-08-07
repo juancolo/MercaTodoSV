@@ -9,15 +9,18 @@
                 <form method="post" action="{{route('admin.update', $user->id)}}" onreset="" >
                     @method('PUT')
                     @csrf
+
                     <aside>Acá podrá editar los usuarios</aside>
                     <div class="form-group">
                         <label for="name">Nombre</label>
-                        <input type="text" class="form-control" name="name"  value="{{$user->name}}" placeholder="Ingrese el nombre del usuario">
+                        <input type="text" class="form-control" name="name"  value="{{$user->name}}" placeholder="{{old('name')}}">
+
                     </div>
+
 
                     <div class="form-group">
                         <label for="email">Correo Electrónico</label>
-                        <input type="email" class="form-control" name="email" value="{{$user->email}}" placeholder="Ingrese el correo del usuario">
+                        <input type="email" class="form-control" name="email" value="{{$user->email}}" placeholder="{{old('email')}}">
                     </div>
 
                     <tbody>
@@ -25,11 +28,12 @@
                         <th> Opciones de usuario</th>
                         <td>
                         <label for="" >Rol</label>
-                        <select name="role_id" id="InputRole_id" class="form-control" value="Usuario">
+                        <select name="role_id" id="role_id" class="form-control">
 
                             <option hidden=""  value={{$user->role}}>{{$user->role}}</option>
-                            <option value="Administrador">Administrado</option>
-                            <option value="Usuario">Usuario</option>
+                            <option value="Administrador">Administrador</option>
+                            <option value="Cliente">Cliente</option>
+                        </select></td>
                         </select></td>
 
                         <td>
