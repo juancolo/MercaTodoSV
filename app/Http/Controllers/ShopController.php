@@ -26,7 +26,9 @@ class ShopController extends Controller
      */
     public function create()
     {
-        //
+        //$products = Product::orderBy('id');
+
+        return view('store.productEspecs');
     }
 
     /**
