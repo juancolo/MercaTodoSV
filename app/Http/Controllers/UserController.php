@@ -66,4 +66,5 @@ class UserController extends Controller {
                 ->route('admin.index')
                 ->with('info', 'Se ha eliminado el usuario correctamente');
 	}
+
 }
