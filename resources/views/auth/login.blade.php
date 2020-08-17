@@ -1,12 +1,13 @@
 @extends('layouts.mainlayout')
 
 @section('content')
+    <hr>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
-
+                <h4><div class="card-header">{{ __('Login') }}</div></h4>
+                <hr>
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
@@ -63,6 +64,7 @@
                                     </a>
                                 @endif
                             </div>
+
                         </div>
                     </form>
                 </div>
@@ -70,4 +72,6 @@
         </div>
     </div>
 </div>
+<hr>
 @endsection
+    <div class="footer" style="position: absolute; bottom: 0px;"></div>

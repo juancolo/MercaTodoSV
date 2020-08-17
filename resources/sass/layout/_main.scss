@@ -1,15 +1,12 @@
 html {
     box-sizing: border-box;
 }
-*, *:before, *:after {
-    box-sizing: inherit;
-}
 
 body {
     font-family: 'Roboto', Arial, sans-serif;
-    font-size: 20px;
-    font-weight: 300;
-    line-height: 1.6;
+    font-size: 17px;
+    font-weight: 200;
+    line-height: 1;
 }
 
 a {
@@ -37,8 +34,8 @@ h2 {
 }
 
 img {
-    max-width: 10%;
-    max-height: 50%;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .text-center {
@@ -50,9 +47,13 @@ img {
     margin: auto;
 }
 
+ul{
+    list-style: none;
+}
+
 .button {
     border: 1px solid $text-color;
-    padding: 120px 40px;
+    padding: 10px 40px;
 
     &:hover {
         color: $white;
@@ -75,21 +76,19 @@ img {
     margin: auto;
 }
 
-.button-container {
-    margin: 80px 0;
-}
-
-header {
+.header {
     background: url('/img/triangles.svg');
     background-size: cover;
     color: white;
-
+    width: 100%;
+    justify-content: space-between;
     img {
-        max-width: 90%;
-        max-height: 70%;
+        max-width: 100%;
+        max-height: 100%;
+        margin-left: 140px;
 
             p {
-                margin: 500px 500px;
+                margin: 100px 100px;
             }
 
             .button {
@@ -100,16 +99,33 @@ header {
     .top-nav {
         display: flex;
         justify-content: space-between;
-        padding: 20px 0;
+        padding: 5px 150px ;
+        border-bottom: beige;
+
+        img {
+            max-width: 5%;
+            max-height: 70%;
+            margin: 0px;
+
+            p {
+                margin: 500px 500px;
+            }
+
+            .button {
+                margin-right: 1400px;
+            }
+        }
+
 
         .logo {
-            font-weight: bold;
-            font-size: 50px;
+            max-width: 100%;
+            max-height: 100%;
         }
 
         ul {
+            list-style-type: none;
             display: flex;
-            //text-transform: uppercase;
+            text-transform: uppercase;
             justify-content: space-between;
             width: 30%;
 
@@ -122,7 +138,17 @@ header {
         }
     }
 }
+.sidebar {
+    h3 {
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
 
+    ul {
+        line-height: 2;
+        margin-bottom: 40px;
+    }
+}
 .hero {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -131,6 +157,8 @@ header {
     padding-bottom: 84px;
 
     .hero-image {
+        max-width: 100%;
+        max-height: 100%;
         padding-left: 60px;
     }
 
@@ -145,6 +173,7 @@ header {
 
     .button {
         margin-right: 14px;
+        color: $white;
     }
 }
 
@@ -155,6 +184,7 @@ header {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-gap: $gutter;
+        padding: 50px 0;
     }
 }
 
@@ -189,6 +219,9 @@ footer {
     background: $gray-background;
     color: $white;
     padding: 40px 0;
+    //position: absolute;
+    width: 100%;
+    bottom: 0px;
 
     .footer-content {
         display: flex;

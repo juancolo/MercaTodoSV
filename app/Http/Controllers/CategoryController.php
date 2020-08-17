@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Product;
 use Illuminate\Http\Request;
+use App\Category;
 
-class ProductController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,11 +13,8 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-
     {
-        $products = Product::inRandomOrder()->take(4)->get();
-
-        return view('store.landing')->with('products', $products);
+        //
     }
 
     /**
@@ -27,8 +24,8 @@ class ProductController extends Controller
      */
     public function create()
     {
+        return redirect(route('category.create'));
 
-        return view('admin.productcreate');
     }
 
     /**
@@ -39,17 +36,16 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        Product::create([
-        'name' => $request->input('name'),
-        'slug' => $request->input('slug'),
-        'details' => $request->input('details'),
-        'description' => $request->input('description'),
-        'price' => $request->input('price'),
-        'category' => $request->input('category'),
+        Category::create([
+            'name' => $request->input('name'),
+            'slug' => $request->input('slug'),
+            'details' => $request->input('details'),
+            'description' => $request->input('description'),
+            'price' => $request->input('price'),
+            'category' => $request->input('category'),
         ]);
 
         return redirect('/shop');
-
     }
 
     /**

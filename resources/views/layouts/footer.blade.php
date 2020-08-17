@@ -1,4 +1,7 @@
 <footer>
+    <div class="footer" style="
+    padding: 40px 0;
+    width: 100%;">
     <div class="footer-content container">
         <div class="made-with">Made with <i class="fa fa-heart heart"></i> by JuanCo</div>
         <ul>
@@ -9,4 +12,6 @@
             <li><a href="https://twitter.com/drehimself"><i class="fa fa-twitter"></i></a></li>
         </ul>
     </div> <!-- end footer-content -->
+    </div>
 </footer>
+

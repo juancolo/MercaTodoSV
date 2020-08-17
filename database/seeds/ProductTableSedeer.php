@@ -12,18 +12,21 @@ class ProductTableSedeer extends Seeder
      */
     public function run()
     {
-        Product::truncate();
         $product1 = new Product();
 
         $product1->name = 'Mackbook Pro 1';
-        $product1->slug = 'macbook-pro 1';
+        $product1->slug = 'macbook_pro_1';
         $product1->details = '15 inch, 1 TB SSD, 32 GB';
-        $product1->price =  2499;
+        $product1->actualPrice =  2499;
+        $product1->oldPrice =  2499;
         $product1->description = 'lorem asderwsewrsdfdfgdvxsdfw';
-        $product1->category =  1;
+        $product1->category_id =  1;
+        $product1->sales = 0;
+        $product1->visits = 0;
+        $product1->status = 0;
 
         $product1->save();
-
+/*
         $product2 = new Product();
 
         $product2->name = 'Mackbook Pro 2';
@@ -88,6 +91,6 @@ class ProductTableSedeer extends Seeder
         $product7->description = 'lorem asderwsewrsdfdfgdvxsdfw';
         $product7->category =  1;
 
-        $product7->save();
+        $product7->save();*/
     }
 }
