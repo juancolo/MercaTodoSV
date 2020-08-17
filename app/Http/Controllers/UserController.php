@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class UserController extends Controller {
@@ -13,9 +14,9 @@ class UserController extends Controller {
 	}
 
 	public function index() {
-		$users = User::get();
+		$users = User::orderBy('id', 'ASC')->paginate(15);
 
-		return view('admin.usermanage', ['users' => $users]);
+		return view('admin.usermanage', compact('users'));
 	}
 
 	public function create() {
@@ -27,11 +28,12 @@ class UserController extends Controller {
 		//
 	}
 
-	public function update(Request $request, string $id) {
+	public function update( $request, string $id) {
 
-		$user = new User::findOrFail($id);
+		$user = User::findOrFail($id);
 
-		$user->name  = $request->get('name');
+		$user->first_name  = $request->get('first_name');
+        $user->last_name  = $request->get('last_name');
 		$user->email = $request->get('email');
 		$user->role  = $request->get('role_id');
 
@@ -45,16 +47,23 @@ class UserController extends Controller {
 		//
 	}
 
-	public function edit($id) {
+	public function edit( $id) {
 		return view('admin.editusers', ['user' => User::findOrFail($id)]);
 
 	}
 
-	public function destroy($id) {
-		$user = User::findOrFail($id);
+	/**
+	 * @return RedirectResponse
+	 */
 
-		$user->delete();
+	public function destroy($id) : RedirectResponse
+    {
+		$userToDelete = User::findOrFail($id);
 
-		return redirect('');
+		$userToDelete->delete();
+
+		return redirect()
+                ->route('admin.index')
+                ->with('info', 'Se ha eliminado el usuario correctamente');
 	}
 }

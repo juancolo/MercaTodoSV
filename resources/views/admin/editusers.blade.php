@@ -1,19 +1,36 @@
-@extends('layouts.template')
+@extends('layouts.mainlayout')
+
+@section('title', 'MercaTodo|Admin Editar Usuarios')
 
 @section('content')
 
-    <div style="width:800px; margin:0 auto;" class="container margin:auto">
-        <div class="row">
-            <div class="column-sm-6" >
+    <div class="breadcrumbs">
+        <div class="container">
+            <a href="/">Inicio</a>
+            <i class="fa fa-chevron-right breadcrumb-separator"></i>
+            <span>Editar Usuarios</span>
+        </div>
+    </div> <!-- end breadcrumbs -->
+
+    <div class="container form">
+        <div class="half-form">
+            <div class="half-form" >
 
                 <form method="post" action="{{route('admin.update', $user->id)}}" onreset="" >
                     @method('PUT')
                     @csrf
-
-                    <aside>Acá podrá editar los usuarios</aside>
+                    <br>
+                    <h2>Acá podrá editar los usuarios</h2>
+                    <br>
                     <div class="form-group">
-                        <label for="name">Nombre</label>
-                        <input type="text" class="form-control" name="name"  value="{{$user->name}}" placeholder="{{old('name')}}">
+                        <label class="label" for="first_name">Nombre</label>
+                        <input type="text" class="form-control" name="first_name"  value="{{$user->first_name}}" placeholder="{{old('first_name')}}">
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="last_name">Apellidos</label>
+                        <input type="text" class="form-control" name="last_name"  value="{{$user->last_name}}" placeholder="{{old('last_name')}}">
 
                     </div>
 
