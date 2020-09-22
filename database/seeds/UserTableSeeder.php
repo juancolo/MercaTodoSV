@@ -26,10 +26,14 @@ class UserTableSeeder extends Seeder
 
         $admin->save();
 
-        /*$user = new User();
-        $user->name = 'Juan';
-        $user->email = 'juan3@merca.com';
-        $user->password = bcrypt('12341234');
-        $user->save();*/
+        $client = new User();
+
+        $client->first_name = 'Juan Cliente';
+        $client->last_name = 'Colorado';
+        $client->email = 'juan@merca.com';
+        $client->role = 'Cliente';
+        $client->password = bcrypt('12341234');
+
+        $client->save();
     }
 }

@@ -20,18 +20,30 @@
 
     <div class="product-section container">
         <div class="product-section-image">
-            <img src="{{ asset('img/macbook-pro.png') }}" alt="product">
+
+            @if ($product->file)
+
+                <img src="{{$product->file}}" class="embed-responsive" alt="product">
+
+            @endif
         </div>
         <div class="product-section-information">
-            <h1 class="product-section-title">MacBook Pro</h1>
-            <div class="product-section-subtitle">15 inch, 1TB SSD, 32GB RAM</div>
+            <h1 class="product-section-title">{{$product->name}}</h1>
+            <div class="product-section-subtitle">{{$product->details}}</div>
+            <div class="product-section-price">{{ $product->presentPrice() }}</div>
 
             <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae facere facilis praesentium eaque et eum, illo repudiandae quia adipisci, soluta voluptatum. Reprehenderit inventore, sed a voluptatibus enim optio cum repellat?
+                {!! $product->description !!}
             </p>
 
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas magni accusantium, sapiente dicta iusto ut dignissimos atque placeat tempora iste.</p>
+            <p>&nbsp;</p>
+
+                <form action="">
+
+                    <button type="submit" class="button button-plain">Add to Cart</button>
+                </form>
         </div>
+
     </div> <!-- end product-section -->
 
     <div class="might-like-section">

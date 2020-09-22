@@ -64,6 +64,9 @@ ul{
 .button-white {
     border: 1px solid $white;
     color: $white !important;
+    padding: 10px 60px;
+    margin-top: 50px;
+
 
     &:hover {
         color: $text-color !important;
@@ -74,6 +77,7 @@ ul{
 .section-description {
     width: 80%;
     margin: auto;
+    padding: 40px 40px;
 }
 
 .header {
@@ -85,7 +89,7 @@ ul{
     img {
         max-width: 100%;
         max-height: 100%;
-        margin-left: 140px;
+        //margin-left: 140px;
 
             p {
                 margin: 100px 100px;
@@ -99,13 +103,14 @@ ul{
     .top-nav {
         display: flex;
         justify-content: space-between;
-        padding: 5px 150px ;
+        padding: 10px 10px ;
         border-bottom: beige;
+        margin: center;
 
         img {
-            max-width: 5%;
+            max-width: 80%;
             max-height: 70%;
-            margin: 0px;
+            margin: 10px;
 
             p {
                 margin: 500px 500px;
@@ -113,6 +118,7 @@ ul{
 
             .button {
                 margin-right: 1400px;
+                margin-top: 100px;
             }
         }
 
@@ -173,7 +179,12 @@ ul{
 
     .button {
         margin-right: 14px;
-        color: $white;
+        color: $text-color;
+
+        &:hover {
+            color: $white !important;
+            background: $text-color;
+        }
     }
 }
 
@@ -184,12 +195,12 @@ ul{
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-gap: $gutter;
-        padding: 50px 0;
+        padding: 10px 0;
     }
 }
 
 .blog-section {
-    background: $light-gray-background;
+
     border-top: 1px solid $separator-color;
     padding: 50px 0;
 
@@ -237,5 +248,54 @@ footer {
             }
         }
     }
+}
+
+shop{
+    padding-bottom: 10px;
+    padding-top: 20px;
+}
+
+.shop-grid:hover{
+    box-shadow: 0 40px 80px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+.image{
+    position: relative;
+}
+
+.overlay{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right:0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .5s ease;
+    background-color: rgba(67, 68, 68, 0.7);
+}
+
+.image:hover .overlay{
+    opacity: 1;
+    padding: 50px;
+}
+
+.detail{
+    color: #fff;
+    font-size: 20px;
+    position: absolute;
+    top: 100px;
+    left: 140px;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+}
+row{
+    padding: 50px;
+}
+
+table{
+    margin-left:auto;
+    margin-right:auto;
 }
 

@@ -15,7 +15,7 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
 
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('name', 124)->unique();
             $table->string('slug', 124)->unique();
             $table->string('details', 80);
@@ -25,9 +25,8 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('category_id');
             $table->unsignedInteger('sales')->default(0);
             $table->unsignedBigInteger('visits')->default(0);
-            $table->string('status');
             $table->string('file', 200)->nullable();
-            $table->enum('status', ['ACTIVO', 'INACTIVO'])->default('INACTIVO'),
+            $table->enum('status', ['ACTIVO', 'INACTIVO'])->default('INACTIVO');
             $table->timestamps();
 
             //relations
@@ -35,9 +34,6 @@ class CreateProductsTable extends Migration
             ->onDelete('cascade')
             ->onUpdate('cascade');
 
-            $table->foreign('tag_id')->references('id')->on('tags')
-             ->onDelete('cascade')
-             ->onUpdate('cascade');
         });
     }
 
