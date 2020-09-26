@@ -67,36 +67,32 @@
 
                 </tr>
             </thead>
-            <tbody>
-            @foreach($products as $product)
-                <tr style="text-align:center;">
-                    <th scope="row" >{{$product->id}}</th>
+                <tbody>
+                @foreach($products as $product)
+                    <tr style="text-align:center;">
+                        <th scope="row" >{{$product->id}}</th>
 
-                    <td>
-                        <a href="{{route('client.product.specs', $product->slug)}}">
-                            <img src="{{asset($product->file)}}" class="w-50 h-50" alt="">
-                        </a>
-                    </td>
-                    <td>{{$product->name}}</td>
-                    <td>{{$product->category->name}}</td>
-                    <td>{{$product->presentPrice()}}</td>
+                        <td>
+                                <img src="{{asset($product->file)}}" class="w-50 h-50" alt="">
+                        </td>
+                        <td>{{$product->name}}</td>
+                        <td>{{$product->category->name}}</td>
+                        <td>{{$product->presentPrice()}}</td>
 
-                    <td>
-                        <form action="{{route('product.destroy', $product->slug)}}" method="POST" style=" width: 300px">
-                            <a href="{{ route('product.edit', $product->slug)}}"><button type="button" class="btn btn-primary">Editar</button></a>
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('¿Seguro desea elminar a {{$product->slug}} ?')">Eliminar</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
+                        <td>
+                            <form action="{{route('product.destroy', $product)}}" method="POST" style=" width: 300px">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('¿Seguro desea elminar a {{$product->name}} ?')">Eliminar</button>
+                            </form>
+                            <a class="btn btn-primary" href="{{ route('product.edit', $product)}}">Editar</a>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
         </div>
             <div class="pagination" style="justify-content: center">{{$products}}</div>
     </div>
-
-
 
 @endsection

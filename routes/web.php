@@ -15,10 +15,14 @@ Route::resource('/admin',  'Admin\UserController');
 Route::resource('/shop', 'ShopController');
 Route::resource('/product', 'Admin\ProductController');
 
+
 Route::group( ['prefix' => 'store'], function (){
     Route::get('/landing', 'StoreController@landing')->name('client.landing');
     Route::get('/landing/products', 'StoreController@showProducts')->name('client.product');
     Route::get('/landing/products/espeficiaciones/{product}', 'StoreController@showSpecs')->name('client.product.specs');
+    Route::post('/cart/{product}', 'Store\CartController@store')->name('cart.store');
+    Route::get('/cart', 'Store\CartController@index')->name('cart.index');
+    Route::delete('/cart/{product}', 'Store\CartController@destroy')->name('cart.destroy');
 });
 
 //Try routes
@@ -26,3 +30,5 @@ Route::group( ['prefix' => 'store'], function (){
 //Route::get('/prodshow', 'ProductController@index');
 Route::get('/', 'HomeController@index')->name('home')->middleware('verified');
 Route::get('/shop2', 'ShopController@create');
+
+

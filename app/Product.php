@@ -8,7 +8,6 @@ use Illuminate\Database\Query\Builder;
 
 class Product extends Model
 {
-    protected $guarded = [];
     protected $fillable = [
         'name', 'slug','details', 'description', 'actualPrice', 'oldPrice', 'category_id', 'sales', 'visits', 'file', 'status'
     ];
@@ -39,5 +38,10 @@ class Product extends Model
                             ->orWhere('description', 'like', "%$productInfo%");
         }
         return $query;
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
 }

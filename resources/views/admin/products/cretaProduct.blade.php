@@ -49,7 +49,7 @@
                             </div>
                         </div>
 
-                        <div class="col">
+                        <div class="col {{ $errors->has('actualPrice') ? 'has-error' : ''}}">
                             <label for="category">{{__('Actual Price')}}</label>
                             <div class="input-group mb-2 mr-sm-2">
                                 <div class="input-group-prepend">
@@ -57,8 +57,8 @@
                                 </div>
                                 <input type="text"
                                        class="form-control"
-                                       id="actual_price"
-                                       name="actual_price"
+                                       id="actualPrice"
+                                       name="actualPrice"
                                        placeholder="{{__('Product actual price')}}">
                             </div>
                         </div>
