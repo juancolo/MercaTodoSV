@@ -32,6 +32,5 @@
 
 @include('layouts.footer')
 
-@yield('footer')
 
 </html>

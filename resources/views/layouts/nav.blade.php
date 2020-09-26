@@ -5,8 +5,8 @@
 
                 <div class="top-nav-right">
 
-                    <a href="{{route('client.landing')}}"><li>{{__('Home')}}</li></a>
-                    <li><a href="{{route('client.product')}}">{{__('Buy')}}</a></li>
+                    <a href="{{route('client.landing')}}" style="color: white"><li>{{__('Home')}}</li></a>
+                    <li><a href="{{route('client.product')}}" style="color: white">{{__('Buy')}}</a></li>
 
                     @guest()
                     <li><a href="#">Sign Up</a></li>
@@ -46,7 +46,10 @@
                                 </div>
                             </li>
                         @endif
-
+                            <li>
+                                <a href="{{route('cart.index')}}" style="color: white"><i style="font-size:24px" class="fa">&#xf07a;</i></a>
+                                <span class="badge badge-danger">{{\Cart::session(auth()->id())->getContent()->count()}}</span>
+                            </li>
                     @endauth
                 </ul>
                 </div>

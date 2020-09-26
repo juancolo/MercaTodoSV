@@ -49,8 +49,8 @@
                                        class="form-control"
                                        name="name"
                                        id="name"
-                                       value="{{old( $product->name, request('name'))}}"
-                                       placeholder="{{old('name')}}">
+                                       value="{{old( 'name', $product->name)}}"
+                                       >
                                 {!! $errors->first('category', '<span class="help-block">:message</span>') !!}
                             </div>
                             <div class="form-group">
@@ -59,7 +59,7 @@
                                        class="form-control"
                                        name="slug"
                                        id="slug"
-                                       value="{{old($product->slug, request('slug'))}}"
+                                       value="{{old ('slug',$product->slug)}}"
                                        placeholder="{{old('category')}}"
                                        readonly>
                                 {!! $errors->first('slug', '<span class="help-block">:message</span>') !!}

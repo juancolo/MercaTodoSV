@@ -2,14 +2,13 @@
 
 @section('title', 'Product')
 
-@section('extra-css')
-
-@endsection
-
 @section('content')
 
-    <div class="breadcrumbs">
+       <div class="breadcrumbs">
         <div class="container">
+            @if(Cart::session(auth()->id()))
+            {{Cart::session(auth()->id())->getTotal()}}
+            @endif
             <a href="#">Home</a>
             <i class="fa fa-chevron-right breadcrumb-separator"></i>
             <span>Shop</span>
@@ -17,7 +16,11 @@
             <span>Macbook Pro</span>
         </div>
     </div> <!-- end breadcrumbs -->
-
+       @if (session('status'))
+           <div class="alert alert-success">
+               {{ session('status') }}
+           </div>
+       @endif
     <div class="product-section container">
         <div class="product-section-image">
 
@@ -30,7 +33,7 @@
         <div class="product-section-information">
             <h1 class="product-section-title">{{$product->name}}</h1>
             <div class="product-section-subtitle">{{$product->details}}</div>
-            <div class="product-section-price">{{ $product->presentPrice() }}</div>
+            <div class="product-section-price">{{ $product->presentPrice()}}</div>
 
             <p>
                 {!! $product->description !!}
@@ -38,9 +41,12 @@
 
             <p>&nbsp;</p>
 
-                <form action="">
-
-                    <button type="submit" class="button button-plain">Add to Cart</button>
+                <form action="{{route('cart.store', $product)}}" method="POST">
+                    @csrf
+                    @method('POST')
+                    <button type="submit"
+                            class="button button-plain"
+                    >Add to Cart</button>
                 </form>
         </div>
 

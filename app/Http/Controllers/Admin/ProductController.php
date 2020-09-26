@@ -64,6 +64,7 @@ class ProductController extends Controller
             'slug'          => $request->input('slug'),
             'details'       => $request->input('details'),
             'description'   => $request->input('description'),
+            'actualPrice'  => $request->input('actualPrice'),
             'category_id'   => $request->input('category_id')
             ]);
 
@@ -76,7 +77,6 @@ class ProductController extends Controller
             $product->file = Storage::url($file);
         }
 
-        $product->save();
 
         return redirect()->route('product.index');
     }
@@ -95,12 +95,11 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  string $slug
+     * @param  Product $slug
      * @return View
      */
-    public function edit(string $slug)
+    public function edit(Product $product)
     {
-        $product    = Product::where('slug', $slug)->first();
         $categories = Category::orderBy('name', 'ASC')->get();
         $tags       = Tag::orderBy('name', 'ASC')->get();
 
@@ -148,14 +147,12 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  $slug
+     * @param  Product $product
      * @return RedirectResponse
      */
-    public function destroy($slug) : RedirectResponse
+    public function destroy(Product $product) : RedirectResponse
     {
-        $productToDelete = Product::where('slug', $slug)->first();
-
-        $productToDelete->delete();
+        $product->delete();
 
         return redirect()
             ->route('product.index')

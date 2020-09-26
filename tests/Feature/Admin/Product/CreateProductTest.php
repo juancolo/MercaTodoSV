@@ -28,7 +28,6 @@ class CreateProductTest extends TestCase
         $response->assertStatus(302);
     }
 
-
     /**
      * @test
      */
@@ -48,6 +47,7 @@ class CreateProductTest extends TestCase
             'name' => 'ProductTest',
             'slug' => 'producttest',
             'details' => 'productdetails',
+            'actualPrice' => '1000',
             'description' => 'productdescription',
             'category_id' => $category->id,
             'tags' => [ 0 => $tag1->id,
@@ -87,18 +87,28 @@ class CreateProductTest extends TestCase
 
     public function aProductPriceMustBeGreaterThanZero()
     {
-        $this->withoutExceptionHandling();
+        //$this->withoutExceptionHandling();
 
         //Given => An a authenticated admin can edit an existing product
         $this->ActingAsAdmin();
         $category = factory(Category::class)->create(['name' => 'categoryTest']);
+        $tag1 = factory(Tag::class)->create(['name' => 'tagTest1']);
+        $tag2 = factory(Tag::class)->create(['name' => 'tagTest2']);
 
-        //Assert
+        $product = ([
+            'name' => 'ProductTest',
+            'slug' => 'producttest',
+            'details' => 'productdetails',
+            'actualPrice' => 0,
+            'description' => 'productdescription',
+            'category_id' => $category->id,
+            'tags' => [ 0 => $tag1->id,
+                        1 => $tag2->id]
+        ]);
 
+        $response = $this->post(route('product.store', $product));
 
-        $response = $this->post(route('product.store'), array_merge($this->productCreation(), ['actual_price' => '100']));
-
-        $response->assertSessionHasErrors('actual_price');
+        $response->assertSessionHasErrors('actualPrice');
 
     }
 public function productCreation(){
