@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Product;
+namespace App\Http\Requests\Cart;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class IndexProductRequest extends FormRequest
+class CartUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class IndexProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'search' => ['min:3','max:70','regex:/^[^\{\}\[\]\;\<\>]*$/']
+            'quantity' => 'required',
         ];
     }
 }
