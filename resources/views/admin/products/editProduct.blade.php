@@ -28,7 +28,7 @@
                 <div class="half-form">
                     <div class="half-form" >
 
-                        <form method="post" action="{{route('product.update', $product->slug)}}" enctype="multipart/form-data">
+                        <form method="post" action="{{route('product.update', $product)}}" enctype="multipart/form-data">
                             @method('PUT')
                             @csrf
                             <br>

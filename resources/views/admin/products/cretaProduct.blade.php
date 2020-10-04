@@ -4,6 +4,7 @@
 
 @section('content')
 
+<<<<<<< Updated upstream
 <div class="container">
         <div id="app">
             <form action="{{route('product.store')}}" method="post" enctype="multipart/form-data">
@@ -127,5 +128,8 @@
             <hr>
         </div>
     </div>
+=======
+@include('admin.products.__form')
+>>>>>>> Stashed changes
 
 @endsection

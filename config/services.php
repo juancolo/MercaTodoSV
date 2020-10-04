@@ -30,4 +30,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'placetopay' => [
+        'login' => env('PTP_APP_LOGIN', ''),
+        'trankey'=> env('PTP_APP_SECRETKEY', ''),
+        'url'=> env('PTP_APP_URL', '')
+    ]
 ];

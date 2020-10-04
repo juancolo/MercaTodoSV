@@ -50,6 +50,10 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->hasOne(Category::class);
     }
 
+    public function orders(){
+        return $this->hasMany(Order::class);
+    }
+
     /**
      * @param Builder $query
      * @param string|null $userInfo

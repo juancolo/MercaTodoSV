@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Category;
-use App\Http\Requests\ProductRequest;
+use App\Http\Requests\Product\IndexProductRequest;
+use App\Http\Requests\Product\StoreProductRequest;
+use App\Http\Requests\Product\UpdateProductRequest;
 use App\Product;
 use App\Tag;
 use Illuminate\Http\RedirectResponse;
@@ -24,13 +26,12 @@ class ProductController extends Controller
         $this->middleware('auth');
     }
 
+
     /**
-     * Display a listing of the resource.
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @param IndexProductRequest $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|View
      */
-    public function index(Request $request)
+    public function index(IndexProductRequest $request)
 
     {
         $products = Product::ProductInfo($request->input('search'))->paginate();
@@ -57,8 +58,9 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
 
      */
-    public function store(ProductRequest $request)
+    public function store(StoreProductRequest $request)
     {
+<<<<<<< Updated upstream
         $product = Product::create([
             'name'          => $request->input('name'),
             'slug'          => $request->input('slug'),
@@ -66,6 +68,9 @@ class ProductController extends Controller
             'description'   => $request->input('description'),
             'category_id'   => $request->input('category_id')
             ]);
+=======
+        $product = Product::create($request->validated()->all());
+>>>>>>> Stashed changes
 
         $product->tags()->sync($request->input('tags'));
 
@@ -76,8 +81,11 @@ class ProductController extends Controller
             $product->file = Storage::url($file);
         }
 
+<<<<<<< Updated upstream
         $product->save();
 
+=======
+>>>>>>> Stashed changes
         return redirect()->route('product.index');
     }
 
@@ -95,7 +103,11 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
+<<<<<<< Updated upstream
      * @param  string $slug
+=======
+     * @param Product $product
+>>>>>>> Stashed changes
      * @return View
      */
     public function edit(string $slug)
@@ -110,25 +122,13 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     *
-     * @param ProductRequest $request
-     * @param   $slug
+     * @param Product $product
+     * @param UpdateProductRequest $request
+     * @return RedirectResponse
      */
-    public function update(ProductRequest $request, $slug)
+    public function update(Product $product, UpdateProductRequest $request): RedirectResponse
     {
-        $product = Product::where('slug', $slug)->first();
-
-        $product->name          = $request->name;
-        $product->slug          = $request->slug;
-        $product->details       = $request->details;
-        $product->description   = $request->description;
-        $product->actualPrice   = $request->actual_price;
-        $product->oldPrice      = $request->old_price;
-        $product->status        = $request->status;
-        $product->category_id   = $request->input('category_id');
-        $product->tags()->sync($request->get('tags'));
-
-//Image
+    //Image
         if($request->file('file'))
         {
             if($product->file) {
@@ -138,7 +138,8 @@ class ProductController extends Controller
             $product->file = Storage::url($file);
         }
 
-        $product->save();
+        $product->update(array_filter($request->validated()));
+
 
         return redirect()->route('product.index')
                          ->with('status', 'Producto actualizado correctamente');
@@ -153,9 +154,14 @@ class ProductController extends Controller
      */
     public function destroy($slug) : RedirectResponse
     {
+<<<<<<< Updated upstream
         $productToDelete = Product::where('slug', $slug)->first();
 
         $productToDelete->delete();
+=======
+        Storage::delete($product->file);
+        $product->delete();
+>>>>>>> Stashed changes
 
         return redirect()
             ->route('product.index')
