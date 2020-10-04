@@ -74,7 +74,6 @@ public function index(IndexProductRequest $request)
             $product->save();
         }
 
-
         return redirect()->route('product.index');
     }
 
