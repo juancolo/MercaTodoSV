@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Store;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Cart\CartUpdateRequest;
 use App\Product;
+use App\User;
 use Darryldecode\Cart\Cart;
 use Illuminate\Http\Request;
 
@@ -19,28 +21,30 @@ class CartController extends Controller
      */
     public function index()
     {
-        return view('cart.index');
-    }
+        $user = auth()->id();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+        $cartItems = $this->getCartOfAUser()->getContent();
 
+        //Verify if the items into the cart still exist into the project
+        foreach ($cartItems as $item){
+
+            if (Product::find($item['id'])) {
+
+            }
+            else{
+                $this->getCartOfAUser()->remove($item['id']);
+            }
+        }
+        $cartInfo = $this->getCartOfAUser();
+        return view('cart.index', compact('cartItems', 'cartInfo', 'user' ));
+    }
 
     /**
      * @param Product $product
      */
     public function store(Product $product)
     {
-        $user = auth()->id();
-
-        \Cart::session ($user)->add(array(
+        $this->getCartOfAUser()->add(array(
             'id' => $product->id,
             'name' => $product->name,
             'price' => $product->actualPrice,
@@ -52,37 +56,22 @@ class CartController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  $cartItems
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update( $cartItems)
     {
-        //
+
+        $this->getCartOfAUser()->update($cartItems, array(
+                'quantity' => array(
+                'relative' => false,
+                'value' => request('quantity')
+            ),
+        ));
+
+        return back();
     }
 
     /**
@@ -93,9 +82,14 @@ class CartController extends Controller
      */
     public function destroy($productId)
     {
-        \Cart::session(auth()->id())->remove($productId);
+        $this->getCartOfAUser()->remove($productId);
 
         return back()->with('status', 'Producto eliminado del carrito adecuadamente');
 
+    }
+    public function getCartOfAUser(){
+        $user = \Cart::session(auth()->id());
+
+        return $user;
     }
 }

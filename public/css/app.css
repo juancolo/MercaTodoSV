@@ -519,6 +519,106 @@ form button[type=submit] {
   margin-bottom: 40px;
 }
 
+.webcheckout-section {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  /* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other (and change the direction - make the "cart" column go on top) */
+}
+
+.webcheckout-section .row {
+  /* IE10 */
+  display: flex;
+  /* IE10 */
+  flex-wrap: wrap;
+  margin: 0 -16px;
+}
+
+.webcheckout-section .col-25 {
+  /* IE10 */
+  flex: 25%;
+}
+
+.webcheckout-section .col-50 {
+  /* IE10 */
+  flex: 50%;
+  padding-left: 80px;
+}
+
+.webcheckout-section .col-75 {
+  /* IE10 */
+  flex: 75%;
+}
+
+.webcheckout-section .col-25,
+.webcheckout-section .col-50,
+.webcheckout-section .col-75 {
+  padding: 0 16px;
+}
+
+.webcheckout-section .container-web {
+  background-color: #f2f2f2;
+  padding: 5px 15px 15px 15px;
+  border: 1px solid lightgrey;
+  border-radius: 1px;
+}
+
+.webcheckout-section input[type=text] {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.webcheckout-section select {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 3px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.webcheckout-section label {
+  margin-bottom: 10px;
+  display: block;
+}
+
+.webcheckout-section .icon-container {
+  margin-bottom: 20px;
+  padding: 7px 0;
+  font-size: 24px;
+}
+
+.webcheckout-section .btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  width: 100%;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 17px;
+}
+
+.webcheckout-section .btn:hover {
+  background-color: #45a049;
+}
+
+.webcheckout-section span.price {
+  color: grey;
+}
+
+@media (max-width: 800px) {
+  .webcheckout-section .row {
+    flex-direction: column-reverse;
+  }
+
+  .webcheckout-section .col-25 {
+    margin-bottom: 20px;
+  }
+}
+
 .breadcrumbs {
   background: #F5F5F5;
   border-bottom: 1px solid #CDCDCD;
