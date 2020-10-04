@@ -10,13 +10,13 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class AddProductToCartTest extends TestCase
+class StoreCartProducts extends TestCase
 {
     use WithFaker, RefreshDatabase;
     /**
      * @test
      */
-    public function AnUserCanAddAProductToTheCart()
+    public function AnAuthenticatedUserCanAddAProductToTheCart()
     {
         $this->withoutExceptionHandling();
     //Arrange
@@ -25,7 +25,7 @@ class AddProductToCartTest extends TestCase
 
         $product = Product::where(['id' => '3'])->first();
 
-        $user = $this->ActingAsClient();
+       $this->ActingAsClient();
     //When
         $this->post(route('cart.store', $product));
 
@@ -41,20 +41,22 @@ class AddProductToCartTest extends TestCase
     public function aCartProductNeedAQuantity()
     {
         $this->withoutExceptionHandling();
-        $this->ActingAsClient();
 
         $category = factory(Category::class)->create(['name' => 'categoryTest']);
-        factory(Product::class, 10)->create([
-            'category_id' => $category->id,
-            'actualPrice' => 0
-        ]);
+        factory(Product::class, 10)->create(['category_id' => $category->id]);
 
         $product = Product::where(['id' => '3'])->first();
-dd($product);
+        $this->ActingAsClient();
+
         //When
-        $this->post(route('cart.addProduct', [$product->id]));
+        $this->post(route('cart.store', [$product->id]));
 
         $this->assertCount(1, \Cart::getContent());
+
+
+    }
+
+    public function AnUnathenticatedUserCantStoreAProductIntoTheCart(){
 
 
     }
