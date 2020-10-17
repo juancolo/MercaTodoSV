@@ -22,9 +22,8 @@
             <table class="table text-center" >
                 <thead>
                 <tr>
-                    <th>Id</th>
+                    <th>@lang('Name')</th>
                     <th>Image</th>
-                    <th>Name</th>
                     <th>Quantity</th>
                     <th></th>
                     <th>Unit Price</th>
@@ -39,11 +38,13 @@
                     <tr>
 
                         <form class="form-control" action="{{ route('cart.update', $item->id) }}">
-                            <td>{{ $item->id }}</td>
                             <td>{{ $item->name }}</td>
-                            <td><img src="{{asset($item->attributes['0'])}}" class="w-50 h-50"></td>
+                            <td><img src="{{asset($item->attributes['0'])}}" ></td>
                             <td>
-                                <input name="quantity" type="number"  value="{{ $item->quantity }}">
+                                <input name="quantity"
+                                       type="number"
+                                       min="1"
+                                       value="{{ $item->quantity }}">
                             </td>
                             <td>
                                 <button class="btn btn-secondary"
@@ -55,10 +56,13 @@
                             <td>{{ $item->getPriceSum() }}</td>
                         </form>
                             <td>
-                                <form class="form-control" action="{{route('cart.destroy', $item->id)}}" method="POST" >
+                                <form action="{{route('cart.destroy', $item->id)}}" method="POST" >
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro desea elminar a {{$item->name}} ?')">Eliminar</button>
+                                    <button type="submit"
+                                            class="btn btn-sm btn-danger"
+                                            onclick="return confirm('¿Seguro desea elminar a {{$item->name}} ?')">
+                                        {{__('Delete')}}</button>
                                 </form>
                             </td>
                     </tr>
@@ -70,10 +74,6 @@
                 <tr>
                     <td>Items on Cart:</td>
                     <td>{{$cartItems->count()}}</td>
-                </tr>
-                <tr>
-                    <td>Total Qty:</td>
-                    <td>@{{ details.total_quantity }}</td>
                 </tr>
                 <tr>
                     <td>Sub Total:</td>
@@ -94,6 +94,5 @@
             <h2> {{'There is no products into de Cart'}}</h2>
         @endif
     </div>
-
 @endsection
 

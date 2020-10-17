@@ -1,5 +1,3 @@
-<!doctype html>
-<html lang="{{ app()->getLocale() }}">
 
 <body>
     <header>
@@ -54,6 +52,7 @@
                                     @endif
                         </div>
                                 <a class="text-center">{{$product->description}}</a>
+                                <a class="text-center">{{$product->category->name}}</a>
                                 <div class="text-center">Price: {{$product->presentPrice()}}</div>
                     <br>
                 </div> <!-- end products -->
@@ -95,4 +94,4 @@
 </div> <!-- end blog-section -->
 @endsection('content')
 </body>
-</html>
+

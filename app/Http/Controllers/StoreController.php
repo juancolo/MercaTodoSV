@@ -4,14 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class StoreController extends Controller
 {
     public function landing(){
 
-        $products = Product::inRandomOrder()->take(3)->paginate(3);
-
-        return view('store.productLanding')->with('products', $products);
+        return view('store.productLanding',[
+            'products' => Product::inRandomOrder()->take(3)->paginate(3)
+            ]);
     }
 
     /**
@@ -22,13 +23,19 @@ class StoreController extends Controller
     {
         $products = Product::ProductInfo($request->input('search'))->paginate(15);
 
-        return view('store.productShow', compact('products', $products));
+        return view('store.productShow', compact('products'));
+
+        /*$key = "product.page". request('page', 1);
+
+       $products = Cache::rememberForever($key, function ()
+        use ($request){
+            return Product::ProductInfo($request->input('search'))->paginate(15);
+        });
+
+        return view('store.productShow', compact('products'));*/
     }
 
-
-    public function showSpecs($slug){
-
-        $product = Product::where('slug', $slug)->first();
+    public function showSpecs(Product $product){
 
         return view('store.productEspecs', compact('product'));
 

@@ -70,13 +70,12 @@
 
                                 <select class="form-control"
                                         name = "category_id">
-                                    @foreach($categories as $category)
-                                        @if($product->category->name == $category->name )
+                                    @foreach($categories as $id => $name)
                                             <option name = "category_id"
-                                                    selected = selected
-                                                    value="{{$product->category->id}}"> {{$product->category->name}}</option>
-                                        @endif
-                                            <option name = "category_id" value="{{$category->id}}"> {{$category->name}}</option>
+                                                    value="{{$id}}"
+                                                    {{$id == old('category_id', $product->category_id) ? 'selected': ''}}
+                                                    >{{$name}}</option>
+
                                     @endforeach
 
                                 </select>

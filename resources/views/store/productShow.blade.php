@@ -68,7 +68,7 @@
                             @if ($product->file)
 
                                 <a href="{{route('client.product.specs', $product->slug)}}">
-                                    <img src="{{$product->file}}" class="w-100">
+                                    <img src="{{'storage/app/public/'.$product->file}}" class="w-100">
                                     <div class="overlay">
                                         <div class="detail"> View Detail</div>
                                     </div>
@@ -77,15 +77,14 @@
                         </div>
 
                         <a class="text-center">{{$product->description}}</a>
+                        <a class="text-center">{{$product->category->name}}</a>
                         <div class="text-center">Price: {{$product->presentPrice()}}</div>
                         <br>
 
                     </div> <!-- end products -->
                 @endforeach
             </div>
-            <div class="pagination" style="justify-content: center; padding-top: 40px">
                 {{$products->appends(request()->only('search'))->links()}}
-            </div>
         </div>
     </div>
 

@@ -9,7 +9,7 @@ use Illuminate\Database\Query\Builder;
 class Product extends Model
 {
     protected $fillable = [
-        'name', 'slug','details', 'description', 'actualPrice', 'oldPrice', 'category_id', 'sales', 'visits', 'file', 'status'
+        'name', 'slug','details', 'description', 'actualPrice', 'oldPrice', 'category_id', 'stock', 'file', 'status'
     ];
 
     public function category(){
@@ -18,6 +18,10 @@ class Product extends Model
 
     public function tags(){
         return $this->belongsToMany(Tag::class, 'product_tag')->withPivot('tag_id');
+    }
+
+    public function orders(){
+        return $this->belongsToMany(Order::class, 'order_product')->withPivot('order_id');
     }
 
     public function presentPrice (){

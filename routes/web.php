@@ -5,17 +5,15 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('client.landing');
 })->name('welcome');
 
 Auth::routes(['verify'=>true]);
 
 //User Admin
 Route::resource('/admin',  'Admin\UserController');
-
 //Products Admin
 Route::resource('/product', 'Admin\ProductController');
-
 Route::resource('/shop', 'ShopController');
 
 
@@ -38,11 +36,15 @@ Route::group( ['prefix' => 'store'], function (){
 });
 
 //Payments
-Route::get('payment/index/{user}', 'PaymentController@index')->name('payment.index');
-Route::post('payment/store', 'PaymentController@store')->name('payment.store');
-Route::view('/webcheckout', 'webcheckout.index');
+Route::group(['prefix'=> 'payment'], function (){
+    Route::get('/index/{user}', 'PaymentController@index')
+        ->name('payment.index');
+    Route::post('/payment', 'PaymentController@store')
+        ->name('payment.store');
+    Route::get('/endtransaction/{order}', 'PaymentController@endTransaction' )
+        ->name('payment.endTransaction');
+    Route::post('/payment/{order}', 'PaymentController@reDonePayment')
+        ->name('payment.redone');
+});
 
-//Try routes
-Route::post('payment/storeprueba', 'PaymentController@storePrueba')->name('payment.storeprueba');
-Route::get('show/storeprueba', 'PaymentController@show')->name('payment.show');
 
