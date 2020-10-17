@@ -44,7 +44,7 @@ class StoreProductRequest extends FormRequest
             'category_id' => 'required|exists:categories,id',
             'tags' => 'array',
             'tags.*' => 'exists:tags,id',
-            'file' => 'image|mimes:jpeg,bmp,png|size:1250 MB',
+            'file' => 'image|mimes:jpeg,bmp,png',
             'status' => Rule::in(['ACTIVO', 'INACTIVO'])
         ];
     }

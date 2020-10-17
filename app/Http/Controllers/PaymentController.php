@@ -3,150 +3,112 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Payment\PaymentInfoRequest;
-use App\Order;
+use App\Services\CartService;
 use App\User;
-use Dnetix\Redirection\PlacetoPay;
+use App\Order;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
-use League\Flysystem\Config;
-use PhpParser\Node\Stmt\DeclareDeclare;
 use Ramsey\Uuid\Uuid;
+use Illuminate\View\View;
+use App\Services\PaymentData;
+use Dnetix\Redirection\PlacetoPay;
+use Illuminate\Support\Facades\Auth;
+
 
 class PaymentController extends Controller
 {
+    /**
+     * @var CartService
+     */
+    private $cartService;
+
+    public function __construct(CartService $cartService)
+    {
+        $this->cartService = $cartService;
+    }
 
     /**
      * @param User $user
-     * @return View
+     * @return RedirectResponse|View
      */
     public function index(User $user): View
     {
-        return view('webcheckout.index', compact('user'));
+        if ($this->cartService->getAContentCartFormAUser()->count() == 0)
+
+            return redirect()->route('client.product');
+        else
+
+            return view('webcheckout.index', compact('user'));
     }
 
     /**
      * @param PlacetoPay $placetopay
-     * @param Request $paymentInfo
-     * @return \Illuminate\Http\RedirectResponse
+     * @param PaymentInfoRequest $request
+     * @return \Illuminate\Contracts\Foundation\Application|RedirectResponse|\Illuminate\Routing\Redirector
      * @throws \Dnetix\Redirection\Exceptions\PlacetoPayException
      */
-    public function store(PlacetoPay $placetopay, Request $paymentInfo)
+    public function store(PlacetoPay $placetopay, PaymentInfoRequest $request)
     {
-        dd($paymentInfo);
+        //Create the order for the payment
+        $order = Order::create($request->all());
+        $order->reference = substr(Uuid::uuid4(), 0, 10);
+        $order->user_id = $this->getUserId();
+        $order->total = intval($this->cartService->getACartFromUser()->getTotal());
 
-        Order::create($paymentInfo->validated->all());
-        //User
-        $user = auth()->id();
-        //Cart total
+         // Conection with PlaceToPay
+        $payment = new PaymentData($order);
 
-        // Creating a random reference for the test
-        $reference = substr(Uuid::uuid4(), 0, 10);
-        //Create a order assigned to a user
-        //$order = Order::created();
-        // Request Information
-        $request = [
-            "buyer" => [
-                'name'          => $paymentInfo->input('name'),
-                'surname'       => $paymentInfo->input('surname'),
-                'email'         => $paymentInfo->input('email'),
-                'documentType'  => $paymentInfo->input('documentType'),
-                'document'      => $paymentInfo->input('document'),
-                'mobile'        => $paymentInfo->input('mobile'),
-                'address'       => [
-                    'street'    => $paymentInfo->input('street'),
-                ]
-            ],
-            'payment' => [
-                'reference'     => $reference,
-                'description'   => 'Payment of',
-                'amount'        => [
-                                'currency' => 'USD',
-                                'total' => 120,
-                ],
-            ],
-            'expiration' => date('c', strtotime('+2 days')),
-            'returnUrl' => 'http://example.com/response?reference=' . $reference,
-            'ipAddress' => '127.0.0.1',
-            'requestId' => '00001',
-            'userAgent' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36',
-        ];
+        //CreateRequest PlaceToPay
+        $response = $placetopay->request($payment->setPayment());
 
+        //Update the Order information
+        $order->requestId = $response->requestId;
+        $order->processUrl = $response->processUrl;
+        $order->status = $response->status()->status();
+        $order->save();
 
-        try {
-
-            $response = $placetopay->request($request);
-
-            if ($response->isSuccessful()) {
-                // Redirect the client to the processUrl or display it on the JS extension
-                return redirect()->away($response->processUrl());
-            } else {
-                // There was some error so check the message
-                // $response->status()->message();
-            }
-            var_dump($response);
-        } catch (Exception $e) {
-            var_dump($e->getMessage());
-        }
+        return redirect($response->processUrl());
     }
 
     /**
      * @param PlacetoPay $placetopay
+     * @param Order $order
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|View
      */
-    public function show(PlacetoPay $placetopay){
-
-
-        $response = $placetopay->query(412548);
-
-        dd($response->status[status]);
-
-    }
-
-    public function redone(PlacetoPay $placetopay){
-
-
-        $response = $placetopay->request(412452);
-
-
-    }
-
-    public function storePrueba(PlacetoPay $placetopay)
+    public function endTransaction (PlacetoPay $placetopay, Order $order)
     {
-        // Creating a random reference for the test
-        $reference = '00002';
+        $response = $placetopay->query($order->reference);
+        $order->status = $response->status()->status();
+        $order->save();
 
-        // Request Information
-        $request = [
-            'payment' => [
-                'reference' => $reference,
-                'description' => 'Testing payment',
-                'amount' => [
-                    'currency' => 'USD',
-                    'total' => 120,
-                ],
-            ],
-            'expiration' => date('c', strtotime('+2 days')),
-            'returnUrl' => route('welcome'),
-            'ipAddress' => '127.0.0.1',
-            'requestId' => '00001',
-            'userAgent' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36',
-        ];
+        $this->cartService->getACartFromUser()->clear();
 
-
-        try {
-
-            $response = $placetopay->request($request);
-
-            if ($response->isSuccessful()) {
-                // Redirect the client to the processUrl or display it on the JS extension
-                return redirect()->away($response->processUrl());
-            } else {
-                // There was some error so check the message
-                // $response->status()->message();
-            }
-            var_dump($response);
-        } catch (Exception $e) {
-            var_dump($e->getMessage());
-        }
+        return view('webcheckout.endTransaction', compact('order'));
     }
+
+
+    /**
+     * @param PlacetoPay $placetopay
+     * @param Order $order
+     * @return \Illuminate\Contracts\Foundation\Application|RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws \Dnetix\Redirection\Exceptions\PlacetoPayException
+     */
+    public function reDonePayment(PlacetoPay $placetopay, Order $order)
+    {
+        $payment = new PaymentData($order);
+        $response = $placetopay->request($payment->setPayment());
+
+        $order->requestId = $response->requestId;
+        $order->processUrl = $response->processUrl;
+        $order->status = $response->status()->status();
+        $order->save();
+
+        return redirect($response->processUrl());
+    }
+
+    public function getUserId(){
+        return $user = Auth::id();
+    }
+
 
 }

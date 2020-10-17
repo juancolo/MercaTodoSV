@@ -4,6 +4,7 @@ namespace App\Http\Requests\Payment;
 
 use Faker\Provider\Payment;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PaymentInfoRequest extends FormRequest
 {
@@ -25,14 +26,48 @@ class PaymentInfoRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'              => ['required','min:3','max:70','regex:/^[^\{\}\[\]\;\<\>]*$/'],
-            'slug'              => 'required|min:3|max:70',
-            'email'             => 'require1|email:rfc,dns',
-            'category_id'       => 'required|exists:categories,id',
-            'tags'              => 'array',
-            'tags.*'            => 'exists:tags,id',
-            'file'              => 'image|mimes:jpeg,bmp,png|size:512',
-            'status'            => Rule::in(['ACTIVO', 'INACTIVO'])
+            'first_name' => [
+                'required',
+                'min:3',
+                'max:70',
+                'regex:/^[^\{\}\[\]\;\<\>]*$/'],
+
+            'last_name' => [
+                'required',
+                'min:3',
+                'max:70',
+                'regex:/^[^\{\}\[\]\;\<\>]*$/'],
+
+            'email' =>[
+                'required'
+                ,'email:rfc'],
+
+            'document_type' => Rule::in(['CC', 'CE']),
+            'document_number' => ['required','numeric'],
+
+            'state' => [
+                'required',
+                'min:3','max:70',
+                'regex:/^[^\{\}\[\]\;\<\>]*$/'],
+
+            'street' => [
+                'required',
+                'min:3',
+                'max:70'],
+
+            'zip' => [
+                'required',
+                'min:5',
+                'max:8'
+                ],
+
+            'mobile' => [
+                'required',
+                'numeric',
+                'digits:10'
+            ]
+
+
         ];
     }
 }

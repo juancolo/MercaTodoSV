@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Category;
-use App\Http\Requests\Product\IndexProductRequest;
-use App\Http\Requests\Product\StoreProductRequest;
-use App\Http\Requests\Product\UpdateProductRequest;
-use App\Product;
 use App\Tag;
-use Illuminate\Http\RedirectResponse;
+use App\Product;
+use App\Category;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\View\View;
+use App\Http\Requests\Product\StoreProductRequest;
+use App\Http\Requests\Product\IndexProductRequest;
+use App\Http\Requests\Product\UpdateProductRequest;
 
 
 class ProductController extends Controller
@@ -36,7 +36,7 @@ class ProductController extends Controller
     {
         $products = Product::ProductInfo($request->input('search'))->paginate();
 
-        return view('admin.products.manageProduct', compact('products'));
+        return view('admin.products.manageProduct', compact('products') );
     }
 
     /**
@@ -60,7 +60,7 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        $product = Product::create($request->validated()->all());
+        $product = Product::create($request->validated());
 
         $product->tags()->sync($request->input('tags'));
 
@@ -93,10 +93,12 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        $categories = Category::orderBy('name', 'ASC')->get();
+        $categories = Category::pluck('name', 'id');
         $tags       = Tag::orderBy('name', 'ASC')->get();
 
-        return view('admin.products.editProduct', compact('product', 'categories', 'tags'));
+        return view(
+            'admin.products.editProduct',
+            compact('product', 'categories', 'tags'));
     }
 
     /**

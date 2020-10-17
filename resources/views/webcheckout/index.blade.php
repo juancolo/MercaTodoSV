@@ -8,8 +8,20 @@
         <div class="webcheckout-section">
             <div class="row">
                 <div class="col-75">
+
                     <div class="container-web">
-                        <form action="/action_page.php">
+                    <div class="col-50">
+                        @if($errors->any())
+                                <ul>
+                                    <div class="alert-danger {{session('alert') ?? 'alert-info'}}">
+                                    @foreach($errors->all() as $error)
+                                        <li>{{$error}}</li>
+                                    @endforeach
+                                    </div>
+                                </ul>
+                        @endif
+                    </div>
+                        <form>
 
                             <div class="row">
                                 <div class="col-50">
@@ -19,6 +31,7 @@
                                     <input type="text"
                                            id="first_name"
                                            name="first_name"
+                                           data-dismiss="alert"
                                            value="{{old('first_name',$user->first_name)}}">
 
                                     <label for="last_name"><i class="fa fa-user"></i>{{__('Last Name')}}</label>
@@ -43,43 +56,56 @@
                                     <label for="email">{{__('Document Number')}}</label>
                                     <input type="text"
                                            id="document_number"
-                                           name="document_number">
+                                           name="document_number"
+                                           value="{{old('document_number')}}">
                                 </div>
 
                                 <div class="col-50">
                                     <h3>{{__('Address')}}</h3>
 
-                                    <label for="city"><i class="fa fa-phone"></i> {{__('Mobile')}}</label>
+                                    <label for="mobile"><i class="fa fa-phone"></i> {{__('Mobile')}}</label>
                                     <input type="text"
-                                           id="phone_number"
-                                           name="phone_number">
+                                           id="mobile"
+                                           name="mobile"
+                                           value="{{old('mobile')}}">
 
-                                    <label for="city"><i class="fa fa-institution"></i> {{__('State')}}</label>
+                                    <label for="state"><i class="fa fa-institution"></i> {{__('State')}}</label>
+                                    <input type="text"
+                                           id="state"
+                                           name="state"
+                                           value="{{old('state')}}"
+                                           placeholder="{{__('Type your state')}}">
+
+                                    <label for="city"><i class="fa fa-address-card-o"></i> {{__('City')}}</label>
                                     <input type="text"
                                            id="city"
                                            name="city"
-                                           placeholder="New York">
+                                           placeholder="542 W. 15th Street"
+                                           value="{{old('city')}}">
 
-                                    <label for="address"><i class="fa fa-address-card-o"></i> {{__('City')}}</label>
+                                    <label for="street"><i class="fa fa-address-card-o"></i> {{__('Street')}}</label>
                                     <input type="text"
-                                           id="address"
-                                           name="address"
-                                           placeholder="542 W. 15th Street">
-
-                                    <label for="address"><i class="fa fa-address-card-o"></i> {{__('Street')}}</label>
-                                    <input type="text"
-                                           id="address"
-                                           name="address"
+                                           id="street"
+                                           name="street"
+                                           value="{{old('address')}}"
                                            placeholder="542 W. 15th Street">
 
                                     <div class="row">
                                         <div class="col-50">
-                                            <label for="state">State</label>
-                                            <input type="text" id="state" name="state" placeholder="NY">
+                                            <label for="address">Address</label>
+                                            <input type="text"
+                                                   id="address"
+                                                   name="address"
+                                                   value="{{old('state')}}"
+                                                   placeholder="NY">
                                         </div>
                                         <div class="col-50">
                                             <label for="zip">Zip</label>
-                                            <input type="text" id="zip" name="zip" placeholder="10001">
+                                            <input type="text"
+                                                   id="zip"
+                                                   name="zip"
+                                                   value="{{old('zip')}}"
+                                                   placeholder="10001">
                                         </div>
                                     </div>
                                 </div>

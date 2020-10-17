@@ -85,11 +85,6 @@
                 </div>
 
                 <div class="links">
-                    <form action="{{route('payment.storeprueba')}}" method="POST">
-                        @csrf
-                        @method('POST')
-                        <button type="submit">Enviar</button>
-                    </form>
                     <a href="https://laracasts.com">Laracasts</a>
                     <a href="https://laravel-news.com">News</a>
                     <a href="https://blog.laravel.com">Blog</a>

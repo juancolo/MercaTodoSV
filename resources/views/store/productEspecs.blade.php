@@ -23,7 +23,7 @@
        @endif
     <div class="product-section container">
         <div class="product-section-image">
-
+            {{dd($product)}}
             @if ($product->file)
 
                 <img src="{{$product->file}}" class="embed-responsive" alt="product">

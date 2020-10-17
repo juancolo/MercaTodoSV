@@ -23,8 +23,7 @@ class CreateProductsTable extends Migration
             $table->decimal('actualPrice', 6, 2)->default(0);
             $table->decimal('oldPrice', 6, 2)->default(0);
             $table->unsignedBigInteger('category_id');
-            $table->unsignedInteger('sales')->default(0);
-            $table->unsignedBigInteger('visits')->default(0);
+            $table->unsignedInteger('stock')->default(0);
             $table->string('file', 200)->nullable();
             $table->enum('status', ['ACTIVO', 'INACTIVO'])->default('INACTIVO');
             $table->timestamps();

@@ -4,15 +4,28 @@ namespace App\Http\Controllers\Store;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Cart\CartUpdateRequest;
+use App\Http\Requests\Product\UpdateProductRequest;
 use App\Product;
+use App\Services\CartService;
 use App\User;
 use Darryldecode\Cart\Cart;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    public function __construct() {
+    /**
+     * @var CartService
+     */
+    private $cartService;
+
+    /**
+     * CartController constructor.
+     * @param CartService $cartService
+     */
+    public function __construct(CartService $cartService) {
         $this->middleware('auth');
+        $this->cartService = $cartService;
     }
     /**
      * Display a listing of the resource.
@@ -23,7 +36,7 @@ class CartController extends Controller
     {
         $user = auth()->id();
 
-        $cartItems = $this->getCartOfAUser()->getContent();
+        $cartItems = $this->cartService->getAContentCartFormAUser();
 
         //Verify if the items into the cart still exist into the project
         foreach ($cartItems as $item){
@@ -41,35 +54,21 @@ class CartController extends Controller
 
     /**
      * @param Product $product
+     * @return RedirectResponse
      */
-    public function store(Product $product)
+    public function store(Product $product): RedirectResponse
     {
-        $this->getCartOfAUser()->add(array(
-            'id' => $product->id,
-            'name' => $product->name,
-            'price' => $product->actualPrice,
-            'quantity' => 1,
-            'attributes' => array($product->file),
-            'associateModel' => Product::class
-        ));
-        return back()->with('status', $product->name.' se ha agregado tu carrito');
+        return back()->with('status', $this->cartService->storeACartOfAUser($product));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  $cartItems
-     * @return \Illuminate\Http\Response
-     */
-    public function update( $cartItems)
-    {
 
-        $this->getCartOfAUser()->update($cartItems, array(
-                'quantity' => array(
-                'relative' => false,
-                'value' => request('quantity')
-            ),
-        ));
+    /**
+     * @param $cartItems
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update($cartItems)
+    {
+        $this->cartService->updateAProductToACartUser($cartItems);
 
         return back();
     }
@@ -82,7 +81,7 @@ class CartController extends Controller
      */
     public function destroy($productId)
     {
-        $this->getCartOfAUser()->remove($productId);
+        $this->cartService->deleteAProductFromTheCartUser($productId);
 
         return back()->with('status', 'Producto eliminado del carrito adecuadamente');
 
