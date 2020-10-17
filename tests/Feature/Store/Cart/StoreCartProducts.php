@@ -18,7 +18,6 @@ class StoreCartProducts extends TestCase
      */
     public function AnAuthenticatedUserCanAddAProductToTheCart()
     {
-        $this->withoutExceptionHandling();
     //Arrange
         $category = factory(Category::class)->create(['name' => 'categoryTest']);
         factory(Product::class, 10)->create(['category_id' => $category->id]);
@@ -33,31 +32,22 @@ class StoreCartProducts extends TestCase
 
     }
 
-
     /**
      * @test
      */
+    public function AnUnAuthenticatedUserCantStoreAProductIntoTheCart(){
 
-    public function aCartProductNeedAQuantity()
-    {
-        $this->withoutExceptionHandling();
-
+        //Arrange
         $category = factory(Category::class)->create(['name' => 'categoryTest']);
         factory(Product::class, 10)->create(['category_id' => $category->id]);
 
         $product = Product::where(['id' => '3'])->first();
-        $this->ActingAsClient();
-
         //When
-        $this->post(route('cart.store', [$product->id]));
+        $response = $this->post(route('cart.store', $product));
 
-        $this->assertCount(1, \Cart::getContent());
-
-
-    }
-
-    public function AnUnathenticatedUserCantStoreAProductIntoTheCart(){
-
+        $response
+            ->assertRedirect(route('login'))
+            ->assertStatus(302);
 
     }
         private function ActingAsClient(){
