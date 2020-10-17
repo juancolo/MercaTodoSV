@@ -6,9 +6,6 @@
 
        <div class="breadcrumbs">
         <div class="container">
-            @if(Cart::session(auth()->id()))
-            {{Cart::session(auth()->id())->getTotal()}}
-            @endif
             <a href="#">Home</a>
             <i class="fa fa-chevron-right breadcrumb-separator"></i>
             <span>Shop</span>
