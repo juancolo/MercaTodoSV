@@ -84,9 +84,7 @@
                     </div> <!-- end products -->
                 @endforeach
             </div>
-            <div class="pagination" style="justify-content: center; padding-top: 40px">
                 {{$products->appends(request()->only('search'))->links()}}
-            </div>
         </div>
     </div>
 
