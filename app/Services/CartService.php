@@ -35,6 +35,7 @@ class CartService
      */
     public function storeACartOfAUser(Product $product)
     {
+        //dd($product);
         if ($product->stock < 1)
 
             return ( 'no hay suficiente stock del producto');
