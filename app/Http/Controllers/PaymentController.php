@@ -77,7 +77,7 @@ class PaymentController extends Controller
      */
     public function endTransaction (PlacetoPay $placetopay, Order $order)
     {
-        $response = $placetopay->query($order->reference);
+        $response = $placetopay->query($order->requestId);
         $order->status = $response->status()->status();
         $order->save();
 

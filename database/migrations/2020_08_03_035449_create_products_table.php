@@ -20,12 +20,12 @@ class CreateProductsTable extends Migration
             $table->string('slug', 124)->unique();
             $table->string('details', 80);
             $table->text('description')->nullable();
-            $table->decimal('actualPrice', 6, 2)->default(0);
-            $table->decimal('oldPrice', 6, 2)->default(0);
+            $table->decimal('actual_price', 6, 2);
+            $table->decimal('old_price', 6, 2)->nullable();
             $table->unsignedBigInteger('category_id');
             $table->unsignedInteger('stock')->default(0);
             $table->string('file', 200)->nullable();
-            $table->enum('status', ['ACTIVO', 'INACTIVO'])->default('INACTIVO');
+            $table->enum('status', ['ACTIVO', 'INACTIVO'])->default('ACTIVO');
             $table->timestamps();
 
             //relations

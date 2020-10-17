@@ -40,10 +40,10 @@ class UpdateProductRequest extends FormRequest
             'details' => 'required|min:3|max:80',
             'description' => 'required|min:3|max:200',
             'actual_price'  => 'required|min:4|max:8',
-            'old_price' => 'min:4|max:8',
+            'old_price' => 'numeric|min:0|not_in:0',
             'category_id' => 'required|exists:categories,id',
-            'tags' => 'array',
-            'tags.*' => 'exists:tags,id',
+            //'tags' => 'array',
+            //'tags.*' => 'exists:tags,id',
             'file' => 'image|mimes:jpeg,bmp,png',
             'status' => Rule::in(['ACTIVO', 'INACTIVO'])
         ];

@@ -48,7 +48,7 @@
                         </div>
                     </div>
 
-                    <div class="col {{ $errors->has('actualPrice') ? 'has-error' : ''}}">
+                    <div class="col {{ $errors->has('actual_price') ? 'has-error' : ''}}">
                         <label for="category">{{__('Actual Price')}}</label>
                         <div class="input-group mb-2 mr-sm-2">
                             <div class="input-group-prepend">
@@ -70,7 +70,9 @@
                     <select class="form-control"
                             name = "category_id">
                         @foreach($categories as $category)
-                            <option name = "category_id" value="{{$category->id}}"> {{$category->name}}</option>
+                            <option name = "category_id"
+                                    value="{{$category->id}}">
+                                {{$category->name}}</option>
                         @endforeach
 
                     </select>
@@ -84,8 +86,8 @@
 
                         <div class="col-sm-3">
                             <label class="checkbox-inline "for="tags[]">
-                                <input name="tags[]" type="checkbox" value="{{ old('tags[]',$tag->id) }}"
-                                > {{ $tag->name }}
+                                <input name="tags" id="tags" type="checkbox" value="{{ $tag->id}}">
+                                {{ $tag->name }}
                             </label>
                         </div>
 
