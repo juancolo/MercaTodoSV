@@ -32,7 +32,6 @@ class ProductController extends Controller
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|View
      */
     public function index(IndexProductRequest $request)
-
     {
         $products = Product::ProductInfo($request->input('search'))->paginate();
 
@@ -46,10 +45,11 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = Category::orderBy('name', 'ASC')->get();
-        $tags = Tag::orderBy('name', 'ASC')->get();
-
-        return view('admin.products.cretaProduct', compact('categories', 'tags'));
+        return view('admin.products.cretaProduct', with([
+         'categories'=> Category::pluck('name', 'id'),
+         'tags'=>  Tag::orderBy('name', 'ASC')->get()
+        ])
+        );
     }
 
     /**
@@ -63,13 +63,15 @@ class ProductController extends Controller
         $product = Product::create($request->validated());
 
         $product->tags()->sync($request->input('tags'));
-
+        $product->save();
         //Image
         if($request->file('file'))
         {
-            $file = $request->file('file')->store('public');
+            $file = $request->file('file')->store('images');
             $product->file = Storage::url($file);
+            $product->save();
         }
+
 
         return redirect()->route('product.index');
     }
@@ -91,14 +93,16 @@ class ProductController extends Controller
      * @param Product $product
      * @return View
      */
-    public function edit(Product $product)
+    public function edit(Product $product): View
     {
-        $categories = Category::pluck('name', 'id');
-        $tags       = Tag::orderBy('name', 'ASC')->get();
-
+//dd($tags['id']);
         return view(
-            'admin.products.editProduct',
-            compact('product', 'categories', 'tags'));
+            'admin.products.editProduct', with([
+                'product' => $product->with('tags'),
+                'categories'=> Category::pluck('name', 'id'),
+                'tags'=> Tag::pluck('name', 'id')
+            ])
+        );
     }
 
     /**
@@ -110,18 +114,18 @@ class ProductController extends Controller
      */
     public function update(Product $product, UpdateProductRequest $request): RedirectResponse
     {
-    //Image
+        $product->update($request->validated());
+        $product->tags()->sync($request->input('tags'));
+        //Image
         if($request->file('file'))
         {
             if($product->file) {
                 Storage::delete($product->file);
             }
-            $file = $request->file('file')->store('public');
+            $file = $request->file('file')->store('images');
             $product->file = Storage::url($file);
+            $product->save();
         }
-
-        $product->update(array_filter($request->validated()));
-
 
         return redirect()->route('product.index')
                          ->with('status', 'Producto actualizado correctamente');

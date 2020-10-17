@@ -21,15 +21,15 @@ class StoreController extends Controller
      */
     public function showProducts(Request $request)
     {
-        $products = Product::ProductInfo($request->input('search'))->paginate(15);
+        $products = Product::with('category')->ProductInfo($request->input('search'))->paginate();
 
         return view('store.productShow', compact('products'));
 
-        /*$key = "product.page". request('page', 1);
+       /*$key = "product.page". request('page', 1);
 
        $products = Cache::rememberForever($key, function ()
         use ($request){
-            return Product::ProductInfo($request->input('search'))->paginate(15);
+            return Product::with('category')->ProductInfo($request->input('search'))->paginate(15);
         });
 
         return view('store.productShow', compact('products'));*/

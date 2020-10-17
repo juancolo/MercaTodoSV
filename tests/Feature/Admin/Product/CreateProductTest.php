@@ -47,7 +47,7 @@ class CreateProductTest extends TestCase
             'name' => 'ProductTest',
             'slug' => 'producttest',
             'details' => 'productdetails',
-            'actualPrice' => '1000',
+            'actual_price' => 1000,
             'description' => 'productdescription',
             'category_id' => $category->id,
             'tags' => [ 0 => $tag1->id,
@@ -108,7 +108,7 @@ class CreateProductTest extends TestCase
 
         $response = $this->post(route('product.store', $product));
 
-        $response->assertSessionHasErrors('actualPrice');
+        $response->assertSessionHasErrors('actual_price');
 
     }
 public function productCreation(){

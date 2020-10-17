@@ -39,7 +39,7 @@
 
                         <form class="form-control" action="{{ route('cart.update', $item->id) }}">
                             <td>{{ $item->name }}</td>
-                            <td><img src="{{asset($item->attributes['0'])}}" ></td>
+                            <td><img src="{{asset(asset('storage/'.$item->attributes['0']))}}" ></td>
                             <td>
                                 <input name="quantity"
                                        type="number"

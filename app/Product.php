@@ -9,7 +9,7 @@ use Illuminate\Database\Query\Builder;
 class Product extends Model
 {
     protected $fillable = [
-        'name', 'slug','details', 'description', 'actualPrice', 'oldPrice', 'category_id', 'stock', 'file', 'status'
+        'name', 'slug','details', 'description', 'actual_price', 'old_price', 'category_id', 'stock', 'file', 'status'
     ];
 
     public function category(){
@@ -25,7 +25,7 @@ class Product extends Model
     }
 
     public function presentPrice (){
-        return "$ ".number_format($this->actualPrice / 1);
+        return "$ ".number_format($this->actual_price / 1);
     }
 
     /**
@@ -38,7 +38,7 @@ class Product extends Model
     {
         if(null !== $productInfo){
             return $query   ->where('name', 'like', "%$productInfo%")
-                            ->orWhere('actualPrice', 'like', "%$productInfo%")
+                            ->orWhere('actual_price', 'like', "%$productInfo%")
                             ->orWhere('description', 'like', "%$productInfo%");
         }
         return $query;

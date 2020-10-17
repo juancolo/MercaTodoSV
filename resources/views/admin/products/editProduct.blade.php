@@ -92,7 +92,7 @@
                                                class="form-control"
                                                id="old_price"
                                                name="old_price"
-                                               value="{{$product->oldPrice}}"
+                                               value="{{$product->old_price}}"
                                                placeholder="{{__('Product old price')}}"
                                                readonly>
                                         {!! $errors->first('oldPrice', '<span class="help-block">:message</span>') !!}
@@ -110,7 +110,7 @@
                                                class="form-control"
                                                id="actual_price"
                                                name="actual_price"
-                                               value="{{$product->actualPrice}}"
+                                               value="{{$product->actual_price}}"
                                                placeholder="{{__('Product actual price')}}">
                                     </div>
                                 </div>
@@ -120,22 +120,22 @@
                             <br>
 
                             @foreach ($product->tags as $tagged)
-                                {{$tagged['id']}}
+
                             @endforeach
 
-                            @foreach($tags as $tag)
+                            @foreach($tags as $id => $name)
 
                                 <div class="col-sm-3">
                                     <label class="checkbox-inline "for="tags[]">
-                                        <input name="tags[]" type="checkbox" value="{{ $tag->id }}"
+                                        <input name="tags[]" type="checkbox" value="{{ $id }}"
 
                                                @foreach ($product->tags as $tagged)
 
-                                               @if($tagged['id'] == $tag->id) checked=checked @endif
+                                               @if($tagged['id'] == $id) checked=checked @endif
 
                                                 @endforeach
 
-                                        > {{ $tag->name }}
+                                        > {{ $name }}
                                     </label>
                                 </div>
 

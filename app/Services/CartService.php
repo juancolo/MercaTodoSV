@@ -35,6 +35,7 @@ class CartService
      */
     public function storeACartOfAUser(Product $product)
     {
+        //dd($product);
         if ($product->stock < 1)
 
             return ( 'no hay suficiente stock del producto');
@@ -42,7 +43,7 @@ class CartService
             $this->getACartFromUser()->add(array(
                     'id' => $product->id,
                     'name' => $product->name,
-                    'price' => $product->actualPrice,
+                    'price' => $product->actual_price,
                     'quantity' => 1,
                     'attributes' => array($product->file),
                     'associateModel' => Product::class

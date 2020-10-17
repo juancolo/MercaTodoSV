@@ -6,9 +6,6 @@
 
        <div class="breadcrumbs">
         <div class="container">
-            @if(Cart::session(auth()->id()))
-            {{Cart::session(auth()->id())->getTotal()}}
-            @endif
             <a href="#">Home</a>
             <i class="fa fa-chevron-right breadcrumb-separator"></i>
             <span>Shop</span>
@@ -17,16 +14,15 @@
         </div>
     </div> <!-- end breadcrumbs -->
        @if (session('status'))
-           <div class="alert alert-success">
+           <div class="card col-md-12 alert alert-success">
                {{ session('status') }}
            </div>
        @endif
     <div class="product-section container">
         <div class="product-section-image">
-            {{dd($product)}}
             @if ($product->file)
 
-                <img src="{{$product->file}}" class="embed-responsive" alt="product">
+                <img src="{{$product->file}}" alt="{{$product->name}}">
 
             @endif
         </div>
