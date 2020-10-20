@@ -50,6 +50,10 @@
                                 <a href="{{route('cart.index')}}" style="color: white"><i style="font-size:24px" class="fa">&#xf07a;</i></a>
                                 <span class="badge badge-danger">{{\Cart::session(auth()->id())->getContent()->count()}}</span>
                             </li>
+                            <li>
+                                <a href="{{route('order.show')}}" style="color: white"><i style="font-size:24px" class="fa">&#xf1d8;</i></a>
+                                <span class="badge badge-danger"></span>
+                            </li>
                     @endauth
                 </ul>
                 </div>

@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers\Store;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Cart\CartUpdateRequest;
-use App\Http\Requests\Product\UpdateProductRequest;
 use App\Product;
+use Illuminate\View\View;
 use App\Services\CartService;
-use App\User;
-use Darryldecode\Cart\Cart;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
@@ -32,23 +29,22 @@ class CartController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): View
     {
-        $user = auth()->id();
-
+        $user = Auth::id();
         $cartItems = $this->cartService->getAContentCartFormAUser();
 
         //Verify if the items into the cart still exist into the project
-        foreach ($cartItems as $item){
-
-            if (Product::find($item['id'])) {
-
+            foreach ($cartItems as $item)
+            {
+                if (Product::find($item['id'])) {
+                }
+                else{
+                    $this->getCartOfAUser()->remove($item['id']);
+                }
             }
-            else{
-                $this->getCartOfAUser()->remove($item['id']);
-            }
-        }
         $cartInfo = $this->getCartOfAUser();
+
         return view('cart.index', compact('cartItems', 'cartInfo', 'user' ));
     }
 
@@ -58,37 +54,33 @@ class CartController extends Controller
      */
     public function store(Product $product): RedirectResponse
     {
-        return back()->with('status', $this->cartService->storeACartOfAUser($product));
+        return redirect()->route('client.product.specs', compact('product'))
+                         ->with('status', $this->cartService->storeACartOfAUser($product));
     }
 
 
     /**
      * @param $cartItems
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function update($cartItems)
+    public function update($cartItems): RedirectResponse
     {
         $this->cartService->updateAProductToACartUser($cartItems);
-
         return back();
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
      * @param $productId
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
-    public function destroy($productId)
+    public function destroy($productId): RedirectResponse
     {
         $this->cartService->deleteAProductFromTheCartUser($productId);
-
         return back()->with('status', 'Producto eliminado del carrito adecuadamente');
 
     }
     public function getCartOfAUser(){
         $user = \Cart::session(auth()->id());
-
         return $user;
     }
 }

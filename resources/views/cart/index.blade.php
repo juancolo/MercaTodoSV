@@ -39,7 +39,7 @@
 
                         <form class="form-control" action="{{ route('cart.update', $item->id) }}">
                             <td>{{ $item->name }}</td>
-                            <td><img src="{{asset(asset('storage/'.$item->attributes['0']))}}" ></td>
+                            <td><img src="{{$item->attributes['0']}}" ></td>
                             <td>
                                 <input name="quantity"
                                        type="number"
@@ -86,7 +86,7 @@
             </table>
                 <row>
                     <form action="{{route('payment.index', $user)}}">
-                        <input type="submit" value="{{__('Pay')}}" class="btn btn-success right">
+                        <input type="submit" value="{{__('Pay')}}" class="btn-payment">
                     </form>
                 </row>
         </div>

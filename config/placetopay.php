@@ -16,7 +16,5 @@ return [
         'login' => env('PTP_APP_LOGIN'),
         'tranKey' => env('PTP_APP_TRAN_KEY'),
         'url' => env('PTP_URL'),
-        'nonce' => $nonce,
-        'additional' => []
     ],
 ];

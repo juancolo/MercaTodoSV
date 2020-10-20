@@ -15,9 +15,10 @@ class CreateProductTest extends TestCase
 {
     use WithFaker, RefreshDatabase;
 
-    /** @test */
-
-    public function onlyAdminsCanSeeTheProductCreateView()
+    /**
+     * @test
+     */
+    public function only_admins_can_see_the_product_create_view()
     {
         $this->withoutExceptionHandling();
 
@@ -31,7 +32,7 @@ class CreateProductTest extends TestCase
     /**
      * @test
      */
-    public function anAdminCanCreateAProduct()
+    public function an_admin_can_create_a_product()
     {
         $this->withoutExceptionHandling();
 
@@ -78,17 +79,14 @@ class CreateProductTest extends TestCase
 
         $response->assertRedirect(route('product.index'));
         $response->assertStatus(302);
-        // inyección de código <script> alert('test') </script>*/
     }
 
     /**
     * @test
      */
 
-    public function aProductPriceMustBeGreaterThanZero()
+    public function a_product_price_must_be_greater_than_zero()
     {
-        //$this->withoutExceptionHandling();
-
         //Given => An a authenticated admin can edit an existing product
         $this->ActingAsAdmin();
         $category = factory(Category::class)->create(['name' => 'categoryTest']);
@@ -111,17 +109,20 @@ class CreateProductTest extends TestCase
         $response->assertSessionHasErrors('actual_price');
 
     }
-public function productCreation(){
-        return [
-            'name' => 'ProductTest',
-            'slug' => 'producttest',
-            'details' => 'productdetails',
-            'description' => 'productdescription'
-        ];
-}
 
-private function ActingAsAdmin(){
-    $user = factory(User::class)->create(['role' => 'Administrador']);
-    $this->actingAs($user);
-}
+    public function productCreation(){
+            return [
+                'name' => 'ProductTest',
+                'slug' => 'producttest',
+                'details' => 'productdetails',
+                'description' => 'productdescription'
+            ];
+    }
+
+    private function ActingAsAdmin()
+    {
+        $user = factory(User::class)->create(['role' => 'Administrador']);
+        $this->actingAs($user);
+    }
+
 }

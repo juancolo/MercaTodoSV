@@ -25,10 +25,10 @@ Route::group( ['prefix' => 'store'], function (){
         ->name('client.product');
     Route::get('/landing/products/espeficiaciones/{product}', 'StoreController@showSpecs')
         ->name('client.product.specs');
-    Route::post('/cart/{product}', 'Store\CartController@store')
-        ->name('cart.store');
     Route::get('/cart', 'Store\CartController@index')
         ->name('cart.index');
+    Route::post('/cart/{product}', 'Store\CartController@store')
+        ->name('cart.store');
     Route::get('/cart/{product}', 'Store\CartController@update')
         ->name('cart.update');
     Route::delete('/cart/{product}', 'Store\CartController@destroy')
@@ -47,4 +47,11 @@ Route::group(['prefix'=> 'payment'], function (){
         ->name('payment.redone');
 });
 
+//Order
+Route::group(['prefix'=>'order'], function(){
+   Route::get('/show', 'OrderController@show')
+       ->name('order.show');
+});
+
+Route::view('/order/{order}', 'orders.show')->name('orders');
 

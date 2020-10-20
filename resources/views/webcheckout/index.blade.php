@@ -120,7 +120,7 @@
                         </form>
                     </div>
                 </div>
-
+            <!--
                 <div class="col-25">
                     <div class="container">
                         <h4>Cart
@@ -137,6 +137,7 @@
                         <p>Total <span class="price" style="color:black"><b>$30</b></span></p>
                     </div>
                 </div>
+                -->
             </div>
         </div>
     </form>

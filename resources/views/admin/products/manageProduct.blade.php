@@ -47,6 +47,7 @@
                     <div class="input-group-append">
                         <button class="btn btn-navbar" style="margin-top: 40px">
                             <i class="fa fa-search"></i>
+                            <a class="btn btn-primary" href="{{route('product.index')}}">{{__('Clean')}}</a>
                         </button>
                     </div>
                 </div>
