@@ -33,6 +33,10 @@ class Order extends Model
         'processUrl'
     ];
 
+    public function presentPrice()
+    {
+        return "$ ".number_format($this->total / 1);
+    }
     public function getRouteKeyName()
     {
         return 'reference';

@@ -42,7 +42,7 @@ class StoreProductRequest extends FormRequest
             'actual_price'  => 'required|numeric|min:0|not_in:0',
             'old_price' => 'numeric|min:0|not_in:0',
             'category_id' => 'required|exists:categories,id',
-            'tags' => 'array',
+            //'tags' => 'array',
             'tags.*' => 'exists:tags,id',
             'file' => 'image|mimes:jpeg,bmp,png',
             'status' => Rule::in(['ACTIVO', 'INACTIVO'])

@@ -1,17 +1,19 @@
 <?php
 
-namespace Tests\Feature\Admin\Product\Store;
+namespace Tests\Feature\Store\Payment;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class Langind extends TestCase
+class endTransactionTest extends TestCase
 {
     /**
-     * @test
+     * A basic feature test example.
+     *
+     * @return void
      */
-    public function Example()
+    public function testExample()
     {
         $response = $this->get('/');
 

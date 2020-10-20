@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Payment\PaymentInfoRequest;
-use App\Services\CartService;
 use App\User;
 use App\Order;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Ramsey\Uuid\Uuid;
 use Illuminate\View\View;
+use App\Services\CartService;
 use App\Services\PaymentData;
 use Dnetix\Redirection\PlacetoPay;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\Payment\PaymentInfoRequest;
 
 
 class PaymentController extends Controller
@@ -56,18 +55,32 @@ class PaymentController extends Controller
         $order->total = intval($this->cartService->getACartFromUser()->getTotal());
 
          // Conection with PlaceToPay
-        $payment = new PaymentData($order);
+        try {
+            $payment = new PaymentData($order);
 
-        //CreateRequest PlaceToPay
-        $response = $placetopay->request($payment->setPayment());
+            //CreateRequest PlaceToPay
+            $response = $placetopay->request($payment->setPayment());
+
+            if ($response->isSuccessful()) {
+                // Redirect the client to the processUrl or display it on the JS extension
+                $response->processUrl();
+
+                $order->requestId = $response->requestId;
+                $order->processUrl = $response->processUrl;
+                $order->status = $response->status()->status();
+                $order->save();
+
+                return redirect($response->processUrl());
+            } else {
+                // There was some error so check the message
+                $response->status()->message();
+            }
+            var_dump($response);
+        } catch (Exception $e) {
+            var_dump($e->getMessage());
 
         //Update the Order information
-        $order->requestId = $response->requestId;
-        $order->processUrl = $response->processUrl;
-        $order->status = $response->status()->status();
-        $order->save();
-
-        return redirect($response->processUrl());
+        }
     }
 
     /**
@@ -75,7 +88,8 @@ class PaymentController extends Controller
      * @param Order $order
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|View
      */
-    public function endTransaction (PlacetoPay $placetopay, Order $order)
+    public function
+    endTransaction (PlacetoPay $placetopay, Order $order)
     {
         $response = $placetopay->query($order->requestId);
         $order->status = $response->status()->status();

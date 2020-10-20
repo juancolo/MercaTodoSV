@@ -21,7 +21,7 @@
                         role="button"
                         type="submit"> {{__('Redone Payment')}}</button>
             </form>
-            @endif
+        @endif
     </div>
 
 @endsection

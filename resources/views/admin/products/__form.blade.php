@@ -70,6 +70,7 @@
                     <select class="form-control"
                             name = "category_id">
                         @foreach($categories as $category)
+
                             <option name = "category_id"
                                     value="{{$category->id}}">
                                 {{$category->name}}</option>
@@ -82,12 +83,12 @@
                     <label for="tags[]">{{__('Tags')}}</label>
                     <br>
 
-                    @foreach($tags as $tag)
+                    @foreach($tags as $id => $name)
 
                         <div class="col-sm-3">
                             <label class="checkbox-inline "for="tags[]">
-                                <input name="tags" id="tags" type="checkbox" value="{{ $tag->id}}">
-                                {{ $tag->name }}
+                                <input name="tags[]" id="tags" type="checkbox" value="{{$id}}">
+                                {{ $name}}
                             </label>
                         </div>
 

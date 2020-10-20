@@ -52,7 +52,7 @@
                                     @endif
                         </div>
                                 <a class="text-center">{{$product->description}}</a>
-                                <a class="text-center">{{$product->category->name}}</a>
+                                <a class="text-center">{{$product->category()->first()}}</a>
                                 <div class="text-center">Price: {{$product->presentPrice()}}</div>
                     <br>
                 </div> <!-- end products -->

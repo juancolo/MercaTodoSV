@@ -31,7 +31,8 @@ class ProductController extends Controller
      * @param IndexProductRequest $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|View
      */
-    public function index(IndexProductRequest $request)
+
+public function index(IndexProductRequest $request)
     {
         $products = Product::ProductInfo($request->input('search'))->paginate();
 
@@ -45,10 +46,11 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('admin.products.cretaProduct', with([
-         'categories'=> Category::pluck('name', 'id'),
-         'tags'=>  Tag::orderBy('name', 'ASC')->get()
-        ])
+        return view('admin.products.cretaProduct', with
+            ([
+             'categories'=> Category::select('name', 'id')->get(),
+             'tags'=>  Tag::pluck('name', 'id')
+            ])
         );
     }
 
@@ -95,10 +97,10 @@ class ProductController extends Controller
      */
     public function edit(Product $product): View
     {
-//dd($tags['id']);
+
         return view(
             'admin.products.editProduct', with([
-                'product' => $product->with('tags'),
+                'product' => $product,
                 'categories'=> Category::pluck('name', 'id'),
                 'tags'=> Tag::pluck('name', 'id')
             ])

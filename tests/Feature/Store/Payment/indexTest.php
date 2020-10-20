@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Feature\Store\Cart;
+namespace Tests\Feature\Store\Payment;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class DeleteCartProduct extends TestCase
+class indexTest extends TestCase
 {
     /**
      * A basic feature test example.
