@@ -1,0 +1,40 @@
+form {
+    width:800px;
+    margin:0 auto;
+    grid-template-columns: 1fr 1fr;
+
+    .half-form {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-gap: 80px;
+    }
+
+    button[type="submit"] {
+        border-style: none;
+        cursor: pointer;
+        font-size: 18px;
+        line-height: 1.6;
+    }
+}
+
+.form-group {
+    font: bold;
+    margin-bottom: 20px;
+    padding: 5px;
+
+    label {
+        display: block;
+
+        }
+    .form-control{
+        margin-bottom: 20px;
+        padding: 5px;
+        font: bold;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        font-size: 15px;
+    }
+}

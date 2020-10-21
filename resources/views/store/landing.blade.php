@@ -1,194 +1,84 @@
-@extends('layouts.template')
+<!doctype html>
+<html lang="{{ app()->getLocale() }}">
 
-@section('header')
+<body>
+<header>
+    @extends('layouts.mainlayout')
+    @section('content')
+        <div class="hero container">
+            <div class="hero-copy">
+                <h1>Laravel Ecommerce Demo</h1>
+                <p>Includes multiple products, categories, a shopping cart and a checkout system with Stripe integration.</p>
+                <div class="hero-buttons">
+                    <a href="#" class="button button-white">Blog Post</a>
+                    <a href="#" class="button button-white">GitHub</a>
+                </div>
+            </div> <!-- end hero-copy -->
 
-@endsection
 
-@section('banner')
-    <div class="banner_slider owl-carousel">
-        <div class="single_banner_slider">
-            <div class="row">
-                <div class="col-lg-5 col-md-8">
-                    <div class="banner_text">
-                        <div class="banner_text_iner">
-                            <h2>Nos encargamos de
-                                darte lo mejor</h2>
-                            <p>Te invitamos a que pruebes nuestros productos, en ellos encontarás lo que
-                                siempre has buscado.</p>
-                            <a href="#" class="btn_2">Compra ahora</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="banner_img d-none d-lg-block">
-                    <img src="img/banner_img.png" alt="">
-                </div>
-            </div>
-        </div><div class="single_banner_slider">
-            <div class="row">
-                <div class="col-lg-5 col-md-8">
-                    <div class="banner_text">
-                        <div class="banner_text_iner">
-                            <h2>Nos encargamos de
-                                darte lo mejor</h2>
-                            <p>Te invitamos a que pruebes nuestros productos, en ellos encontarás lo que
-                                siempre has buscado.</p>
-                            <a href="#" class="btn_2">Compra ahora</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="banner_img d-none d-lg-block">
-                    <img src="img/banner_img.png" alt="">
-                </div>
-            </div>
-        </div><div class="single_banner_slider">
-            <div class="row">
-                <div class="col-lg-5 col-md-8">
-                    <div class="banner_text">
-                        <div class="banner_text_iner">
-                            <h2>Nos encargamos de
-                                darte lo mejor</h2>
-                            <p>Te invitamos a que pruebes nuestros productos, en ellos encontarás lo que
-                                siempre has buscado.</p>
-                            <a href="#" class="btn_2">Compra ahora</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="banner_img d-none d-lg-block">
-                    <img src="img/banner_img.png" alt="">
-                </div>
-            </div>
+            <div class="hero-image" align="left">
+                <img src="img/macbook-pro-laravel.png">
+            </div> <!-- end hero-image -->
+        </div> <!-- end hero -->
+        @yield('header')
+</header>
+<div class="featured-section">
+
+    <div class="container">
+        <h1 class="text-center">CSS Grid Example</h1>
+
+        <p class="section-description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore vitae nisi, consequuntur illum dolores cumque pariatur quis provident deleniti nesciunt officia est reprehenderit sunt aliquid possimus temporibus enim eum hic.</p>
+
+        <div class="text-center button-container">
+            <a href="#" class="button">Featured</a>
+            <a href="#" class="button">On Sale</a>
         </div>
 
-    </div>
-    <div class="slider-counter"></div>
-    </div>
-@endsection
+        <div class="products text-center">
+            @foreach($products as $product)
 
-@section('content')
-    <div class="row align-items-center justify-content-between">
-        <div class="col-lg-7 col-sm-6">
-            <div class="single_feature_post_text">
-                <p>Premium Quality</p>
-                <h3>Latest foam Sofa</h3>
-                <a href="#" class="feature_btn">EXPLORE NOW <i class="fas fa-play"></i></a>
-                <img src="img/feature/feature_1.png" alt="">
-            </div>
-        </div>
-        <div class="col-lg-5 col-sm-6">
-            <div class="single_feature_post_text">
-                <p>Premium Quality</p>
-                <h3>Latest foam Sofa</h3>
-                <a href="#" class="feature_btn">EXPLORE NOW <i class="fas fa-play"></i></a>
-                <img src="img/feature/feature_2.png" alt="">
-            </div>
-        </div>
-        <div class="col-lg-5 col-sm-6">
-            <div class="single_feature_post_text">
-                <p>Premium Quality</p>
-                <h3>Latest foam Sofa</h3>
-                <a href="#" class="feature_btn">EXPLORE NOW <i class="fas fa-play"></i></a>
-                <img src="img/feature/feature_3.png" alt="">
-            </div>
-        </div>
-        <div class="col-lg-7 col-sm-6">
-            <div class="single_feature_post_text">
-                <p>Premium Quality</p>
-                <h3>Latest foam Sofa</h3>
-                <a href="#" class="feature_btn">EXPLORE NOW <i class="fas fa-play"></i></a>
-                <img src="img/feature/feature_4.png" alt="">
-            </div>
-        </div>
-    </div>
-
-    <!-- awesome_shop start-->
-    <section class="our_offer section_padding">
-        <div class="container">
-            <div class="row align-items-center justify-content-between">
-                <div class="col-lg-6 col-md-6">
-                    <div class="offer_img">
-                        <img src="img/offer_img.png" alt="">
-                    </div>
+                <div class="product">
+                    <a href="#"><img src="/img/macbook-pro.png" alt="product"></a>
+                    <a href="#"><div class="product-name">{{$product->name}}</div></a>
+                    <div class="product-price">{{$product->presentPrice()}}</div>
                 </div>
-                <div class="col-lg-6 col-md-6">
-                    <div class="offer_text">
-                        <h2>Weekly Sale on
-                            60% Off All Products</h2>
-                        <div class="date_countdown">
-                            <div id="timer">
-                                <div id="days" class="date"></div>
-                                <div id="hours" class="date"></div>
-                                <div id="minutes" class="date"></div>
-                                <div id="seconds" class="date"></div>
-                            </div>
-                        </div>
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="enter email address"
-                                   aria-label="Recipient's username" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <a href="#" class="input-group-text btn_2" id="basic-addon2">book now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            @endforeach
+        </div> <!-- end products -->
+
+        <div class="text-center button-container">
+            <a href="#" class="button">View more products</a>
+        </div>
+
+    </div> <!-- end container -->
+    @yield('product')
+</div> <!-- end featured-section -->
+
+<div class="blog-section">
+    <div class="container">
+        <h1 class="text-center">From Our Blog</h1>
+
+        <p class="section-description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore vitae nisi, consequuntur illum dolores cumque pariatur quis provident deleniti nesciunt officia est reprehenderit sunt aliquid possimus temporibus enim eum hic.</p>
+
+        <div class="blog-posts">
+            <div class="blog-post" id="blog1">
+                <a href="#"><img src="/img/blog1.png" alt="Blog Image"></a>
+                <a href="#"><h2 class="blog-title">Blog Post Title 1</h2></a>
+                <div class="blog-description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi, tenetur numquam ipsam reiciendis.</div>
+            </div>
+            <div class="blog-post" id="blog2">
+                <a href="#"><img src="/img/blog2.png" alt="Blog Image"></a>
+                <a href="#"><h2 class="blog-title">Blog Post Title 2</h2></a>
+                <div class="blog-description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi, tenetur numquam ipsam reiciendis.</div>
+            </div>
+            <div class="blog-post" id="blog3">
+                <a href="#"><img src="/img/blog3.png" alt="Blog Image"></a>
+                <a href="#"><h2 class="blog-title">Blog Post Title 3</h2></a>
+                <div class="blog-description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi, tenetur numquam ipsam reiciendis.</div>
             </div>
         </div>
-    </section>
-    <!-- awesome_shop part start-->
-
-    <!-- product_list part start-->
-    <section class="product_list best_seller section_padding">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-12">
-                    <div class="section_tittle text-center">
-                        <h2>Best Sellers <span>shop</span></h2>
-                    </div>
-                </div>
-            </div>
-            <div class="row align-items-center justify-content-between">
-                <div class="col-lg-12">
-                    <div class="best_product_slider owl-carousel">
-                        <div class="single_product_item">
-                            <img src="img/product/product_1.png" alt="">
-                            <div class="single_product_text">
-                                <h4>Quartz Belt Watch</h4>
-                                <h3>$150.00</h3>
-                            </div>
-                        </div>
-                        <div class="single_product_item">
-                            <img src="img/product/product_2.png" alt="">
-                            <div class="single_product_text">
-                                <h4>Quartz Belt Watch</h4>
-                                <h3>$150.00</h3>
-                            </div>
-                        </div>
-                        <div class="single_product_item">
-                            <img src="img/product/product_3.png" alt="">
-                            <div class="single_product_text">
-                                <h4>Quartz Belt Watch</h4>
-                                <h3>$150.00</h3>
-                            </div>
-                        </div>
-                        <div class="single_product_item">
-                            <img src="img/product/product_4.png" alt="">
-                            <div class="single_product_text">
-                                <h4>Quartz Belt Watch</h4>
-                                <h3>$150.00</h3>
-                            </div>
-                        </div>
-                        <div class="single_product_item">
-                            <img src="img/product/product_5.png" alt="">
-                            <div class="single_product_text">
-                                <h4>Quartz Belt Watch</h4>
-                                <h3>$150.00</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- product_list part end-->
-
-@endsection
-
+    </div> <!-- end container -->
+    @yield('blog')
+</div> <!-- end blog-section -->
+@endsection('content')
+</body>
+</html>

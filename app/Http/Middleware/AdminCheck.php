@@ -22,6 +22,6 @@ class AdminCheck
         if (Auth::check() && Auth::user()->role=='Administrador')
             return $next($request);
 
-        return redirect('/home');
+        return redirect()->route('client.landing');
     }
 }
