@@ -10,6 +10,7 @@ Route::get('/', function () {
 
 Auth::routes(['verify'=>true]);
 
+<<<<<<< HEAD
 //User Admin
 Route::resource('/admin',  'Admin\UserController');
 //Products Admin
@@ -56,3 +57,7 @@ Route::group(['prefix'=>'order'], function(){
 
 Route::view('/order/{order}', 'orders.show')->name('orders');
 
+=======
+Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
+Route::view('/index', 'layouts.landing');
+>>>>>>> style_user_interface

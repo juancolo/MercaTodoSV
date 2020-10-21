@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 @extends('layouts.mainlayout')
+=======
+@extends('layouts.template')
+>>>>>>> style_user_interface
 
 @section('content')
     <hr>
