@@ -16,6 +16,7 @@ Route::resource('/admin',  'Admin\UserController');
 Route::resource('/product', 'Admin\ProductController');
 Route::resource('/shop', 'ShopController');
 
+Route::resource('/shop', 'ShopController');
 
 //store
 Route::group( ['prefix' => 'store'], function (){
@@ -54,4 +55,3 @@ Route::group(['prefix'=>'order'], function(){
 });
 
 Route::view('/order/{order}', 'orders.show')->name('orders');
-
