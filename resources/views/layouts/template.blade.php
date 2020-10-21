@@ -84,6 +84,15 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="contact.html">Contactanos</a>
                             </li>
+                            @if (Route::has('login'))
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="blog.html" id="navbarDropdown_3"
+                                   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Salir
+                                </a>
+                            </li>
+                            @endif
 
                             @auth
                             @if (Route::has('login'))
