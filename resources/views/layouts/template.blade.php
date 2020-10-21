@@ -1,9 +1,4 @@
-
-<<<<<<< HEAD
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-=======
-<html lang="zxx">
->>>>>>> style_user_interface
 
 <head>
     <!-- Required meta tags -->
@@ -37,11 +32,9 @@
         <div class="row align-items-center">
             <div class="container">
                 <nav class="navbar navbar-expand-lg navbar-dark">
-<<<<<<< HEAD
+
                     <a class="navbar-brand" href="{{route('store.landing')}}"> <img src="{{asset('img/logo.png')}}" alt="logo"></a>
-=======
-                    <a class="navbar-brand" href="template.blade.php"> <img src="img/logo.png" alt="logo"></a>
->>>>>>> style_user_interface
+
                     <button class="navbar-toggler" type="button" data-toggle="collapse"
                             data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
@@ -58,11 +51,9 @@
                                 <a class="nav-link"></a>
                             </li>
                             <li class="nav-item">
-<<<<<<< HEAD
+
                                 <a class="nav-link" href="{{route('store.landing')}}">Inicio</a>
-=======
-                                <a class="nav-link" href="template.blade.php">Inicio</a>
->>>>>>> style_user_interface
+
                             </li>
 
                             <li class="nav-item dropdown">
@@ -75,10 +66,8 @@
                                     <a class="dropdown-item" href="single-product.html">Produtcos 2</a>
 
                                 </div>
-<<<<<<< HEAD
                                 @guest
-=======
->>>>>>> style_user_interface
+
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="blog.html" id="navbarDropdown_3"
@@ -86,24 +75,16 @@
                                     Ingresar
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown_2">
-<<<<<<< HEAD
                                     <a class="dropdown-item" href="{{route('login')}}"> login</a>
                                     <a class="dropdown-item" href="{{route('register')}}"> Registrate</a>
                                 </div>
 
                                 @endguest
-=======
-                                    <a class="dropdown-item" href="login.html"> login</a>
-                                    <a class="dropdown-item" href="login.html"> Registrate</a>
-                                </div>
-                            </li>
 
->>>>>>> style_user_interface
                             <li class="nav-item">
                                 <a class="nav-link" href="contact.html">Contactanos</a>
                             </li>
 
-<<<<<<< HEAD
                             @auth
                             @if (Route::has('login'))
 
@@ -135,9 +116,6 @@
                             @endif
                             @endauth
 
-
-=======
->>>>>>> style_user_interface
                         </ul>
                     </div>
                 </nav>
@@ -280,72 +258,6 @@
     </div>
 </section>
 <!-- product_list part end-->
-
->>>>>>> style_user_interface
-<!--::footer_part start::-->
-<footer class="footer_part">
-    <div class="container">
-        <div class="row justify-content-around">
-            <div class="col-sm-6 col-lg-2">
-                <div class="single_footer_part">
-                    <h4>Top Products</h4>
-                    <ul class="list-unstyled">
-                        <li><a href="">Managed Website</a></li>
-                        <li><a href="">Manage Reputation</a></li>
-                        <li><a href="">Power Tools</a></li>
-                        <li><a href="">Marketing Service</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-2">
-                <div class="single_footer_part">
-                    <h4>Quick Links</h4>
-                    <ul class="list-unstyled">
-                        <li><a href="">Jobs</a></li>
-                        <li><a href="">Brand Assets</a></li>
-                        <li><a href="">Investor Relations</a></li>
-                        <li><a href="">Terms of Service</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-2">
-                <div class="single_footer_part">
-                    <h4>Features</h4>
-                    <ul class="list-unstyled">
-                        <li><a href="">Jobs</a></li>
-                        <li><a href="">Brand Assets</a></li>
-                        <li><a href="">Investor Relations</a></li>
-                        <li><a href="">Terms of Service</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-2">
-                <div class="single_footer_part">
-                    <h4>Sieguenos</h4>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="single_social_icon"><i class="fab fa-facebook-f"></i> MercaTodoFB</a></li>
-                        <li><a href="#" class="single_social_icon"><i class="fab fa-twitter"></i> MercaTodoTW</a></li>
-                        <li><a href="#" class="single_social_icon"><i class="fas fa-globe"></i> MercaTodoWW</a></li>
-                        <li><a href="#" class="single_social_icon"><i class="fab fa-behance"></i></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="copyright_part">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8">
-                        <div class="copyright_text">
-                            <P><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                                Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="ti-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></P>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-</footer>
-<!--::footer_part end::-->
 
 <!-- jquery plugins here-->
 <script src="js/jquery-1.12.1.min.js"></script>
