@@ -18,7 +18,8 @@
         "laravel/dusk": "^6.8",
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
-        "laravel/ui": "^2.0"
+        "laravel/ui": "^2.0",
+      "ext-openssl": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",
