@@ -75,6 +75,8 @@ public function index(IndexProductRequest $request)
         }
 
 
+=======
+>>>>>>> Stashed changes
         return redirect()->route('product.index');
     }
 

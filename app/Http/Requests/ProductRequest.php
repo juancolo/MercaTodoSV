@@ -29,10 +29,10 @@ class ProductRequest extends FormRequest
             'slug'              => 'required|min:3|max:70',
             'details'           => 'required|min:3|max:80',
             'description'       => 'required|min:3|max:200',
-            'actualPrice'       => 'required|min:4|max:8',
-            'old_price'         => 'min:4|max:8',
+            'actual_price'      => 'numeric|min:4|max:8',
+            'old_price'         => 'numeric|min:4|max:8',
             'category_id'       => 'required|exists:categories,id',
-            'tags'              => 'array',
+            'tags'              => 'required|array',
             'tags.*'            => 'exists:tags,id',
             'file'              => 'image|mimes:jpeg,bmp,png|size:512',
             'status'            => Rule::in(['ACTIVO', 'INACTIVO'])
