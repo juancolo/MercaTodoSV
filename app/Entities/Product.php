@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Entities;
 
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Database\Eloquent\Model;
