@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Routing\Redirector;
 use Ramsey\Uuid\Uuid;
 use App\Entities\User;
 use App\Entities\Order;
@@ -33,20 +34,18 @@ class PaymentController extends Controller
     public function index(User $user): View
     {
         if ($this->cartService->getAContentCartFormAUser()->count() == 0)
-
             return redirect()->route('client.product');
         else
-
             return view('webcheckout.index', compact('user'));
     }
 
     /**
      * @param PlacetoPay $placetopay
      * @param PaymentInfoRequest $request
-     * @return \Illuminate\Contracts\Foundation\Application|RedirectResponse|\Illuminate\Routing\Redirector
+     * @return Redirector
      * @throws \Dnetix\Redirection\Exceptions\PlacetoPayException
      */
-    public function store(PlacetoPay $placetopay, PaymentInfoRequest $request)
+    public function store(PlacetoPay $placetopay, PaymentInfoRequest $request): Redirector
     {
         //Create the order for the payment
         $order = Order::create($request->all());
@@ -88,8 +87,7 @@ class PaymentController extends Controller
      * @param Order $order
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|View
      */
-    public function
-    endTransaction (PlacetoPay $placetopay, Order $order)
+    public function endTransaction (PlacetoPay $placetopay, Order $order)
     {
         $response = $placetopay->query($order->requestId);
         $order->status = $response->status()->status();

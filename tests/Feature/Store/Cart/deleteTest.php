@@ -29,11 +29,6 @@ class deleteTest extends TestCase
             ->post(route('cart.store', $product));
         $this->assertCount(1, \Cart::getContent());
 
-        $this->actingAs($this->ActingAsClient());
-        $response = $this->from(route('client.product.specs', $product))
-            ->post(route('cart.store', $product));
-        $this->assertCount(1, \Cart::getContent());
-
         //When
         $user = Auth::id();
         $response = $this->get(route('cart.index'));

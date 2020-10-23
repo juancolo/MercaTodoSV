@@ -2,7 +2,7 @@
 
 namespace App\Entities;
 
-use PhpParser\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -43,14 +43,15 @@ class Order extends Model
         return 'reference';
     }
 
+
     /**
      * @param Builder $query
      * @return Builder
      */
-    public static function scopeWithOutFinalStatus(Builder $query): Builder
+    public static function scopeWithoutFinalStatus(Builder $query): Builder
     {
         return $query
-            ->where('status', "PENDING")
+            ->where('status', "APPROVED")
             ->orWhere('status', "IN_PROCESS");
 
     }

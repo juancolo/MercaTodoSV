@@ -2,14 +2,14 @@
 
 namespace Tests\Feature\Admin\Product;
 
-use App\Category;
-use App\Product;
-use App\Tag;
-use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Str;
 use Tests\TestCase;
+use App\Entities\Tag;
+use App\Entities\User;
+use App\Entities\Product;
+use App\Entities\Category;
+use Illuminate\Support\Str;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UpdateProductTest extends TestCase
 {
@@ -36,9 +36,7 @@ class UpdateProductTest extends TestCase
 
         $this->assertDatabaseHas('products', ['name'=> $product->name]);
         $response->assertStatus(200);
-
     }
-
 
     private function CreateCategory(){
         $category = factory(Category::class)->create(['name' => 'categoryTest']);

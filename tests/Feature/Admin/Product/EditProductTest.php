@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Feature\Admin\Product\Admin\Product;
+namespace Tests\Feature\Admin\Product;
 
-use App\Tag;
-use App\User;
-use App\Product;
-use App\Category;
 use Tests\TestCase;
+use App\Entities\Tag;
+use App\Entities\User;
+use App\Entities\Product;
+use App\Entities\Category;
 use Illuminate\Support\Str;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;

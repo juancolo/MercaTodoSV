@@ -2,15 +2,12 @@
 
 namespace Tests\Feature\Store\Order;
 
-use App\Category;
-use App\Order;
-use App\Product;
-use App\Tag;
-use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Auth;
+use App\Entities\Order;
+use App\Entities\User;
 use Tests\TestCase;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class showTest extends TestCase
 {
@@ -25,24 +22,21 @@ class showTest extends TestCase
         $response->assertStatus(302);
     }
 
-
     /**
      * @test
      */
     public function an_authenticated_client_cant_see_his_orders()
     {
-        //Arrange
         $this->actingAs($this->ActingAsClient());
         $user = Auth::id();
         $order = factory(Order::class)->create([
             'user_id' => $user,
         ]);
-        //When
+
         $response = $this->get(route('order.show', $user));
-        //Assert
+
         $response->assertStatus(200);
         $response->assertSee($order->total);
-
     }
 
     private function ActingAsClient()

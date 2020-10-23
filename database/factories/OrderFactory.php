@@ -2,7 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Order;
+use App\Entities\Order;
 use Faker\Generator as Faker;
 use Illuminate\Validation\Rule;
 

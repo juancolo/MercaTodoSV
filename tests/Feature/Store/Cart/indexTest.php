@@ -2,12 +2,11 @@
 
 namespace Tests\Feature\Store\Cart;
 
-use App\Tag;
-use App\User;
-use App\Product;
-use App\Category;
+use App\Entities\Category;
+use App\Entities\Product;
+use App\Entities\Tag;
+use App\Entities\User;
 use Tests\TestCase;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -22,7 +21,6 @@ class indexTest extends TestCase
      */
     public function auth_client_can_see_the_cart()
     {
-        //Arrange
         $this->actingAs($this->ActingAsClient());
         $product = $this->CreateProduct
             (
@@ -35,22 +33,19 @@ class indexTest extends TestCase
                     ->post(route('cart.store', $product));
         $this->assertCount(1, \Cart::getContent());
 
-        //When
         $user = Auth::id();
         $response = $this->get(route('cart.index'));
-        //Assert
+
         $response->assertSee($product->name);
         $response->assertSee(\Cart::session($user)->getTotal());
         $response->assertSee('Modify');
         $response->assertSee('Pay');
         $response->assertOk();
-
     }
 
     /**
      * @test
      */
-
     public function an_non_authenticated_user_cant_see_a_cart()
     {
         $response = $this->get(route('cart.index'));

@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Entities\Order;
+use Dnetix\Redirection\PlacetoPay;
 use Illuminate\Console\Command;
 
 class CheckPaymentStatus extends Command
@@ -35,8 +37,13 @@ class CheckPaymentStatus extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(PlacetoPay $placetoPay)
     {
+        $ordersToUpdate = Order::WithoutFinalStatus()->get();
+        //dd($ordersToUpdate->count());
+            if ($ordersToUpdate->count() > 0)
+                foreach ($ordersToUpdate as $order)
+                    $order->status = $placetoPay->query($order->reference);
         return 0;
     }
 }
