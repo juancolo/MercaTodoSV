@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Order;
 use Illuminate\Console\Command;
 
 class CheckPaymentStatus extends Command
@@ -38,7 +37,6 @@ class CheckPaymentStatus extends Command
      */
     public function handle()
     {
-        Order::where
         return 0;
     }
 }

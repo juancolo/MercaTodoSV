@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Store;
 
-use App\Product;
+use App\Entities\Product;
 use Illuminate\View\View;
 use App\Services\CartService;
 use Illuminate\Support\Facades\Auth;
@@ -58,7 +58,6 @@ class CartController extends Controller
                          ->with('status', $this->cartService->storeACartOfAUser($product));
     }
 
-
     /**
      * @param $cartItems
      * @return RedirectResponse
@@ -79,6 +78,7 @@ class CartController extends Controller
         return back()->with('status', 'Producto eliminado del carrito adecuadamente');
 
     }
+
     public function getCartOfAUser(){
         $user = \Cart::session(auth()->id());
         return $user;

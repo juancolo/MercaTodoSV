@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Entities\Category;
 use Illuminate\Http\Request;
-use App\Category;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 
 class CategoryController extends Controller
 {
@@ -31,10 +33,9 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): RedirectResponse
     {
         return redirect(route('category.create'));
-
     }
 
     /**
@@ -43,7 +44,7 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         Category::create([
             'name' => $request->input('name'),

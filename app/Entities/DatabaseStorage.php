@@ -6,8 +6,7 @@
  * Time: 1:25 PM
  */
 
-namespace App;
-
+namespace App\Entities;
 
 use Darryldecode\Cart\CartCollection;
 

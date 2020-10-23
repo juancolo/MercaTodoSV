@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use App\Order;
-use Illuminate\Support\Facades\Auth;
+use App\Entities\Order;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {

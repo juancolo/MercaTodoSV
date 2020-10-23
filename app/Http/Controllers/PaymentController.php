@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use App\Order;
 use Ramsey\Uuid\Uuid;
+use App\Entities\User;
+use App\Entities\Order;
 use Illuminate\View\View;
 use App\Services\CartService;
 use App\Services\PaymentData;

@@ -2,8 +2,8 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Model;
 use PhpParser\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {

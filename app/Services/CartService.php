@@ -3,8 +3,7 @@
 
 namespace App\Services;
 
-
-use App\Product;
+use App\Entities\Product;
 use Darryldecode\Cart\Cart;
 use Darryldecode\Cart\CartCollection;
 use Illuminate\Support\Facades\Auth;

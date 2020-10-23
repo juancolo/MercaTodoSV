@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\User;
+use App\Entities\User;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 
 class UserController extends Controller {
 
@@ -14,7 +15,11 @@ class UserController extends Controller {
         $this->middleware('auth');
 	}
 
-	public function index(Request $request)
+    /**
+     * @param Request $request
+     * @return View
+     */
+    public function index(Request $request): View
     {
 
         $users = User::UserInfo($request->input('search'))->paginate();
@@ -23,12 +28,13 @@ class UserController extends Controller {
 
 	}
 
-    public function create() {
-
+    public function create(): View
+    {
 		return view('admin.create');
 	}
 
-	public function store(Request $request) {
+	public function store(Request $request)
+    {
 		//
 	}
     /**
@@ -39,7 +45,8 @@ class UserController extends Controller {
      * @return RedirectResponse
      */
 
-	public function update( Request $request, $id) : RedirectResponse {
+	public function update( Request $request, $id) : RedirectResponse
+    {
 
 		$user = User::findOrFail($id);
 
@@ -52,14 +59,19 @@ class UserController extends Controller {
 
 		return redirect()->route('admin.index')
                          ->with('status', 'Usuario actualizado correctamente');
-
 	}
 
-	public function show($id) {
+	public function show($id)
+    {
 		//
 	}
 
-	public function edit( $id) {
+    /**
+     * @param $id
+     * @return View
+     */
+    public function edit($id): View
+    {
 		return view('admin.users.editUsers', ['user' => User::findOrFail($id)]);
 	}
 
