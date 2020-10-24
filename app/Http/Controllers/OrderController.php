@@ -22,4 +22,9 @@ class OrderController extends Controller
         //dd($orders);
         return view('orders.show', compact('orders'));
     }
+
+    public function create($request)
+    {
+        //Order::create()
+    }
 }

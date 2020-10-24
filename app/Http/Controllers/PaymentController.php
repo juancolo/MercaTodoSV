@@ -42,7 +42,7 @@ class PaymentController extends Controller
     /**
      * @param PlacetoPay $placetopay
      * @param PaymentInfoRequest $request
-     * @return Redirector
+     * @return \Illuminate\Contracts\Foundation\Application|RedirectResponse|Redirector
      * @throws \Dnetix\Redirection\Exceptions\PlacetoPayException
      */
     public function store(PlacetoPay $placetopay, PaymentInfoRequest $request): Redirector
@@ -52,6 +52,12 @@ class PaymentController extends Controller
         $order->reference = substr(Uuid::uuid4(), 0, 10);
         $order->user_id = $this->getUserId();
         $order->total = intval($this->cartService->getACartFromUser()->getTotal());
+
+        //dd($this->cartService->getAContentCartFormAUser()->toArray());
+        foreach ($this->cartService->getAContentCartFormAUser() as $product)
+            {
+               $order->products()->attach($product['id']);
+            }
 
          // Conection with PlaceToPay
         try {

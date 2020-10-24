@@ -12,7 +12,7 @@ class Order extends Model
     }
 
     public function products(){
-        return $this->hasMany(Product::class, 'order_product')->withPivot('product_id');
+        return $this->belongsToMany(Product::class, 'order_product')->withPivot('product_id');
     }
 
     protected $fillable = [

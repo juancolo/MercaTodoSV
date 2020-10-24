@@ -64,8 +64,8 @@ class CartController extends Controller
      */
     public function update($cartItems): RedirectResponse
     {
-        $this->cartService->updateAProductToACartUser($cartItems);
-        return back();
+        return back()
+            ->with('status', $this->cartService->updateAProductToACartUser($cartItems));
     }
 
     /**
@@ -79,6 +79,9 @@ class CartController extends Controller
 
     }
 
+    /**
+     * @return mixed
+     */
     public function getCartOfAUser(){
         $user = \Cart::session(auth()->id());
         return $user;

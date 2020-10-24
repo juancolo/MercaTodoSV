@@ -40,10 +40,15 @@ class CheckPaymentStatus extends Command
     public function handle(PlacetoPay $placetoPay)
     {
         $ordersToUpdate = Order::WithoutFinalStatus()->get();
-        //dd($ordersToUpdate->count());
             if ($ordersToUpdate->count() > 0)
+            {
                 foreach ($ordersToUpdate as $order)
-                    $order->status = $placetoPay->query($order->reference);
+                    $status = $placetoPay->query($order->reference);
+                    if ($status == 'REJECTED')
+                    {
+                        $order->save();
+                    }
+            }
         return 0;
     }
 }

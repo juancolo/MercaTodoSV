@@ -35,7 +35,6 @@ class CartService
     public function storeACartOfAUser(Product $product)
     {
         if ($product->stock < 1)
-
             return ( 'no hay suficiente stock del producto');
         else
             $this->getACartFromUser()->add(array(
@@ -47,7 +46,7 @@ class CartService
                     'associateModel' => Product::class
                 )
             );
-            return ('se ha agreago '.$product->name .' al carrito');
+            return ('se ha agregado '.$product->name .' al carrito');
     }
 
     /**
@@ -55,6 +54,11 @@ class CartService
      */
     public function updateAProductToACartUser(string $cartItem)
     {
+        $product = $this->getAProductOfACart($cartItem);
+        if (request('quantity') > $product->stock)
+        {
+          return ('the amount of the product is bigger than the stock');
+        }
         $this->getACartFromUser()->update($cartItem, array
             (
             'quantity'=>array(
@@ -63,6 +67,7 @@ class CartService
                 )
             )
         );
+        return ('your cart is update');
     }
 
     /**
@@ -73,4 +78,13 @@ class CartService
         $this->getACartFromUser()->remove($productId);
     }
 
+    public function getAProductOfACart($cartItem)
+    {
+        return Product::where('id',
+            $this
+                ->getACartFromUser()
+                ->get($cartItem)
+                ->toArray()['id']
+        )->first();
+    }
 }
