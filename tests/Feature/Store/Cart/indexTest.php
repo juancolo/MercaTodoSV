@@ -29,8 +29,9 @@ class indexTest extends TestCase
             );
 
         $this->actingAs($this->ActingAsClient());
-        $response = $this->from(route('client.product.specs', $product))
-                    ->post(route('cart.store', $product));
+        $this->from(route('client.product.specs', $product))
+             ->post(route('cart.store', $product));
+
         $this->assertCount(1, \Cart::getContent());
 
         $user = Auth::id();
@@ -58,19 +59,7 @@ class indexTest extends TestCase
         return factory(User::class)->create(['role' => 'Cliente']);
     }
 
-    private function CreateProduct(Category $category, Tag $tag)
-    {
-        return Product::create([
-            'name'=>'ProductTest',
-            'slug'=>'producttest',
-            'details'=>'ProductDetail',
-            'description'=>'ProductDescription',
-            'actual_price'=> 1000,
-            'category_id' => $category->id,
-            'tag_id' => $tag->id,
-            'stock' => 10,
-        ]);
-    }
+
 
     private function CreateCategory(){
         $category = factory(Category::class)->create(['name' => 'categoryTest']);

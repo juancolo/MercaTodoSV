@@ -2,27 +2,28 @@
 
 namespace Tests\Feature\Store\Products;
 
-use App\Entities\Category;
-use App\Entities\Tag;
-use App\Entities\User;
+use App\Entities\Product;
 use Tests\TestCase;
+use App\Entities\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class IndexTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
     /**
      * @test
      */
     public function auth_client_can_see_the_product_index()
     {
-        $this->withoutExceptionHandling();
-
+        factory(Product::class, 15)->create();
         $this->actingAs($this->ActingAsClient());
-        $response = $this->get(route('client.product'));
-
-        $response->assertOk();
+        $this->get(route('client.product'))
+            ->assertOk()
+            ->assertViewHasAll(['products'])
+            ->assertSee('Category')
+            ->assertSee('Product price');
     }
 
     /**
@@ -38,17 +39,5 @@ class IndexTest extends TestCase
     private function ActingAsClient()
     {
         return factory(User::class)->create(['role' => 'Cliente']);
-    }
-
-    private function CreateCategory()
-    {
-        $category = factory(Category::class)->create(['name' => 'categoryTest']);
-        return $category;
-    }
-
-    private function CreateTag()
-    {
-        $tag = factory(Tag::class)->create(['name' => 'tagTest1']);
-        return $tag;
     }
 }

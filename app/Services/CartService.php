@@ -5,12 +5,11 @@ namespace App\Services;
 
 use App\Entities\Product;
 use Darryldecode\Cart\Cart;
-use Darryldecode\Cart\CartCollection;
 use Illuminate\Support\Facades\Auth;
+use Darryldecode\Cart\CartCollection;
 
 class CartService
 {
-
     /**
      * @return Cart
      */

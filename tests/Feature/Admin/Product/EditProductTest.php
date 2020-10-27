@@ -7,7 +7,7 @@ use App\Entities\Tag;
 use App\Entities\User;
 use App\Entities\Product;
 use App\Entities\Category;
-use Illuminate\Support\Str;
+use Tests\Feature\ProductForTest;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -115,11 +115,11 @@ class EditProductTest extends TestCase
         ]);
     }
 
-    private function EditProduct(Product $product)
+   /* private function EditProduct(Product $product)
     {
         $product->name = 'ProdcutEditName';
         $product->slug = Str::slug($product->name);
         $product->save();
         return $product;
-    }
+    }*/
 }

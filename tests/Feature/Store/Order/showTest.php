@@ -2,41 +2,57 @@
 
 namespace Tests\Feature\Store\Order;
 
-use App\Entities\Order;
-use App\Entities\User;
 use Tests\TestCase;
+use App\Entities\User;
+use Tests\Feature\OrderTest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class showTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
-    /**
-     * @test
-     */
+    use RefreshDatabase;
+    use WithFaker;
+
+    /** @test */
     public function an_non_authenticated_client_cant_see_his_orders()
     {
         $user = Auth::id();
-        $response = $this->get(route('order.show', $user));
-        $response->assertStatus(302);
+        $this->get(route('order.show', $user))
+            ->assertStatus(302)
+            ->assertRedirect(route('login'));
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function an_authenticated_client_cant_see_his_orders()
     {
         $this->actingAs($this->ActingAsClient());
+
         $user = Auth::id();
-        $order = factory(Order::class)->create([
-            'user_id' => $user,
-        ]);
+        $order = OrderTest::createOrder($user, 'APPROVED');
 
-        $response = $this->get(route('order.show', $user));
+        $this->get(route('order.show', $user))
+            ->assertStatus(200)
+            ->assertSee($order->presentPrice())
+            ->assertSee($order->reference)
+            ->assertSee($order->status)
+            ->assertDontSee('Redone Payment');
+    }
 
-        $response->assertStatus(200);
-        $response->assertSee($order->total);
+    /** @test */
+    public function if_order_has_pending_status_it_should_show_the_redone_payment_button()
+    {
+        $this->actingAs($this->ActingAsClient());
+
+        $user = Auth::id();
+        $order = OrderTest::createOrder($user, 'PENDING');
+
+        $this->get(route('order.show', $user))
+            ->assertStatus(200)
+            ->assertSee($order->presentPrice())
+            ->assertSee($order->reference)
+            ->assertSee($order->status)
+            ->assertSee('Redone Payment');
     }
 
     private function ActingAsClient()

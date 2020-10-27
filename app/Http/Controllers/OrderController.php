@@ -19,7 +19,6 @@ class OrderController extends Controller
     public function show(): View
     {
         $orders = Order::where('user_id', Auth::id())->get();
-        //dd($orders);
         return view('orders.show', compact('orders'));
     }
 
