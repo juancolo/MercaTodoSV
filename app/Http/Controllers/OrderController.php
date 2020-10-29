@@ -13,6 +13,10 @@ class OrderController extends Controller
         $this->middleware('auth');
     }
 
+    public function create($request)
+    {
+
+    }
     /**
      * @return View
      */
@@ -20,10 +24,5 @@ class OrderController extends Controller
     {
         $orders = Order::where('user_id', Auth::id())->get();
         return view('orders.show', compact('orders'));
-    }
-
-    public function create($request)
-    {
-        //Order::create()
     }
 }

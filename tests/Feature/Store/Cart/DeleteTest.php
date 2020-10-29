@@ -2,12 +2,10 @@
 
 namespace Tests\Feature\Store\Cart;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
+use Illuminate\Support\Facades\Auth;
 
-class deleteTest extends TestCase
+class DeleteTest extends TestCase
 {
     /**
      * @test

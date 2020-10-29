@@ -34,8 +34,6 @@ class CreateProductTest extends TestCase
      */
     public function an_admin_can_create_a_product()
     {
-        $this->withoutExceptionHandling();
-
         $this->ActingAsAdmin();
 
         $category = factory(Category::class)->create(['name' => 'categoryTest']);

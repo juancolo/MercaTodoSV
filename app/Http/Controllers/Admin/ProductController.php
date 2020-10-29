@@ -32,7 +32,9 @@ class ProductController extends Controller
      */
     public function index(IndexProductRequest $request): View
     {
-        $products = Product::ProductInfo($request->input('search'))->paginate();
+        $products = Product::with('category')
+            ->ProductInfo($request->input('search'))
+            ->paginate();
 
         return view('admin.products.manageProduct', compact('products') );
     }
@@ -110,7 +112,7 @@ class ProductController extends Controller
     {
         $product->update($request->validated());
         $product->tags()->sync($request->input('tags'));
-        //Image
+
         if($request->file('file'))
         {
             if($product->file) {

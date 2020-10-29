@@ -2,23 +2,19 @@
 
 namespace Tests\Feature\Store\Payment;
 
-use App\Entities\Category;
-use App\Entities\Product;
-use App\Entities\Tag;
+use Tests\TestCase;
 use App\Entities\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Auth;
+use App\Entities\Category;
 use Tests\Feature\CartTest;
 use Tests\Feature\ProductTest;
-use Tests\TestCase;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class indexTest extends TestCase
+class IndexTest extends TestCase
 {
     protected $category;
-    protected $tag;
     protected $product;
-    protected $cart;
 
     use RefreshDatabase;
     use WithFaker;
@@ -31,20 +27,24 @@ class indexTest extends TestCase
         $this->product = ProductTest::createProduct($this->category);
     }
 
-    /** @test */
+    /**
+     * @test
+     */
   public function auth_client_can_see_the_index_payment()
   {
       $this->actingAs($this->ActingAsClient());
       $user = Auth::id();
       CartTest::createCart($user, $this->product);
 
-      $response = $this->get(route('payment.index', $user ));
-      $response->assertStatus(200);
-      $response->assertSee('Continue to checkout');
-      $response->assertSee('Mobile');
+      $this->get(route('payment.index', $user ))
+            ->assertStatus(200)
+            ->assertSee('Continue to checkout')
+            ->assertSee('Mobile');
   }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function a_non_auth_user_cant_see_the_index_payment()
   {
       $user = 1;

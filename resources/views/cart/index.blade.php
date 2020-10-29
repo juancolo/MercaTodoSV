@@ -91,7 +91,7 @@
                 </row>
         </div>
         @else
-            <h2> {{'There is no products into de Cart'}}</h2>
+            <h2> {{'There is no products into the Cart'}}</h2>
         @endif
     </div>
 @endsection

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Routing\Redirector;
 use Ramsey\Uuid\Uuid;
 use App\Entities\User;
 use App\Entities\Order;
 use Illuminate\View\View;
-use App\Services\CartService;
 use App\Services\PaymentData;
+use App\Services\CartService;
+use Illuminate\Routing\Redirector;
 use Dnetix\Redirection\PlacetoPay;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
@@ -45,7 +45,7 @@ class PaymentController extends Controller
      * @return \Illuminate\Contracts\Foundation\Application|RedirectResponse|Redirector
      * @throws \Dnetix\Redirection\Exceptions\PlacetoPayException
      */
-    public function store(PlacetoPay $placetopay, PaymentInfoRequest $request): Redirector
+    public function store(PlacetoPay $placetopay, PaymentInfoRequest $request): RedirectResponse
     {
         //Create the order for the payment
         $order = Order::create($request->all());
@@ -53,7 +53,6 @@ class PaymentController extends Controller
         $order->user_id = $this->getUserId();
         $order->total = intval($this->cartService->getACartFromUser()->getTotal());
 
-        //dd($this->cartService->getAContentCartFormAUser()->toArray());
         foreach ($this->cartService->getAContentCartFormAUser() as $product)
             {
                $order->products()->attach($product['id']);

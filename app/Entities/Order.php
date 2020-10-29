@@ -51,7 +51,7 @@ class Order extends Model
     public static function scopeWithoutFinalStatus(Builder $query): Builder
     {
         return $query
-            ->where('status', "APPROVED")
+            ->where('status', "PENDING")
             ->orWhere('status', "IN_PROCESS");
 
     }

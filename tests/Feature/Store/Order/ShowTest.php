@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class showTest extends TestCase
+class ShowTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;

@@ -2,9 +2,8 @@
 
 namespace App\Entities;
 
-use GuzzleHttp\Psr7\Request;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 
 class Product extends Model
 {
@@ -29,12 +28,11 @@ class Product extends Model
     }
 
     /**
-     * @param $query
+     * @param Builder $query
      * @param string|null $productInfo
-     * @return mixed
+     * @return Builder
      */
-    public static function scopeProductInfo($query, ? string $productInfo)
-
+    public static function scopeProductInfo(Builder $query, ? string $productInfo): Builder
     {
         if(null !== $productInfo){
             return $query   ->where('name', 'like', "%$productInfo%")
@@ -42,6 +40,15 @@ class Product extends Model
                             ->orWhere('description', 'like', "%$productInfo%");
         }
         return $query;
+    }
+
+    /**
+     * @param Builder $query
+     * @return Builder
+     */
+    public static function scopeActiveProduct(Builder $query): Builder
+    {
+        return $query->where('status', 'like','ACTIVO');
     }
 
     public function getRouteKeyName()

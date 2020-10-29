@@ -18,11 +18,11 @@ Route::resource('/shop', 'ShopController');
 
 //store
 Route::group( ['prefix' => 'store'], function (){
-    Route::get('/landing', 'StoreController@landing')
+    Route::get('/landing', 'Store\StoreController@landing')
         ->name('client.landing');
-    Route::get('/landing/products', 'StoreController@showProducts')
+    Route::get('/landing/products', 'Store\StoreController@showProducts')
         ->name('client.product');
-    Route::get('/landing/products/espeficiaciones/{product}', 'StoreController@showSpecs')
+    Route::get('/landing/products/espeficiaciones/{product}', 'Store\StoreController@showSpecs')
         ->name('client.product.specs');
     Route::get('/cart', 'Store\CartController@index')
         ->name('cart.index');

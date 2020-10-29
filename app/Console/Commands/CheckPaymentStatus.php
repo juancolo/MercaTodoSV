@@ -20,7 +20,7 @@ class CheckPaymentStatus extends Command
      *
      * @var string
      */
-    protected $description = 'Validated the payment status of the status';
+    protected $description = 'Validated the payment status of the pending orders';
 
     /**
      * Create a new command instance.
@@ -43,11 +43,15 @@ class CheckPaymentStatus extends Command
             if ($ordersToUpdate->count() > 0)
             {
                 foreach ($ordersToUpdate as $order)
-                    $status = $placetoPay->query($order->reference);
-                    if ($status == 'REJECTED')
-                    {
+                {
+                    $status = $placetoPay
+                        ->query($order->requestId)
+                        ->status()
+                        ->status();
+                    if ($status == 'REJECTED' || $status == 'APPROVED')
+                        $order->status = $status;
                         $order->save();
-                    }
+                }
             }
         return 0;
     }

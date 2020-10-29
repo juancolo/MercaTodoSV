@@ -7,7 +7,7 @@ use App\Entities\Tag;
 use App\Entities\User;
 use App\Entities\Product;
 use App\Entities\Category;
-use Tests\Feature\ProductForTest;
+use Tests\Feature\ProductTest;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -83,7 +83,7 @@ class EditProductTest extends TestCase
             );
         $this->assertDatabaseHas('products', ['name' => $existProduct->name]);
         //When
-        $product = $this->EditProduct($existProduct);
+        $product = ProductTest::EditProduct($existProduct);
         $response = $this->get(route('product.update', compact('product')));
         //Assert
         $this->assertDatabaseHas('products', ['name'=> $product->name]);

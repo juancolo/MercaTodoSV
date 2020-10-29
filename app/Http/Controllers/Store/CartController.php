@@ -55,7 +55,7 @@ class CartController extends Controller
     public function store(Product $product): RedirectResponse
     {
         return redirect()->route('client.product.specs', compact('product'))
-                         ->with('status', $this->cartService->storeACartOfAUser($product));
+            ->with('status', $this->cartService->storeACartOfAUser($product));
     }
 
     /**

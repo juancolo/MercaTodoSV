@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Entities\Product;
+use Illuminate\Support\Str;
 
 class ProductTest
 {
