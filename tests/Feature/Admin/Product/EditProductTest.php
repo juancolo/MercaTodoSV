@@ -114,12 +114,4 @@ class EditProductTest extends TestCase
             'tag_id' => $tag->id,
         ]);
     }
-
-   /* private function EditProduct(Product $product)
-    {
-        $product->name = 'ProdcutEditName';
-        $product->slug = Str::slug($product->name);
-        $product->save();
-        return $product;
-    }*/
 }
