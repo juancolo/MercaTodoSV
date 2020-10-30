@@ -122,10 +122,8 @@ class ProductController extends Controller
             $product->file = Storage::url($file);
             $product->save();
         }
-
         return redirect()->route('product.index')
                          ->with('status', 'Producto actualizado correctamente');
-
     }
 
     /**
@@ -136,7 +134,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product) : RedirectResponse
     {
-        Storage::delete($product->file);
+        //Storage::delete($product->file);
         $product->delete();
 
         return redirect()

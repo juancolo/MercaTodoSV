@@ -14,7 +14,6 @@ Auth::routes(['verify'=>true]);
 Route::resource('/admin',  'Admin\UserController');
 //Products Admin
 Route::resource('/product', 'Admin\ProductController');
-Route::resource('/shop', 'ShopController');
 
 //store
 Route::group( ['prefix' => 'store'], function (){

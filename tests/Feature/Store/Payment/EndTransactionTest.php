@@ -2,17 +2,13 @@
 
 namespace Tests\Feature\Store\Payment;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class endTransactionTest extends TestCase
+class EndTransactionTest extends TestCase
 {
     /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
+     * @test
+    */
     public function testExample()
     {
         $response = $this->get('/');
