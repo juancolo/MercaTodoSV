@@ -4,17 +4,11 @@ namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Order extends Model
 {
-    public function user(){
-        return $this->belongsTo(User::class);
-    }
-
-    public function products(){
-        return $this->belongsToMany(Product::class, 'order_product')->withPivot('product_id');
-    }
-
     protected $fillable = [
         'reference',
         'user_id',
@@ -34,25 +28,51 @@ class Order extends Model
         'processUrl'
     ];
 
-    public function presentPrice()
+    protected $casts = [
+        'total' => 'float'
+    ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
-        return "$ ".number_format($this->total / 1);
+        return $this->belongsTo(User::class);
     }
-    public function getRouteKeyName()
+
+    /**
+     * @return BelongsToMany
+     */
+    public function products(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'order_product')->withPivot('product_id');
+    }
+
+    /**
+     * @return string
+     */
+    public function presentPrice(): string
+    {
+        return "$ " . number_format($this->total, 2);
+    }
+
+    /**
+     * @return string
+     */
+    public function getRouteKeyName(): string
     {
         return 'reference';
     }
-
 
     /**
      * @param Builder $query
      * @return Builder
      */
-    public static function scopeWithoutFinalStatus(Builder $query): Builder
+    public function scopeWithoutFinalStatus(Builder $query): Builder
     {
         return $query
             ->where('status', "PENDING")
             ->orWhere('status', "IN_PROCESS");
-
     }
+
 }

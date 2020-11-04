@@ -2,11 +2,10 @@
 
 namespace Tests\Feature\Store\Products;
 
-use App\Entities\Category;
-use App\Entities\Product;
-use Tests\Feature\ProductTest;
 use Tests\TestCase;
 use App\Entities\User;
+use App\Entities\Product;
+use App\Entities\Category;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

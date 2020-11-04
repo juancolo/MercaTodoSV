@@ -2,17 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Ramsey\Uuid\Uuid;
+use Exception;
 use App\Entities\User;
 use App\Entities\Order;
 use Illuminate\View\View;
+use Illuminate\Support\Str;
 use App\Services\PaymentData;
 use App\Services\CartService;
 use Illuminate\Routing\Redirector;
 use Dnetix\Redirection\PlacetoPay;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\Foundation\Application;
 use App\Http\Requests\Payment\PaymentInfoRequest;
+use Dnetix\Redirection\Exceptions\PlacetoPayException;
 
 
 class PaymentController extends Controller
@@ -33,40 +38,37 @@ class PaymentController extends Controller
      */
     public function index(User $user): View
     {
-        if ($this->cartService->getAContentCartFormAUser()->count() == 0)
+        if ($this->cartService->getACartFromUser()->isEmpty()) {
             return redirect()->route('client.product');
-        else
-            return view('webcheckout.index', compact('user'));
+        }
+        return view('webcheckout.index', compact('user'));
     }
 
     /**
      * @param PlacetoPay $placetopay
      * @param PaymentInfoRequest $request
-     * @return \Illuminate\Contracts\Foundation\Application|RedirectResponse|Redirector
-     * @throws \Dnetix\Redirection\Exceptions\PlacetoPayException
+     * @return Application|RedirectResponse|Redirector
      */
     public function store(PlacetoPay $placetopay, PaymentInfoRequest $request): RedirectResponse
     {
-        //Create the order for the payment
-        $order = Order::create($request->all());
-        $order->reference = substr(Uuid::uuid4(), 0, 10);
-        $order->user_id = $this->getUserId();
-        $order->total = intval($this->cartService->getACartFromUser()->getTotal());
+        $orderData = array_merge($request->all(), [
+            'reference' => substr(Str::uuid()->toString(), 0, 10),
+            'user_id' => Auth::id(),
+            'total' => $this->cartService->getACartFromUser()->getTotal()
+        ]);
 
-        foreach ($this->cartService->getAContentCartFormAUser() as $product)
-            {
-               $order->products()->attach($product['id']);
-            }
+        $order = Order::create($orderData);
 
-         // Conection with PlaceToPay
+        foreach ($this->cartService->getAContentCartFromAUser() as $product) {
+            $order->products()->attach($product['id']);
+        }
+
         try {
             $payment = new PaymentData($order);
 
-            //CreateRequest PlaceToPay
             $response = $placetopay->request($payment->setPayment());
 
             if ($response->isSuccessful()) {
-                // Redirect the client to the processUrl or display it on the JS extension
                 $response->processUrl();
 
                 $order->requestId = $response->requestId;
@@ -76,23 +78,23 @@ class PaymentController extends Controller
 
                 return redirect($response->processUrl());
             } else {
-                // There was some error so check the message
-                $response->status()->message();
+                return redirect()->route('order.show');
             }
-            var_dump($response);
         } catch (Exception $e) {
-            var_dump($e->getMessage());
-
-        //Update the Order information
+            Log::error('payment', [
+                'line' => $e->getLine(),
+                'message' => $e->getMessage(),
+                'file' => $e->getFile()
+            ]);
         }
     }
 
     /**
      * @param PlacetoPay $placetopay
      * @param Order $order
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|View
+     * @return Application|Factory|View
      */
-    public function endTransaction (PlacetoPay $placetopay, Order $order)
+    public function endTransaction(PlacetoPay $placetopay, Order $order)
     {
         $response = $placetopay->query($order->requestId);
         $order->status = $response->status()->status();
@@ -103,12 +105,11 @@ class PaymentController extends Controller
         return view('webcheckout.endTransaction', compact('order'));
     }
 
-
     /**
      * @param PlacetoPay $placetopay
      * @param Order $order
-     * @return \Illuminate\Contracts\Foundation\Application|RedirectResponse|\Illuminate\Routing\Redirector
-     * @throws \Dnetix\Redirection\Exceptions\PlacetoPayException
+     * @return Application|RedirectResponse|Redirector
+     * @throws PlacetoPayException
      */
     public function reDonePayment(PlacetoPay $placetopay, Order $order)
     {
@@ -122,10 +123,4 @@ class PaymentController extends Controller
 
         return redirect($response->processUrl());
     }
-
-    public function getUserId(){
-        return $user = Auth::id();
-    }
-
-
 }

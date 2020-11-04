@@ -4,27 +4,54 @@ namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Product extends Model
 {
     protected $fillable = [
-        'name', 'slug','details', 'description', 'actual_price', 'old_price', 'category_id', 'stock', 'file', 'status'
+        'name',
+        'slug',
+        'details',
+        'description',
+        'actual_price',
+        'old_price',
+        'category_id',
+        'stock',
+        'file',
+        'status'
     ];
 
-    public function category(){
+    /**
+     * @return BelongsTo
+     */
+    public function category(): BelongsTo
+    {
         return $this->BelongsTo(Category::class);
     }
 
-    public function tags(){
+    /**
+     * @return BelongsToMany
+     */
+    public function tags(): BelongsToMany
+    {
         return $this->belongsToMany(Tag::class, 'product_tag')->withPivot('tag_id');
     }
 
-    public function orders(){
+    /**
+     * @return BelongsToMany
+     */
+    public function orders(): BelongsToMany
+    {
         return $this->belongsToMany(Order::class, 'order_product')->withPivot('order_id');
     }
 
-    public function presentPrice (){
-        return "$ ".number_format($this->actual_price / 1);
+    /**
+     * @return string
+     */
+    public function presentPrice(): string
+    {
+        return "$ " . number_format($this->actual_price / 1);
     }
 
     /**
@@ -32,12 +59,12 @@ class Product extends Model
      * @param string|null $productInfo
      * @return Builder
      */
-    public static function scopeProductInfo(Builder $query, ? string $productInfo): Builder
+    public static function scopeProductInfo(Builder $query, ?string $productInfo): Builder
     {
-        if(null !== $productInfo){
-            return $query   ->where('name', 'like', "%$productInfo%")
-                            ->orWhere('actual_price', 'like', "%$productInfo%")
-                            ->orWhere('description', 'like', "%$productInfo%");
+        if (null !== $productInfo) {
+            return $query->where('name', 'like', "%$productInfo%")
+                ->orWhere('actual_price', 'like', "%$productInfo%")
+                ->orWhere('description', 'like', "%$productInfo%");
         }
         return $query;
     }
@@ -48,10 +75,22 @@ class Product extends Model
      */
     public static function scopeActiveProduct(Builder $query): Builder
     {
-        return $query->where('status', 'like','ACTIVO');
+        return $query->where('status', 'like', 'ACTIVO');
     }
 
-    public function getRouteKeyName()
+    /**
+     * @param Builder $query
+     * @return Builder
+     */
+    public static function scopeExport(Builder $query): Builder
+    {
+        return $query->select('id', 'name', 'actual_price', 'category_id');
+    }
+
+    /**
+     * @return string
+     */
+    public function getRouteKeyName(): string
     {
         return 'slug';
     }

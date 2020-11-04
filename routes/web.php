@@ -11,8 +11,13 @@ Route::get('/', function () {
 Auth::routes(['verify'=>true]);
 
 //User Admin
-Route::resource('/admin',  'Admin\UserController');
+Route::resource('/admin',  'Admin\UserController')
+    ->parameter('admin', 'user');
 //Products Admin
+Route::post('/product/export', 'Admin\ProductController@export')
+    ->name('product.export');
+Route::post('/product/import', 'Admin\ProductController@import')
+    ->name('product.import');
 Route::resource('/product', 'Admin\ProductController');
 
 //store

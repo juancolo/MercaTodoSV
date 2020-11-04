@@ -22,7 +22,6 @@ class PaymentData
 
         public function setPayment()
         {
-
             $payment = [
                 "buyer" => [
                     'name'          => $this->paymentInfo->first_name,

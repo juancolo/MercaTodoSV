@@ -83,12 +83,11 @@ class EditProductTest extends TestCase
         $this->assertDatabaseHas('products', ['name' => $existProduct->name]);
 
         $product = ProductTest::EditProduct($existProduct);
-        $response = $this->get(route('product.update', compact('product')));
+        $response = $this->patch(route('product.update', ));
 
         $this->assertDatabaseHas('products', ['name'=> $product->name]);
         $response->assertStatus(200);
     }
-
 
     private function CreateCategory(){
         $category = factory(Category::class)->create(['name' => 'categoryTest']);

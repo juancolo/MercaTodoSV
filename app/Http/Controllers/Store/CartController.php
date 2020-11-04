@@ -32,7 +32,7 @@ class CartController extends Controller
     public function index(): View
     {
         $user = Auth::id();
-        $cartItems = $this->cartService->getAContentCartFormAUser();
+        $cartItems = $this->cartService->getAContentCartFromAUser();
 
         //Verify if the items into the cart still exist into the project
             foreach ($cartItems as $item)

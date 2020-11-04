@@ -143,7 +143,7 @@
 
                         </div>
                             <div class="form-group {{ $errors->has('description') ? 'has-error' : ''}}">
-                                <label for="last_name">{{__('Description')}}</label>
+                                <label for="description">{{__('Description')}}</label>
                                 <textarea type="text"
                                        class="form-control"
                                        name="description"

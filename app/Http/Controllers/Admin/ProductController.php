@@ -4,14 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Entities\Tag;
 use App\Entities\Product;
+use App\Http\Requests\ImportRequest;
+use App\Imports\ProductsImport;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Entities\Category;
+use App\Exports\ProductsExport;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\IndexProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class ProductController extends Controller
@@ -134,7 +139,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product) : RedirectResponse
     {
-        //Storage::delete($product->file);
+        Storage::delete($product->file);
         $product->delete();
 
         return redirect()
@@ -142,5 +147,23 @@ class ProductController extends Controller
             ->with('status', 'Se ha eliminado el producto correctamente');
     }
 
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function export(Request $request, ProductsExport $productsExport): RedirectResponse
+    {
+        $productsExport->download('product'.$request->extension);
+        return redirect()->route('product.index');
+    }
 
+    /**
+     * @param ImportRequest $request
+     * @return RedirectResponse
+     */
+    public function import(ImportRequest $request)
+    {
+        Excel::import(new ProductsImport(), $request->file('file'));
+        return redirect()->route('product.index')->with('success', 'All Good!');
+    }
 }

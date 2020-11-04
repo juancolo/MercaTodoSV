@@ -27,7 +27,7 @@
         <div class="half-form">
             <div class="half-form" >
 
-                <form method="post" action="{{route('admin.update', $user->id)}}" onreset="" >
+                <form method="post" action="{{route('admin.update', $user)}}" onreset="" >
                     @method('PUT')
                     @csrf
                     <br>
