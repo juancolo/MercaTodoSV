@@ -26,9 +26,10 @@
         <div class="card">
             <div class="container form">
                 <div class="half-form">
-                    <div class="half-form" >
+                    <div class="half-form">
 
-                        <form method="post" action="{{route('product.update', $product)}}" enctype="multipart/form-data">
+                        <form method="post" action="{{route('product.update', $product)}}"
+                              enctype="multipart/form-data">
                             @method('PUT')
                             @csrf
                             <br>
@@ -50,7 +51,7 @@
                                        name="name"
                                        id="name"
                                        value="{{old( 'name', $product->name)}}"
-                                       >
+                                >
                                 {!! $errors->first('category', '<span class="help-block">:message</span>') !!}
                             </div>
                             <div class="form-group">
@@ -69,12 +70,12 @@
                                 <label>{{__('Category')}}</label>
 
                                 <select class="form-control"
-                                        name = "category_id">
+                                        name="category_id">
                                     @foreach($categories as $id => $name)
-                                            <option name = "category_id"
-                                                    value="{{$id}}"
-                                                    {{$id == old('category_id', $product->category_id) ? 'selected': ''}}
-                                                    >{{$name}}</option>
+                                        <option name="category_id"
+                                                value="{{$id}}"
+                                            {{$id == old('category_id', $product->category_id) ? 'selected': ''}}
+                                        >{{$name}}</option>
 
                                     @endforeach
 
@@ -115,40 +116,40 @@
                                     </div>
                                 </div>
                             </div>
-                        <div class="container">
-                            <label>{{__('Tags')}}</label>
-                            <br>
+                            <div class="container">
+                                <label>{{__('Tags')}}</label>
+                                <br>
 
-                            @foreach ($product->tags as $tagged)
+                                @foreach ($product->tags as $tagged)
 
-                            @endforeach
+                                @endforeach
 
-                            @foreach($tags as $id => $name)
+                                @foreach($tags as $id => $name)
 
-                                <div class="col-sm-3">
-                                    <label class="checkbox-inline "for="tags[]">
-                                        <input name="tags[]" type="checkbox" value="{{ $id }}"
+                                    <div class="col-sm-3">
+                                        <label class="checkbox-inline " for="tags[]">
+                                            <input name="tags[]" type="checkbox" value="{{ $id }}"
 
-                                               @foreach ($product->tags as $tagged)
+                                                   @foreach ($product->tags as $tagged)
 
-                                               @if($tagged['id'] == $id) checked=checked @endif
+                                                   @if($tagged['id'] == $id) checked=checked @endif
 
                                                 @endforeach
 
-                                        > {{ $name }}
-                                    </label>
-                                </div>
+                                            > {{ $name }}
+                                        </label>
+                                    </div>
 
-                            @endforeach
+                                @endforeach
 
-                        </div>
+                            </div>
                             <div class="form-group {{ $errors->has('description') ? 'has-error' : ''}}">
                                 <label for="description">{{__('Description')}}</label>
                                 <textarea type="text"
-                                       class="form-control"
-                                       name="description"
-                                       id="description"
-                                       placeholder="{{old('description')}}">
+                                          class="form-control"
+                                          name="description"
+                                          id="description"
+                                          placeholder="{{old('description')}}">
                                        {{$product->description}}
                                 </textarea>
                             </div>

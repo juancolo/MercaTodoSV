@@ -66,20 +66,20 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($users as $info)
+            @foreach($users as $user)
                 <tr style="text-align:center;">
-                    <th scope="row" >{{$info->id}}</th>
+                    <th scope="row" >{{$user->id}}</th>
 
-                    <td>{{$info->first_name}}</td>
-                    <td>{{$info->last_name}}</td>
-                    <td>{{$info->email}}</td>
-                    <td>{{$info->role}}</td>
+                    <td>{{$user->first_name}}</td>
+                    <td>{{$user->last_name}}</td>
+                    <td>{{$user->email}}</td>
+                    <td>{{$user->role}}</td>
                     <td>
-                      <form action="{{route('admin.destroy', $info->id)}}" method="POST">
-                          <a href="{{ route('admin.edit', $info->id)}}"><button type="button" class="btn btn-primary">Editar</button></a>
+                      <form action="{{route('admin.destroy', $user)}}" method="POST">
+                          <a href="{{ route('admin.edit', $user)}}"><button type="button" class="btn btn-primary">Editar</button></a>
                           @csrf
                           @method('DELETE')
-                          <button type="submit" class="btn btn-danger" onclick="return confirm('¿Seguro desea elminar a {{$info->first_name}} {{$info->last_name}}?')">Eliminar</button>
+                          <button type="submit" class="btn btn-danger" onclick="return confirm('¿Seguro desea elminar a {{$user->first_name}} {{$user->last_name}}?')">Eliminar</button>
                       </form>
                     </td>
                 </tr>

@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Exception;
 use App\Entities\Tag;
 use App\Entities\Product;
-use App\Http\Requests\ImportRequest;
-use App\Imports\ProductsImport;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Entities\Category;
+use Illuminate\Http\Request;
+use App\Imports\ProductsImport;
 use App\Exports\ProductsExport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Requests\ImportRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\IndexProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
-use Maatwebsite\Excel\Facades\Excel;
 
 
 class ProductController extends Controller
@@ -25,7 +26,8 @@ class ProductController extends Controller
      * CategoryController constructor.
      * Validate user is an admin and is authenticated
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('admin');
         $this->middleware('auth');
     }
@@ -41,7 +43,7 @@ class ProductController extends Controller
             ->ProductInfo($request->input('search'))
             ->paginate();
 
-        return view('admin.products.manageProduct', compact('products') );
+        return view('admin.products.index', compact('products'));
     }
 
     /**
@@ -49,10 +51,10 @@ class ProductController extends Controller
      */
     public function create(): View
     {
-        return view('admin.products.cretaProduct', with
+        return view('admin.products.create', with
             ([
-             'categories'=> Category::select('name', 'id')->get(),
-             'tags'=>  Tag::pluck('name', 'id')
+                'categories' => Category::select('name', 'id')->get(),
+                'tags' => Tag::pluck('name', 'id')
             ])
         );
     }
@@ -67,25 +69,15 @@ class ProductController extends Controller
 
         $product->tags()->sync($request->input('tags'));
         $product->save();
-        //Image
-        if($request->file('file'))
-        {
+
+        if ($request->file('file')) {
             $file = $request->file('file')->store('images');
             $product->file = Storage::url($file);
             $product->save();
         }
-       return redirect()->route('product.index');
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        return redirect()
+            ->route('product.index');
     }
 
     /**
@@ -96,12 +88,11 @@ class ProductController extends Controller
      */
     public function edit(Product $product): View
     {
-
         return view(
-            'admin.products.editProduct', with([
+            'admin.products.edit', with([
                 'product' => $product,
-                'categories'=> Category::pluck('name', 'id'),
-                'tags'=> Tag::pluck('name', 'id')
+                'categories' => Category::pluck('name', 'id'),
+                'tags' => Tag::pluck('name', 'id')
             ])
         );
     }
@@ -118,26 +109,25 @@ class ProductController extends Controller
         $product->update($request->validated());
         $product->tags()->sync($request->input('tags'));
 
-        if($request->file('file'))
-        {
-            if($product->file) {
+        if ($request->file('file')) {
+            if ($product->file) {
                 Storage::delete($product->file);
             }
+
             $file = $request->file('file')->store('images');
             $product->file = Storage::url($file);
             $product->save();
         }
         return redirect()->route('product.index')
-                         ->with('status', 'Producto actualizado correctamente');
+            ->with('status', 'Producto actualizado correctamente');
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Product $product
+     * @param Product $product
      * @return RedirectResponse
+     * @throws Exception
      */
-    public function destroy(Product $product) : RedirectResponse
+    public function destroy(Product $product): RedirectResponse
     {
         Storage::delete($product->file);
         $product->delete();
@@ -149,21 +139,23 @@ class ProductController extends Controller
 
     /**
      * @param Request $request
-     * @return RedirectResponse
+     * @return ProductsExport
      */
-    public function export(Request $request, ProductsExport $productsExport): RedirectResponse
+    public function export(Request $request): ProductsExport
     {
-        $productsExport->download('product'.$request->extension);
-        return redirect()->route('product.index');
+        return new ProductsExport($request);
     }
 
     /**
      * @param ImportRequest $request
      * @return RedirectResponse
      */
-    public function import(ImportRequest $request)
+    public function import(ImportRequest $request): RedirectResponse
     {
         Excel::import(new ProductsImport(), $request->file('file'));
-        return redirect()->route('product.index')->with('success', 'All Good!');
+
+        return redirect()
+            ->route('product.index')
+            ->with('success', 'All Good!');
     }
 }

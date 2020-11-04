@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Store;
 
 use App\Entities\Product;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\View\View;
 
 class StoreController extends Controller
 {
@@ -14,38 +17,47 @@ class StoreController extends Controller
         $this->middleware('auth');
     }
 
-    public function landing(){
-        $products = Cache::remember('products', 800, function (){
+    /**
+     * @return Application|Factory|View
+     */
+    public function landing()
+    {
+        $products = Cache::remember('products', 800, function () {
             return Product::inRandomOrder()
-                    ->take(3)
-                    ->paginate(3);
+                ->take(3)
+                ->paginate(3);
         });
-        return view('store.productLanding',compact('products'));
+
+        return view('store.index', compact('products'));
     }
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Application|Factory|View
      */
     public function showProducts(Request $request)
     {
-      $key = "product.page". request('page', 1);
+        $key = "product.page" . request('page', 1);
 
-       $products = Cache::remember($key,800, function ()
-        use ($request){
+        $products = Cache::remember($key, 800, function ()
+        use ($request) {
             return
                 Product::with('category')
-                ->ProductInfo($request->input('search'))
-                ->ActiveProduct()
-                ->paginate(15);
+                    ->ProductInfo($request->input('search'))
+                    ->ActiveProduct()
+                    ->paginate(15);
         });
 
-        return view('store.productShow', compact('products'));
+        return view('store.show_products', compact('products'));
     }
 
+    /**
+     * @param Product $product
+     * @return Application|Factory|View
+     */
     public function showSpecs(Product $product)
     {
-        return view('store.productEspecs', compact('product'));
+        return view('store.show_especs', compact('product'));
     }
 
 }

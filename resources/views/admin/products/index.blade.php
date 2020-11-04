@@ -133,6 +133,6 @@
             </div>
             <div class="pagination" style="justify-content: center">{{$products}}</div>
         </div>
-@include('partials.__import__modal')
+@include('partials.__import_modal')
 @include('partials.__export_modal')
 @endsection

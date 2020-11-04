@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Exception;
 use App\Entities\User;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
@@ -10,7 +11,6 @@ use Illuminate\Http\RedirectResponse;
 
 class UserController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('admin');
@@ -25,18 +25,7 @@ class UserController extends Controller
     {
         $users = User::UserInfo($request->input('search'))->paginate();
 
-        return view('admin.users.manageUsers', compact('users', $users));
-
-    }
-
-    public function create(): View
-    {
-        return view('admin.create');
-    }
-
-    public function store(Request $request)
-    {
-        //
+        return view('admin.users.index', compact('users', $users));
     }
 
     /**
@@ -59,30 +48,24 @@ class UserController extends Controller
             ->with('status', 'Usuario actualizado correctamente');
     }
 
-    public function show($id)
-    {
-        //
-    }
-
     /**
-     * @param $id
+     * @param User $user
      * @return View
      */
-    public function edit($id): View
+    public function edit(User $user): View
     {
-        return view('admin.users.editUsers', ['user' => User::findOrFail($id)]);
+        return view('admin.users.edit', compact('user'));
     }
 
     /**
+     * @param User $user
      * @return RedirectResponse
+     * @throws Exception
      */
 
-    public function destroy($id): RedirectResponse
+    public function destroy(User $user): RedirectResponse
     {
-        $userToDelete = User::findOrFail($id);
-
-        $userToDelete->delete();
-
+        $user->delete();
         return redirect()
             ->route('admin.index')
             ->with('status', 'Se ha eliminado el usuario correctamente');

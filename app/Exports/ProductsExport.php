@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Entities\Product;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Excel;
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -15,19 +16,23 @@ class ProductsExport implements FromCollection, Responsable, WithHeadings, Shoul
 {
     use Exportable;
 
-    public $fileName = 'products.xlsx';
-    private $writerType = Excel::XLSX;
+    public $fileName;
     private $headers =[
-        'Content-Type'=> 'test/csv'
+        'Content-Type'=> 'csv'
     ];
+
+    public function __construct(Request $request)
+    {
+        $this->fileName = 'products.'.$request->extension;
+    }
 
     public function headings(): array
     {
         return [
-            'id',
-            'name',
-            'actual_price',
-            'category_id'
+            'Id',
+            'Name',
+            'Actual Price',
+            'Category id'
         ];
     }
 
@@ -36,6 +41,6 @@ class ProductsExport implements FromCollection, Responsable, WithHeadings, Shoul
     */
     public function collection()
     {
-        return Product::all();
+        return Product::select('id', 'name', 'actual_price', 'category_id' )->get();
     }
 }
