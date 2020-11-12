@@ -1,8 +1,6 @@
 <?php
 
-use App\Category;
-use App\Product;
-use App\Tag;
+use App\Entities\Product;
 use Illuminate\Database\Seeder;
 
 class ProductTableSedeer extends Seeder
@@ -14,8 +12,6 @@ class ProductTableSedeer extends Seeder
      */
     public function run()
     {
-        //Product::truncate();
-
         factory(Product::class, 100)->create()->each(function (Product $product){
 
             $product->tags()->attach([

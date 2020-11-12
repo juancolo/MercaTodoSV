@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Tag;
-use App\Product;
-use App\Category;
+use App\Entities\Tag;
+use App\Entities\Product;
 use Illuminate\View\View;
-use Illuminate\Http\Request;
+use App\Entities\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
@@ -29,22 +28,21 @@ class ProductController extends Controller
 
     /**
      * @param IndexProductRequest $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|View
+     * @return View
      */
-
-public function index(IndexProductRequest $request)
+    public function index(IndexProductRequest $request): View
     {
-        $products = Product::ProductInfo($request->input('search'))->paginate();
+        $products = Product::with('category')
+            ->ProductInfo($request->input('search'))
+            ->paginate();
 
         return view('admin.products.manageProduct', compact('products') );
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
         return view('admin.products.cretaProduct', with
             ([
@@ -55,12 +53,10 @@ public function index(IndexProductRequest $request)
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-
+     * @param StoreProductRequest $request
+     * @return RedirectResponse
      */
-    public function store(StoreProductRequest $request)
+    public function store(StoreProductRequest $request): RedirectResponse
     {
         $product = Product::create($request->validated());
 
@@ -73,11 +69,7 @@ public function index(IndexProductRequest $request)
             $product->file = Storage::url($file);
             $product->save();
         }
-
-
-=======
->>>>>>> Stashed changes
-        return redirect()->route('product.index');
+       return redirect()->route('product.index');
     }
 
     /**
@@ -120,7 +112,7 @@ public function index(IndexProductRequest $request)
     {
         $product->update($request->validated());
         $product->tags()->sync($request->input('tags'));
-        //Image
+
         if($request->file('file'))
         {
             if($product->file) {

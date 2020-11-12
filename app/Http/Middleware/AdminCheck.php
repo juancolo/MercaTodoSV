@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\User;
+use App\Entities\User;
 use Closure;
 use http\Env\Request;
 use Illuminate\Support\Facades\Auth;

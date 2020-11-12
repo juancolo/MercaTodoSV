@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use App\Order;
 use Ramsey\Uuid\Uuid;
+use App\Entities\User;
+use App\Entities\Order;
 use Illuminate\View\View;
-use App\Services\CartService;
 use App\Services\PaymentData;
+use App\Services\CartService;
+use Illuminate\Routing\Redirector;
 use Dnetix\Redirection\PlacetoPay;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
@@ -33,26 +34,29 @@ class PaymentController extends Controller
     public function index(User $user): View
     {
         if ($this->cartService->getAContentCartFormAUser()->count() == 0)
-
             return redirect()->route('client.product');
         else
-
             return view('webcheckout.index', compact('user'));
     }
 
     /**
      * @param PlacetoPay $placetopay
      * @param PaymentInfoRequest $request
-     * @return \Illuminate\Contracts\Foundation\Application|RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Contracts\Foundation\Application|RedirectResponse|Redirector
      * @throws \Dnetix\Redirection\Exceptions\PlacetoPayException
      */
-    public function store(PlacetoPay $placetopay, PaymentInfoRequest $request)
+    public function store(PlacetoPay $placetopay, PaymentInfoRequest $request): RedirectResponse
     {
         //Create the order for the payment
         $order = Order::create($request->all());
         $order->reference = substr(Uuid::uuid4(), 0, 10);
         $order->user_id = $this->getUserId();
         $order->total = intval($this->cartService->getACartFromUser()->getTotal());
+
+        foreach ($this->cartService->getAContentCartFormAUser() as $product)
+            {
+               $order->products()->attach($product['id']);
+            }
 
          // Conection with PlaceToPay
         try {
@@ -88,8 +92,7 @@ class PaymentController extends Controller
      * @param Order $order
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|View
      */
-    public function
-    endTransaction (PlacetoPay $placetopay, Order $order)
+    public function endTransaction (PlacetoPay $placetopay, Order $order)
     {
         $response = $placetopay->query($order->requestId);
         $order->status = $response->status()->status();

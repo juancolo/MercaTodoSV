@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Store;
 
-use App\Product;
+use App\Entities\Product;
 use Illuminate\View\View;
 use App\Services\CartService;
 use Illuminate\Support\Facades\Auth;
@@ -55,9 +55,8 @@ class CartController extends Controller
     public function store(Product $product): RedirectResponse
     {
         return redirect()->route('client.product.specs', compact('product'))
-                         ->with('status', $this->cartService->storeACartOfAUser($product));
+            ->with('status', $this->cartService->storeACartOfAUser($product));
     }
-
 
     /**
      * @param $cartItems
@@ -65,8 +64,8 @@ class CartController extends Controller
      */
     public function update($cartItems): RedirectResponse
     {
-        $this->cartService->updateAProductToACartUser($cartItems);
-        return back();
+        return back()
+            ->with('status', $this->cartService->updateAProductToACartUser($cartItems));
     }
 
     /**
@@ -79,6 +78,10 @@ class CartController extends Controller
         return back()->with('status', 'Producto eliminado del carrito adecuadamente');
 
     }
+
+    /**
+     * @return mixed
+     */
     public function getCartOfAUser(){
         $user = \Cart::session(auth()->id());
         return $user;

@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use App\Order;
-use Illuminate\Support\Facades\Auth;
+use App\Entities\Order;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -14,13 +13,16 @@ class OrderController extends Controller
         $this->middleware('auth');
     }
 
+    public function create($request)
+    {
+
+    }
     /**
      * @return View
      */
     public function show(): View
     {
         $orders = Order::where('user_id', Auth::id())->get();
-        //dd($orders);
         return view('orders.show', compact('orders'));
     }
 }

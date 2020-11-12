@@ -4,7 +4,7 @@
 namespace App\Services;
 
 
-use App\Order;
+use App\Entities\Order;
 
 class PaymentData
 {
