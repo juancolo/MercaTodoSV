@@ -19,7 +19,9 @@
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
-      "ext-openssl": "*"
+        "maatwebsite/excel": "^3.1",
+        "phpoffice/phpspreadsheet": "^1.15",
+        "predis/predis": "^1.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",

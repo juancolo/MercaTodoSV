@@ -12,7 +12,7 @@
                 </ul>
             @endif
 
-            <h2>{{__('Create a product')}}</h2>
+            <h2>{{__('')}}</h2>
             <div class="form-group">
                 <label for="name">{{__('Name')}}</label>
                 <input v-model="name"

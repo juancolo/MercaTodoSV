@@ -2,18 +2,19 @@
 
 namespace Tests\Feature\Admin\Product;
 
-use App\Category;
-use App\Product;
-use App\Tag;
-use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Str;
+use App\Entities\Product;
+use App\Http\Requests\Product\UpdateProductRequest;
 use Tests\TestCase;
+use App\Entities\User;
+use App\Entities\Category;
+use Tests\Feature\ProductTest;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UpdateProductTest extends TestCase
 {
     use WithFaker, RefreshDatabase;
+
     /**
      * @test
      */
@@ -23,51 +24,36 @@ class UpdateProductTest extends TestCase
         $user = factory(User::class)->create(['role' => 'Administrador']);
 
         $this->actingAs($user);
-        $product = $this->CreateProduct
-            (
-                $this->CreateCategory(),
-                $this->CreateTag()
-            );
-
+        $product = factory(Product::class)->create(
+            [
+                'name' => 'ProductTest',
+                'slug' => 'producttest',
+                'details' => 'ProductDetail',
+                'description' => 'ProductDescription',
+                'actual_price' => 1000,
+                'category_id' => $this->CreateCategory(),
+                'stock' => 10,
+            ]);
         $this->assertDatabaseHas('products', ['name' => $product->name]);
 
-        $product = $this->EditProduct($product);
-        $response = $this->get(route('product.update', compact('product')));
+        $response = $this->put(route('product.update', $product), $this->data());
 
-        $this->assertDatabaseHas('products', ['name'=> $product->name]);
-        $response->assertStatus(200);
-
+        $product->fresh();
+        $this->assertDatabaseHas('products', ['name' => 'Test Edit Name']);
+        $response->assertStatus(302);
     }
 
-
-    private function CreateCategory(){
+    private function CreateCategory()
+    {
         $category = factory(Category::class)->create(['name' => 'categoryTest']);
         return $category;
     }
 
-    private function CreateTag(){
-        $tag = factory(Tag::class)->create(['name' => 'tagTest1']);
-        return $tag;
-    }
-
-    private function CreateProduct(Category $category, Tag $tag)
+    public function data()
     {
-        return Product::create([
-            'name'=>'ProductTest',
-            'slug'=>'producttest',
-            'details'=>'ProductDetail',
-            'description'=>'ProductDescription',
-            'actual_price'=> 1000,
-            'category_id' => $category->id,
-            'tag_id' => $tag->id,
-        ]);
-    }
-
-    private function EditProduct(Product $product)
-    {
-        $product->name = 'ProdcutEditName';
-        $product->slug = Str::slug($product->name);
-        $product->save();
-        return $product;
+        return [
+            'name' => 'Test Edit Name',
+            'slug' => 'testeditslug',
+        ];
     }
 }
