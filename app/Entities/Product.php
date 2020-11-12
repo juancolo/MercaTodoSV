@@ -84,7 +84,7 @@ class Product extends Model
      */
     public static function scopeExport(Builder $query): Builder
     {
-        return $query->select('id', 'name', 'actual_price', 'category_id');
+        return $query->select('id', 'name', 'slug', 'actual_price', 'category_id');
     }
 
     /**

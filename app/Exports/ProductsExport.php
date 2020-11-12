@@ -3,44 +3,57 @@
 namespace App\Exports;
 
 use App\Entities\Product;
-use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Excel;
+use Maatwebsite\Excel\Concerns\FromQuery;
+use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use Illuminate\Contracts\Support\Responsable;
-use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class ProductsExport implements FromCollection, Responsable, WithHeadings, ShouldAutoSize
+class ProductsExport implements
+    FromQuery,
+    WithHeadings,
+    ShouldAutoSize,
+    ShouldQueue
 {
     use Exportable;
 
-    public $fileName;
     private $headers =[
         'Content-Type'=> 'csv'
     ];
-
-    public function __construct(Request $request)
-    {
-        $this->fileName = 'products.'.$request->extension;
-    }
 
     public function headings(): array
     {
         return [
             'Id',
             'Name',
+            'Slug',
+            'Details',
+            'Description',
             'Actual Price',
-            'Category id'
+            'Category id',
+            'Status',
+            'Stock'
         ];
     }
 
     /**
-    * @return Collection
-    */
-    public function collection()
+     * @return Builder
+     */
+    public function query()
     {
-        return Product::select('id', 'name', 'actual_price', 'category_id' )->get();
+        return Product::query()
+            ->select(
+                'id',
+                'name',
+                'slug',
+                'details',
+                'description',
+                'actual_price',
+                'category_id',
+                'status',
+                'stock'
+            );
     }
+
 }

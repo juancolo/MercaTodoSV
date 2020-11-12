@@ -3,6 +3,9 @@
 namespace Tests\Feature\Admin\Product;
 
 use App\Entities\Product;
+use App\Jobs\NotifyAdminOfCompetedExport;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Testing\Fakes\NotificationFake;
 use Tests\TestCase;
 use App\Entities\User;
 use App\Entities\Category;
@@ -20,22 +23,23 @@ class ExportProductTest extends TestCase
     use WithFaker;
 
     protected function setUp(): void
-{
-    parent::setUp();
+    {
+        parent::setUp();
 
-    $this->category = factory(Category::class)->create();
-    factory(Product::class, 20)->create(['category_id' => $this->category->id]);
-}
+        $this->category = factory(Category::class)->create();
+        factory(Product::class, 20)->create(['category_id' => $this->category->id]);
+    }
 
     /**
      * @test
-    */
+     */
     public function an_admin_can_see_the_export_a_users_report_button()
     {
         $this->ActingAsAdmin();
         $this->get(route('product.index'))
             ->assertStatus(200)
-            ->assertSee(route('product.export'));
+            ->assertSee(route('product.export'))
+            ->assertViewIs('admin.products.index');
     }
 
     /**
@@ -53,15 +57,19 @@ class ExportProductTest extends TestCase
      */
     public function an_admin_can_export_a_user_xlsx_report()
     {
-        $products = Product::all();
-        $this->ActingAsAdmin();
         Excel::fake();
-        $this->get(route('product.export'))
-            ->assertStatus(200);
+        Notification::fake();
+        $this->ActingAsAdmin();
 
-        Excel::assertDownloaded('products.xlsx', function (ProductsExport $export)
-        use ($products){
-            return $export->collection()->contains($products->random());
+        $this->post(route('product.export'), $this->extension())
+            ->assertStatus(302);
+
+        Excel::assertQueued('products.xlsx', function (ProductsExport $export) {
+            return true;
+        });
+
+        Excel::assertStored('products.xlsx', function (ProductsExport $export) {
+            return true;
         });
     }
 
@@ -69,6 +77,13 @@ class ExportProductTest extends TestCase
     {
         $user = factory(User::class)->create(['role' => 'Administrador']);
         $this->actingAs($user);
+    }
+
+    public function extension()
+    {
+        return [
+            'extension' => 'xlsx'
+        ];
     }
 
 }

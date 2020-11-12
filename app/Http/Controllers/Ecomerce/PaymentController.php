@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Ecomerce;
 
 use Exception;
 use App\Entities\User;
@@ -12,6 +12,7 @@ use App\Services\CartService;
 use Illuminate\Routing\Redirector;
 use Dnetix\Redirection\PlacetoPay;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;

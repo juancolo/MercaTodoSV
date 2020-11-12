@@ -9,5 +9,7 @@
     "Options": "Opciones",
     "Product": "Producto",
     "Create Product": "Crear un Producto",
-    "Clean": "limpiar"
+    "Clean": "limpiar",
+    "Delete": "Eliminar",
+    "Name": "Nombre"
 }

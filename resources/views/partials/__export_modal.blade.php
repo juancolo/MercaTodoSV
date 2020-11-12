@@ -7,7 +7,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="{{route('product.export')}}" method="POST" id="export">
+            <form action="{{route('product.export', 'extension')}}" method="POST" id="export">
                 @csrf
                 <div class="modal-body">
                     <label for="extension">{{ __("Selecciona el formato") }}</label>

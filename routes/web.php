@@ -8,20 +8,23 @@ Route::get('/', function () {
     return redirect()->route('client.landing');
 })->name('welcome');
 
-Auth::routes(['verify'=>true]);
+Auth::routes(['verify' => true]);
 
 //User Admin
-Route::resource('/admin',  'Admin\UserController')
+Route::resource('/admin', 'Admin\UserController')
     ->parameter('admin', 'user');
+Route::get('/admin/user/export', 'Admin\ExportController@userExport')
+    ->name('user.export');
 //Products Admin
-Route::post('/product/export', 'Admin\ProductController@export')
+Route::post('/product/export', 'Admin\ExportController@productExport')
     ->name('product.export');
-Route::post('/product/import', 'Admin\ProductController@import')
+Route::post('/product/import', 'Admin\ImportController@productImport')
     ->name('product.import');
-Route::resource('/product', 'Admin\ProductController');
+Route::resource('/product', 'Admin\ProductController')
+    ->except('show');
 
 //store
-Route::group( ['prefix' => 'store'], function (){
+Route::group(['prefix' => 'store'], function () {
     Route::get('/landing', 'Store\StoreController@landing')
         ->name('client.landing');
     Route::get('/landing/products', 'Store\StoreController@showProducts')
@@ -39,21 +42,21 @@ Route::group( ['prefix' => 'store'], function (){
 });
 
 //Payments
-Route::group(['prefix'=> 'payment'], function (){
-    Route::get('/index/{user}', 'PaymentController@index')
+Route::group(['prefix' => 'payment'], function () {
+    Route::get('/index/{user}', 'Ecomerce\PaymentController@index')
         ->name('payment.index');
-    Route::post('/payment', 'PaymentController@store')
+    Route::post('/payment', 'Ecomerce\PaymentController@store')
         ->name('payment.store');
-    Route::get('/end_transaction/{order}', 'PaymentController@endTransaction' )
+    Route::get('/end_transaction/{order}', 'Ecomerce\PaymentController@endTransaction')
         ->name('payment.endTransaction');
-    Route::post('/payment/{order}', 'PaymentController@reDonePayment')
+    Route::post('/payment/{order}', 'Ecomerce\PaymentController@reDonePayment')
         ->name('payment.redone');
 });
 
 //Order
-Route::group(['prefix'=>'order'], function(){
-   Route::get('/show', 'OrderController@show')
-       ->name('order.show');
+Route::group(['prefix' => 'order'], function () {
+    Route::get('/show', 'Ecomerce\OrderController@show')
+        ->name('order.show');
 });
 
 

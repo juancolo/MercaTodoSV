@@ -4,14 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use Exception;
 use App\Entities\Tag;
-use App\Entities\Product;
-use Illuminate\View\View;
-use App\Entities\Category;
 use Illuminate\Http\Request;
-use App\Imports\ProductsImport;
-use App\Exports\ProductsExport;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Http\Requests\ImportRequest;
+use Illuminate\View\View;
+use App\Entities\Product;
+use App\Entities\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
@@ -34,10 +30,10 @@ class ProductController extends Controller
 
 
     /**
-     * @param IndexProductRequest $request
+     * @param Request $request
      * @return View
      */
-    public function index(IndexProductRequest $request): View
+    public function index(Request $request): View
     {
         $products = Product::with('category')
             ->ProductInfo($request->input('search'))
@@ -106,7 +102,7 @@ class ProductController extends Controller
      */
     public function update(Product $product, UpdateProductRequest $request): RedirectResponse
     {
-        $product->update($request->validated());
+        $product->update($request->all());
         $product->tags()->sync($request->input('tags'));
 
         if ($request->file('file')) {
@@ -135,27 +131,5 @@ class ProductController extends Controller
         return redirect()
             ->route('product.index')
             ->with('status', 'Se ha eliminado el producto correctamente');
-    }
-
-    /**
-     * @param Request $request
-     * @return ProductsExport
-     */
-    public function export(Request $request): ProductsExport
-    {
-        return new ProductsExport($request);
-    }
-
-    /**
-     * @param ImportRequest $request
-     * @return RedirectResponse
-     */
-    public function import(ImportRequest $request): RedirectResponse
-    {
-        Excel::import(new ProductsImport(), $request->file('file'));
-
-        return redirect()
-            ->route('product.index')
-            ->with('success', 'All Good!');
     }
 }

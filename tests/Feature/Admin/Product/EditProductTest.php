@@ -68,27 +68,6 @@ class EditProductTest extends TestCase
         $response->assertStatus(200);
     }
 
-    /**
-     * @test
-     */
-    public function admins_can_edit_an_existing_product()
-    {
-        $user = factory(User::class)->create(['role' => 'Administrador']);
-        $this->actingAs($user);
-        $existProduct = $this->CreateProduct
-            (
-                $this->CreateCategory(),
-                $this->CreateTag()
-            );
-        $this->assertDatabaseHas('products', ['name' => $existProduct->name]);
-
-        $product = ProductTest::EditProduct($existProduct);
-        $response = $this->patch(route('product.update', ));
-
-        $this->assertDatabaseHas('products', ['name'=> $product->name]);
-        $response->assertStatus(200);
-    }
-
     private function CreateCategory(){
         $category = factory(Category::class)->create(['name' => 'categoryTest']);
         return $category;
