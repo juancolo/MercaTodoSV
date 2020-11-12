@@ -16,8 +16,6 @@ Route::resource('/admin',  'Admin\UserController');
 Route::resource('/product', 'Admin\ProductController');
 Route::resource('/shop', 'ShopController');
 
-Route::resource('/shop', 'ShopController');
-
 //store
 Route::group( ['prefix' => 'store'], function (){
     Route::get('/landing', 'StoreController@landing')
@@ -42,7 +40,7 @@ Route::group(['prefix'=> 'payment'], function (){
         ->name('payment.index');
     Route::post('/payment', 'PaymentController@store')
         ->name('payment.store');
-    Route::get('/endtransaction/{order}', 'PaymentController@endTransaction' )
+    Route::get('/end_transaction/{order}', 'PaymentController@endTransaction' )
         ->name('payment.endTransaction');
     Route::post('/payment/{order}', 'PaymentController@reDonePayment')
         ->name('payment.redone');
@@ -54,4 +52,4 @@ Route::group(['prefix'=>'order'], function(){
        ->name('order.show');
 });
 
-Route::view('/order/{order}', 'orders.show')->name('orders');
+

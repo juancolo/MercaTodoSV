@@ -1,8 +1,9 @@
 <?php
 
-namespace App;
+namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use PhpParser\Builder;
 
 class Order extends Model
 {
@@ -40,5 +41,17 @@ class Order extends Model
     public function getRouteKeyName()
     {
         return 'reference';
+    }
+
+    /**
+     * @param Builder $query
+     * @return Builder
+     */
+    public static function scopeWithOutFinalStatus(Builder $query): Builder
+    {
+        return $query
+            ->where('status', "PENDING")
+            ->orWhere('status', "IN_PROCESS");
+
     }
 }
