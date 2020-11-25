@@ -2,12 +2,13 @@
 
 namespace App\Jobs;
 
-use App\Notifications\ExportReady;
+use App\Entities\Exports;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
+use App\Notifications\ExportReady;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class NotifyAdminOfCompetedExport implements ShouldQueue
 {
@@ -32,8 +33,14 @@ class NotifyAdminOfCompetedExport implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
+        Exports::create([
+            'type' => 'Products export',
+            'filePath' => $this->filePath,
+            'created_by' => $this->user->id
+        ]);
+
         $this->user->notify(new ExportReady($this->filePath));
     }
 }

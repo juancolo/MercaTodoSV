@@ -59,4 +59,4 @@ Route::group(['prefix' => 'order'], function () {
         ->name('order.show');
 });
 
-
+Route::view('/form', 'layouts.admin.forms');

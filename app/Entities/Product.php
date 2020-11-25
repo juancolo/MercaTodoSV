@@ -94,4 +94,15 @@ class Product extends Model
     {
         return 'slug';
     }
+
+    /**
+     * @return string
+     */
+    public function getProductImage(): string
+    {
+        if ($this->file == null) {
+            return 'img/logo.png';
+        }
+        return asset($this->file);
+    }
 }

@@ -27,7 +27,7 @@ class StoreController extends Controller
                 ->take(3)
                 ->paginate(3);
         });
-
+flush();
         return view('store.index', compact('products'));
     }
 
@@ -39,7 +39,7 @@ class StoreController extends Controller
     {
         $key = "product.page" . request('page', 1);
 
-        $products = Cache::remember($key, 800, function ()
+        $products = Cache::remember($key, 60, function ()
         use ($request) {
             return
                 Product::with('category')

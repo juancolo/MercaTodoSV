@@ -18,16 +18,16 @@ class NotifyAdminOfCompletedImport implements ShouldQueue
      * @var User
      */
     private $user;
-    private $filePath;
+    private $message;
 
     /**
      * @param $user
-     * @param $filePath
+     * @param $message
      */
-    public function __construct($user, $filePath)
+    public function __construct($user, $message)
     {
         $this->user = $user;
-        $this->filePath = $filePath;
+        $this->message = $message;
     }
 
     /**
@@ -37,6 +37,6 @@ class NotifyAdminOfCompletedImport implements ShouldQueue
      */
     public function handle()
     {
-        $this->user->notify(new ImportReady($this->filePath));
+        $this->user->notify(new ImportReady($this->message));
     }
 }

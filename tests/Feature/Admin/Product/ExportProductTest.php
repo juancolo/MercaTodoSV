@@ -18,6 +18,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class ExportProductTest extends TestCase
 {
     protected $category;
+    protected $products;
 
     use RefreshDatabase;
     use WithFaker;
@@ -27,7 +28,7 @@ class ExportProductTest extends TestCase
         parent::setUp();
 
         $this->category = factory(Category::class)->create();
-        factory(Product::class, 20)->create(['category_id' => $this->category->id]);
+        $this->products = factory(Product::class, 20)->create(['category_id' => $this->category->id]);
     }
 
     /**
@@ -62,14 +63,15 @@ class ExportProductTest extends TestCase
         $this->ActingAsAdmin();
 
         $this->post(route('product.export'), $this->extension())
-            ->assertStatus(302);
+            ->assertStatus(302)
+            ->assertRedirect(route('product.index'));
 
         Excel::assertQueued('products.xlsx', function (ProductsExport $export) {
-            return true;
+            return $export->query()->get()->contains($this->products->random());
         });
 
         Excel::assertStored('products.xlsx', function (ProductsExport $export) {
-            return true;
+            return $export->query()->get()->contains($this->products->random());
         });
     }
 

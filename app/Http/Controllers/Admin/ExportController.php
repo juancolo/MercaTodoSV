@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Entities\Product;
-use App\Exports\ProductsExport;
 use App\Exports\UsersExport;
+use App\Exports\ProductsExport;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
@@ -18,9 +18,9 @@ class ExportController extends Controller
      * @param ProductsExport $productsExport
      * @return RedirectResponse
      */
-    public function productExport(ExportRequest $request, ProductsExport $productsExport, Product $products)
+    public function productExport(ExportRequest $request, ProductsExport $productsExport)
     {
-        $filePath = 'products.' . $request->extension;
+        $filePath = date(now()).'products.' . $request->extension;
 
         $productsExport->queue($filePath)->chain([
             new NotifyAdminOfCompetedExport(
@@ -29,6 +29,7 @@ class ExportController extends Controller
             )
         ]);
 
+        Log::notice('the user number '.Auth::id().' has export '. $productsExport->query()->count().' products');
         return redirect()
             ->route('product.index')
             ->with('status', 'The export product started. We will notify by email');

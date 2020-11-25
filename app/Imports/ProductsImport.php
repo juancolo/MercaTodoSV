@@ -3,40 +3,52 @@
 namespace App\Imports;
 
 use App\Entities\Product;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Validation\Rule;
+use Illuminate\Database\Eloquent\Model;
+use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\Importable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Maatwebsite\Excel\Concerns\SkipsFailures;
+use Maatwebsite\Excel\Concerns\WithValidation;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
-use Maatwebsite\Excel\Row;
-use Maatwebsite\Excel\Concerns\OnEachRow;
-use Maatwebsite\Excel\Concerns\Importable;
-use Maatwebsite\Excel\Concerns\WithValidation;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class ProductsImport implements
-    OnEachRow,
+    ToModel,
     WithHeadingRow,
     WithValidation,
-    WithBatchInserts,
+    SkipsOnFailure,
+    ShouldQueue,
     WithChunkReading,
-    ShouldQueue
+    WithBatchInserts
 {
     use Importable;
+    use SkipsFailures;
 
-    public function onRow(Row $row)
+    /**
+     * @var int
+     */
+    private int $rows = 0;
+
+    /**
+     * @param array $row
+     * @return Model|Model[]|null
+     */
+    public function model(array $row)
     {
-        $row = $row->toArray();
+        ++$this->rows;
 
-        Product::updateOrCreate(
+        return Product::updateOrCreate(
             [
                 'name' => $row['name'],
+                'slug' => $row['slug'],
             ],
 
             [
-                'name' => $row['name'],
                 'actual_price' => $row['actual_price'],
                 'category_id' => $row['category_id'],
-                'slug' => $row['slug'],
                 'details' => $row['details'],
                 'description' => $row['description'],
                 'status' => $row['status'],
@@ -44,18 +56,19 @@ class ProductsImport implements
             ]);
     }
 
+    /**
+     * @return array
+     */
     public function rules(): array
     {
         return [
             'name' => [
                 'required',
-                'unique:products',
                 'min:3', 'max:70',
                 'regex:/^[^\{\}\[\]\;\<\>]*$/'],
 
             'slug' => [
                 'required',
-                'unique:products',
                 'min:3', 'max:70',
                 'regex:/^[^\{\}\[\]\;\<\>]*$/'],
 
@@ -67,14 +80,28 @@ class ProductsImport implements
             'status' => Rule::in(['ACTIVO', 'INACTIVO'])
         ];
     }
+
+    /**
+     * @return int
+     */
+    public function getRowCount(): int
+    {
+        return $this->rows;
+    }
+
+    /**
+     * @return int
+     */
     public function batchSize(): int
     {
         return 1000;
     }
 
+    /**
+     * @return int
+     */
     public function chunkSize(): int
     {
-      return 1000;
+        return 1000;
     }
-
 }
