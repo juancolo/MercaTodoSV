@@ -61,7 +61,7 @@
                     </div>
                 </form>
                 <div>
-                    <h2>{{__('Products')}}<a href="{{route('product.create')}}">
+                    <h2>{{__('ProductStatus')}}<a href="{{route('product.create')}}">
 
                             <button type="button"
                                     class="btn btn-dark float-right"

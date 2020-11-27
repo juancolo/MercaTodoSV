@@ -3,26 +3,48 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Imports\ProductsImport;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\ImportRequest;
-use App\Jobs\NotifyAdminOfCompletedImport;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Jobs\NotifyAdminOfCompletedImport;
+use App\Jobs\NotifyAdminOfIncompleteImport;
 
 class ImportController extends Controller
 {
-    public function productImport(ImportRequest $request)
+    public function productImport(ImportRequest $request, ProductsImport $import)
     {
-        $import = new ProductsImport();
-        $import->queue($request->file('file'))->chain([
-            new NotifyAdminOfCompletedImport(
-                Auth::user(),
-                'You had been import '. $import->getRowCount(). ' products'
-            )]
-        );
+        $import->import($request->file('file'));
 
-        Log::notice('the user number ' . Auth::id() . ' has import ' . $import->getRowCount() . ' products');
+        if (count($import->failures()) > 0) {
+
+            $this->dispatch(new NotifyAdminOfIncompleteImport(
+                    Auth::user(),
+                    $this->getValidationErrors($import->failures()))
+            );
+        } else {
+            $import->queue($request->file('file'))->chain([
+                new NotifyAdminOfCompletedImport(
+                    Auth::user(),
+                    'message'
+                )
+            ]);
+        }
+
         return redirect()
-            ->route('product.index');
+            ->route('product.index')
+            ->with('message', '');
+    }
+
+    public function getValidationErrors($importFailures): array
+    {
+        $validationErrors = [];
+        foreach ($importFailures as $failure) {
+            $validationErrors []= [
+                'message' => $failure->errors()[0],
+                'row' => $failure->row(),
+            ];
+        }
+        dd($validationErrors);
+        return $validationErrors;
     }
 }

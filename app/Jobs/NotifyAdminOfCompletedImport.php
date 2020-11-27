@@ -3,12 +3,13 @@
 namespace App\Jobs;
 
 use App\Entities\User;
-use App\Notifications\ImportReady;
+use App\Entities\Imports;
 use Illuminate\Bus\Queueable;
+use App\Notifications\ImportReady;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 
 class NotifyAdminOfCompletedImport implements ShouldQueue
 {
@@ -37,6 +38,12 @@ class NotifyAdminOfCompletedImport implements ShouldQueue
      */
     public function handle()
     {
+        Imports::create([
+            'type' => 'ProductStatus import',
+            'filePath' => $this->message,
+            'created_by' => $this->user->id
+        ]);
+
         $this->user->notify(new ImportReady($this->message));
     }
 }

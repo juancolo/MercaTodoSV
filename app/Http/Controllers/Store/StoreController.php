@@ -27,7 +27,7 @@ class StoreController extends Controller
                 ->take(3)
                 ->paginate(3);
         });
-flush();
+
         return view('store.index', compact('products'));
     }
 
@@ -47,7 +47,6 @@ flush();
                     ->ActiveProduct()
                     ->paginate(15);
         });
-
         return view('store.show_products', compact('products'));
     }
 

@@ -3,11 +3,10 @@
 namespace App\Imports;
 
 use App\Entities\Product;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Validation\Rule;
-use Illuminate\Database\Eloquent\Model;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\Importable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
@@ -19,10 +18,9 @@ class ProductsImport implements
     ToModel,
     WithHeadingRow,
     WithValidation,
-    SkipsOnFailure,
-    ShouldQueue,
     WithChunkReading,
-    WithBatchInserts
+    WithBatchInserts,
+    SkipsOnFailure
 {
     use Importable;
     use SkipsFailures;
@@ -34,13 +32,12 @@ class ProductsImport implements
 
     /**
      * @param array $row
-     * @return Model|Model[]|null
      */
     public function model(array $row)
     {
         ++$this->rows;
 
-        return Product::updateOrCreate(
+        Product::updateOrCreate(
             [
                 'name' => $row['name'],
                 'slug' => $row['slug'],
@@ -64,11 +61,13 @@ class ProductsImport implements
         return [
             'name' => [
                 'required',
+                'unique:products',
                 'min:3', 'max:70',
                 'regex:/^[^\{\}\[\]\;\<\>]*$/'],
 
             'slug' => [
                 'required',
+                'unique:products',
                 'min:3', 'max:70',
                 'regex:/^[^\{\}\[\]\;\<\>]*$/'],
 
@@ -76,6 +75,7 @@ class ProductsImport implements
             'description' => 'min:3|max:200',
             'actual_price' => 'required|numeric|min:0|not_in:0',
             'old_price' => 'numeric|min:0|not_in:0',
+            'stock' => 'numeric|min:0|not_in:0',
             'category_id' => 'required|exists:categories,id',
             'status' => Rule::in(['ACTIVO', 'INACTIVO'])
         ];
@@ -89,19 +89,13 @@ class ProductsImport implements
         return $this->rows;
     }
 
-    /**
-     * @return int
-     */
-    public function batchSize(): int
-    {
-        return 1000;
-    }
-
-    /**
-     * @return int
-     */
     public function chunkSize(): int
     {
-        return 1000;
+        return 10000;
+    }
+
+    public function batchSize(): int
+    {
+        return 10000;
     }
 }

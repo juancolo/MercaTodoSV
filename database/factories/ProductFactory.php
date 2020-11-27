@@ -4,6 +4,7 @@
 
 use App\Entities\Product;
 use Illuminate\Support\Str;
+use App\Constants\ProductStatus;
 use Faker\Generator as Faker;
 
 $factory->define(Product::class, function (Faker $faker) {
@@ -19,7 +20,7 @@ $factory->define(Product::class, function (Faker $faker) {
         'description' => $faker->text(100),
         'category_id' => rand(1, 20),
         'stock' => $faker->numberBetween(0, 100),
-        'status' => $faker->randomElement(['ACTIVO', 'INACTIVO']),
+        'status' => $faker->randomElement([ProductStatus::ACTIVE, ProductStatus::INACTIVE]),
         'file' => $faker->imageUrl($width = 500, $height = 400 ),
     ];
 });

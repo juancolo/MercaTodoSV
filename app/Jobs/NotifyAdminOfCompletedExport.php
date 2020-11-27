@@ -10,9 +10,12 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class NotifyAdminOfCompetedExport implements ShouldQueue
+class NotifyAdminOfCompletedExport implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable,
+        InteractsWithQueue,
+        Queueable,
+        SerializesModels;
 
     private $user;
     private $filePath;
@@ -36,7 +39,7 @@ class NotifyAdminOfCompetedExport implements ShouldQueue
     public function handle(): void
     {
         Exports::create([
-            'type' => 'Products export',
+            'type' => 'ProductStatus export',
             'filePath' => $this->filePath,
             'created_by' => $this->user->id
         ]);

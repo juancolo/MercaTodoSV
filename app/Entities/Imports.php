@@ -5,12 +5,13 @@ namespace App\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Exports extends Model
+class Imports extends Model
 {
     protected $fillable = [
         'type',
         'filePath',
-        'created_by'
+        'created_by',
+        'count'
     ];
 
     /**
