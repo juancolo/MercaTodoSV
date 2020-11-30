@@ -44,7 +44,6 @@ class ImportController extends Controller
                 'row' => $failure->row(),
             ];
         }
-        dd($validationErrors);
         return $validationErrors;
     }
 }
