@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use App\Constants\ProductStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,6 +22,8 @@ class Product extends Model
         'file',
         'status'
     ];
+
+    public $allowedSorts = ['name', 'details'];
 
     /**
      * @return BelongsTo
@@ -59,7 +62,7 @@ class Product extends Model
      * @param string|null $productInfo
      * @return Builder
      */
-    public static function scopeProductInfo(Builder $query, ?string $productInfo): Builder
+    public static function scopeProductInfo(Builder $query, string $productInfo = null): Builder
     {
         if (null !== $productInfo) {
             return $query->where('name', 'like', "%$productInfo%")
@@ -75,7 +78,7 @@ class Product extends Model
      */
     public static function scopeActiveProduct(Builder $query): Builder
     {
-        return $query->where('status', 'like', 'ACTIVO');
+        return $query->where('status', 'like', 0);
     }
 
     /**
@@ -93,5 +96,24 @@ class Product extends Model
     public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductImage(): string
+    {
+        if ($this->file == null) {
+            return 'img/logo.png';
+        }
+        return asset($this->file);
+    }
+
+    /**
+     * @return string
+     */
+    public function status(): string
+    {
+        return ProductStatus::STATUSES[$this->status];
     }
 }

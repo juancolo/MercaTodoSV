@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Entities\Exports;
+use App\Entities\Imports;
+use App\Observers\ExportsObserver;
+use App\Observers\ImportsObserver;
 use Dnetix\Redirection\PlacetoPay;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,12 +28,11 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap any application services.
      *
-     * @return void
      */
     public function boot()
     {
-        //
+        Exports::observe( ExportsObserver::class);
+        Imports::observe( ImportsObserver::class);
     }
 }

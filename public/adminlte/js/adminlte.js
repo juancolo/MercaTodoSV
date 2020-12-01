@@ -17,7 +17,7 @@
    */
   var ControlSidebar = function ($) {
     /**
-     * Constants
+     * ProductStatus
      * ====================================================
      */
     var NAME = 'ControlSidebar';
@@ -286,7 +286,7 @@
    */
   var Layout = function ($) {
     /**
-     * Constants
+     * ProductStatus
      * ====================================================
      */
     var NAME = 'Layout';
@@ -527,7 +527,7 @@
    */
   var PushMenu = function ($) {
     /**
-     * Constants
+     * ProductStatus
      * ====================================================
      */
     var NAME = 'PushMenu';
@@ -750,7 +750,7 @@
    */
   var Treeview = function ($) {
     /**
-     * Constants
+     * ProductStatus
      * ====================================================
      */
     var NAME = 'Treeview';
@@ -931,7 +931,7 @@
    */
   var DirectChat = function ($) {
     /**
-     * Constants
+     * ProductStatus
      * ====================================================
      */
     var NAME = 'DirectChat';
@@ -1017,7 +1017,7 @@
    */
   var TodoList = function ($) {
     /**
-     * Constants
+     * ProductStatus
      * ====================================================
      */
     var NAME = 'TodoList';
@@ -1134,7 +1134,7 @@
    */
   var CardWidget = function ($) {
     /**
-     * Constants
+     * ProductStatus
      * ====================================================
      */
     var NAME = 'CardWidget';
@@ -1378,7 +1378,7 @@
    */
   var CardRefresh = function ($) {
     /**
-     * Constants
+     * ProductStatus
      * ====================================================
      */
     var NAME = 'CardRefresh';
@@ -1542,7 +1542,7 @@
    */
   var Dropdown = function ($) {
     /**
-     * Constants
+     * ProductStatus
      * ====================================================
      */
     var NAME = 'Dropdown';
@@ -1676,7 +1676,7 @@
    */
   var Toasts = function ($) {
     /**
-     * Constants
+     * ProductStatus
      * ====================================================
      */
     var NAME = 'Toasts';

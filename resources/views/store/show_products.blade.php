@@ -30,7 +30,7 @@
             </ul>
         </div> <!-- end sidebar -->
         <div>
-            <h1>Laptops</h1>
+            <h1>Products</h1>
             <div class="container">
 
                 <form action="{{route('client.product', 'search')}}" method="GET" class="col-6">
@@ -65,10 +65,10 @@
                         <a href="#"><div class="text-center">Name: {{$product->name}}</div></a>
                         <div class="image">
 
-                            @if ($product->file)
+                            @if ($product->getProductImage())
 
                                 <a href="{{route('client.product.specs', $product->slug)}}">
-                                    <img src="{{url($product->file)}}" class="w-100">
+                                    <img src="{{url($product->getProductImage())}}" class="w-100">
                                     <div class="overlay">
                                         <div class="detail"> View Detail</div>
                                     </div>

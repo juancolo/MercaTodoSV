@@ -39,7 +39,7 @@ class StoreController extends Controller
     {
         $key = "product.page" . request('page', 1);
 
-        $products = Cache::remember($key, 800, function ()
+        $products = Cache::remember($key, 60, function ()
         use ($request) {
             return
                 Product::with('category')
@@ -47,7 +47,6 @@ class StoreController extends Controller
                     ->ActiveProduct()
                     ->paginate(15);
         });
-
         return view('store.show_products', compact('products'));
     }
 
