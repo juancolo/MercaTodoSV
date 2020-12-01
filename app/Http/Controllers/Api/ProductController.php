@@ -4,20 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\Entities\Product;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
+use App\Http\Resources\ProductCollection;
 
 class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::ApplySorts(request('sort'))
-            ->paginate(
-                $perPage = request('page.size'),
-                $columns = ['*'],
-                $pageName = 'page[number]',
-                $page = request('page.number')
-            )->appends(request()->except('page.number'));
+        $products = Product::applySorts()
+            ->jsonPaginate();
 
         return ProductCollection::make($products);
     }

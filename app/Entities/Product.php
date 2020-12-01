@@ -2,9 +2,6 @@
 
 namespace App\Entities;
 
-use App\Traits\HasSort;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Str;
 use App\Constants\ProductStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -13,8 +10,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Product extends Model
 {
-    use HasSort;
-
     protected $fillable = [
         'name',
         'slug',
