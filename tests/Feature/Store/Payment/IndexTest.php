@@ -47,9 +47,8 @@ class IndexTest extends TestCase
      */
     public function a_non_auth_user_cant_see_the_index_payment()
   {
-      $user = 1;
-      $response = $this->get(route('payment.index', $user));
-      $response->assertStatus(404);
+      $this->get(route('payment.index', 1))
+          ->assertStatus(404);
   }
 
     private function ActingAsClient()

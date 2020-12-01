@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Store;
 
+use App\Entities\Cart;
 use App\Entities\Product;
 use Illuminate\View\View;
 use App\Services\CartService;
@@ -20,32 +21,29 @@ class CartController extends Controller
      * CartController constructor.
      * @param CartService $cartService
      */
-    public function __construct(CartService $cartService) {
+    public function __construct(CartService $cartService)
+    {
         $this->middleware('auth');
         $this->cartService = $cartService;
     }
+
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
     public function index(): View
     {
         $user = Auth::id();
-        $cartItems = $this->cartService->getAContentCartFormAUser();
+        $cartItems = $this->cartService->getAContentCartFromAUser();
 
-        //Verify if the items into the cart still exist into the project
-            foreach ($cartItems as $item)
-            {
-                if (Product::find($item['id'])) {
-                }
-                else{
-                    $this->getCartOfAUser()->remove($item['id']);
-                }
+        foreach ($cartItems as $item) {
+            if (Product::findOrFail($item['id'])) {
+            } else {
+                $this->getCartOfAUser()->remove($item['id']);
             }
-        $cartInfo = $this->getCartOfAUser();
+        }
+        $cartInfo = $this->cartService->getACartFromUser();
 
-        return view('cart.index', compact('cartItems', 'cartInfo', 'user' ));
+        return view('cart.index', compact('cartItems', 'cartInfo', 'user'));
     }
 
     /**
@@ -77,13 +75,5 @@ class CartController extends Controller
         $this->cartService->deleteAProductFromTheCartUser($productId);
         return back()->with('status', 'Producto eliminado del carrito adecuadamente');
 
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCartOfAUser(){
-        $user = \Cart::session(auth()->id());
-        return $user;
     }
 }

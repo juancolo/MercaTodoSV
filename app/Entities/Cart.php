@@ -17,11 +17,18 @@ class Cart extends Model
         'id', 'cart_data',
     ];
 
+    /**
+     * @param $value
+     */
     public function setCartDataAttribute($value)
     {
         $this->attributes['cart_data'] = serialize($value);
     }
 
+    /**
+     * @param $value
+     * @return mixed
+     */
     public function getCartDataAttribute($value)
     {
         return unserialize($value);

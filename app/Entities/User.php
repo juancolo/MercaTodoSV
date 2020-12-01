@@ -2,34 +2,30 @@
 
 namespace App\Entities;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-/**
-*
-*
-* @
-*/
-
 class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
 
     /**
-     * The attributes that are mass assignable.
-     *
      * @var array
      */
     protected $fillable = [
-        'first_name','last_name','email', 'password', 'active', 'role'
+        'first_name',
+        'last_name',
+        'email',
+        'password',
+        'active',
+        'role'
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
-     *
      * @var array
      */
     protected $hidden = [
@@ -37,20 +33,25 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
-     * The attributes that should be cast to native types.
-     *
      * @var array
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * @return Relation
+     */
     public function category(): Relation
     {
         $this->hasOne(Category::class);
     }
 
-    public function orders(){
+    /**
+     * @return HasMany
+     */
+    public function orders(): HasMany
+    {
         return $this->hasMany(Order::class);
     }
 
@@ -59,11 +60,11 @@ class User extends Authenticatable implements MustVerifyEmail
      * @param string|null $userInfo
      * @return Builder
      */
-    public static function scopeUserInfo($query, ? string $userInfo)
+    public static function scopeUserInfo($query, ?string $userInfo)
 
     {
-        if(null !== $userInfo){
-            return $query   ->where('first_name', 'like', "%$userInfo%")
+        if (null !== $userInfo) {
+            return $query->where('first_name', 'like', "%$userInfo%")
                 ->orWhere('last_name', 'like', "%$userInfo%")
                 ->orWhere('email', 'like', "%$userInfo%");
         }

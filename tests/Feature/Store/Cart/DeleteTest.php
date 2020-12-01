@@ -28,7 +28,7 @@ class DeleteTest extends TestCase
     /**
      * @test
      */
-    public function auth_client_can_delete_the_cart()
+    public function auth_client_can_delete_a_product_of_the_cart()
     {
         $this->ActingAsClient();
         $this->post(route('cart.store', $this->product));
@@ -54,7 +54,6 @@ class DeleteTest extends TestCase
 
     public function ActingAsClient()
     {
-        $user = factory(User::class)->create(['role' => 'Cliente']);
-        $this->actingAs($user);
+        $this->actingAs(factory(User::class)->create(['role' => 'Cliente']));
     }
 }

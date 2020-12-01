@@ -21,7 +21,7 @@ class CartService
     /**
      * @return CartCollection
      */
-    public function getAContentCartFormAUser(): CartCollection
+    public function getAContentCartFromAUser(): CartCollection
     {
         return $this->getACartFromUser()->getContent();
     }

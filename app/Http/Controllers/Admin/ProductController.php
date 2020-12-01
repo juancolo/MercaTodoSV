@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Exception;
 use App\Entities\Tag;
-use App\Entities\Product;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
+use App\Entities\Product;
 use App\Entities\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
@@ -20,23 +22,24 @@ class ProductController extends Controller
      * CategoryController constructor.
      * Validate user is an admin and is authenticated
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('admin');
         $this->middleware('auth');
     }
 
 
     /**
-     * @param IndexProductRequest $request
+     * @param Request $request
      * @return View
      */
-    public function index(IndexProductRequest $request): View
+    public function index(Request $request): View
     {
         $products = Product::with('category')
             ->ProductInfo($request->input('search'))
             ->paginate();
 
-        return view('admin.products.manageProduct', compact('products') );
+        return view('admin.products.index', compact('products'));
     }
 
     /**
@@ -44,10 +47,10 @@ class ProductController extends Controller
      */
     public function create(): View
     {
-        return view('admin.products.cretaProduct', with
+        return view('admin.products.create', with
             ([
-             'categories'=> Category::select('name', 'id')->get(),
-             'tags'=>  Tag::pluck('name', 'id')
+                'categories' => Category::select('name', 'id')->get(),
+                'tags' => Tag::pluck('name', 'id')
             ])
         );
     }
@@ -62,25 +65,15 @@ class ProductController extends Controller
 
         $product->tags()->sync($request->input('tags'));
         $product->save();
-        //Image
-        if($request->file('file'))
-        {
+
+        if ($request->file('file')) {
             $file = $request->file('file')->store('images');
             $product->file = Storage::url($file);
             $product->save();
         }
-       return redirect()->route('product.index');
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        return redirect()
+            ->route('product.index');
     }
 
     /**
@@ -91,12 +84,11 @@ class ProductController extends Controller
      */
     public function edit(Product $product): View
     {
-
         return view(
-            'admin.products.editProduct', with([
+            'admin.products.edit', with([
                 'product' => $product,
-                'categories'=> Category::pluck('name', 'id'),
-                'tags'=> Tag::pluck('name', 'id')
+                'categories' => Category::pluck('name', 'id'),
+                'tags' => Tag::pluck('name', 'id')
             ])
         );
     }
@@ -110,31 +102,28 @@ class ProductController extends Controller
      */
     public function update(Product $product, UpdateProductRequest $request): RedirectResponse
     {
-        $product->update($request->validated());
+        $product->update($request->all());
         $product->tags()->sync($request->input('tags'));
 
-        if($request->file('file'))
-        {
-            if($product->file) {
+        if ($request->file('file')) {
+            if ($product->file) {
                 Storage::delete($product->file);
             }
+
             $file = $request->file('file')->store('images');
             $product->file = Storage::url($file);
             $product->save();
         }
-
         return redirect()->route('product.index')
-                         ->with('status', 'Producto actualizado correctamente');
-
+            ->with('status', 'Producto actualizado correctamente');
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Product $product
+     * @param Product $product
      * @return RedirectResponse
+     * @throws Exception
      */
-    public function destroy(Product $product) : RedirectResponse
+    public function destroy(Product $product): RedirectResponse
     {
         Storage::delete($product->file);
         $product->delete();
@@ -143,6 +132,4 @@ class ProductController extends Controller
             ->route('product.index')
             ->with('status', 'Se ha eliminado el producto correctamente');
     }
-
-
 }

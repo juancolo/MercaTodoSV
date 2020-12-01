@@ -12,12 +12,12 @@ class ProductTableSedeer extends Seeder
      */
     public function run()
     {
-        factory(Product::class, 100)->create()->each(function (Product $product){
+        factory(Product::class, 100)->create()->each(function (Product $product) {
 
             $product->tags()->attach([
-                rand(1,5),
-                rand(6,12),
-                rand(13,20)
+                rand(1, 5),
+                rand(6, 12),
+                rand(13, 20)
             ]);
 
         });
