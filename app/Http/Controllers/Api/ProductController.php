@@ -12,8 +12,8 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::where('name', 'like', Str::of(request('filters.name')))
-            ->applySorts()->jsonPaginate();
+        //dd(request('filters.name'));
+        $products = Product::applySorts()->jsonPaginate();
 
         return ProductCollection::make($products);
     }

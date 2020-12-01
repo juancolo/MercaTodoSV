@@ -20,7 +20,8 @@ class ProductsImport implements
     WithValidation,
     WithChunkReading,
     WithBatchInserts,
-    SkipsOnFailure
+    SkipsOnFailure,
+    ShouldQueue
 {
     use Importable;
     use SkipsFailures;
