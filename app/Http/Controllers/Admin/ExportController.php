@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Entities\Product;
-use App\Exports\ProductsExport;
 use App\Exports\UsersExport;
+use App\Exports\ProductsExport;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
-use App\Jobs\NotifyAdminOfCompetedExport;
+use App\Jobs\NotifyAdminOfCompletedExport;
 use App\Http\Requests\Product\ExportRequest;
 
 class ExportController extends Controller
@@ -18,12 +17,12 @@ class ExportController extends Controller
      * @param ProductsExport $productsExport
      * @return RedirectResponse
      */
-    public function productExport(ExportRequest $request, ProductsExport $productsExport, Product $products)
+    public function productExport(ExportRequest $request, ProductsExport $productsExport)
     {
-        $filePath = 'products.' . $request->extension;
+        $filePath = date('d-m-Y', strtotime(now())).'-products.' . $request->extension;
 
         $productsExport->queue($filePath)->chain([
-            new NotifyAdminOfCompetedExport(
+            new NotifyAdminOfCompletedExport(
                 Auth::user(),
                 asset('storage/' . $filePath)
             )

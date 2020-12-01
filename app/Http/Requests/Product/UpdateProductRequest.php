@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Product;
 
+use App\Constants\ProductStatus;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -43,7 +44,7 @@ class UpdateProductRequest extends FormRequest
             'old_price' => ['numeric', 'min:0','not_in:0'],
             'category_id' => ['exists:categories,id'],
             'file' => ['image', 'mimes:jpeg,bmp,png'],
-            'status' => Rule::in(['ACTIVO', 'INACTIVO'])
+            'status' => Rule::in(ProductStatus::ACTIVE, ProductStatus::INACTIVE)
         ];
 
     }

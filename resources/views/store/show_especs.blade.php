@@ -4,27 +4,24 @@
 
 @section('content')
 
-       <div class="breadcrumbs">
+    <div class="breadcrumbs">
         <div class="container">
             <a href="#">Home</a>
+            E
             <i class="fa fa-chevron-right breadcrumb-separator"></i>
             <span>Shop</span>
             <i class="fa fa-chevron-right breadcrumb-separator"></i>
             <span>Macbook Pro</span>
         </div>
     </div> <!-- end breadcrumbs -->
-       @if (session('status'))
-           <div class="card col-md-12 alert alert-success">
-               {{ session('status') }}
-           </div>
-       @endif
+    @if (session('status'))
+        <div class="card col-md-12 alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
     <div class="product-section container">
         <div class="product-section-image">
-            @if ($product->file)
-
-                <img src="{{$product->file}}" alt="{{$product->name}}">
-
-            @endif
+            <img src="{{url($product->getProductImage())}}">
         </div>
         <div class="product-section-information">
             <h1 class="product-section-title">{{$product->name}}</h1>
@@ -37,13 +34,14 @@
 
             <p>&nbsp;</p>
 
-                <form action="{{route('cart.store', $product)}}" method="POST">
-                    @csrf
-                    @method('POST')
-                    <button type="submit"
-                            class="button button-plain"
-                    >Add to Cart</button>
-                </form>
+            <form action="{{route('cart.store', $product)}}" method="POST">
+                @csrf
+                @method('POST')
+                <button type="submit"
+                        class="button button-plain"
+                >Add to Cart
+                </button>
+            </form>
         </div>
 
     </div> <!-- end product-section -->

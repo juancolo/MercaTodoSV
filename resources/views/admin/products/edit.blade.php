@@ -3,7 +3,8 @@
 @section('title', 'MercaTodo|Admin Productos')
 
 @section('content')
-
+{{$active = \App\Constants\ProductStatus::ACTIVE}}
+{{$inactive = \App\Constants\ProductStatus::INACTIVE}}
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <div class="content-header">
@@ -61,7 +62,7 @@
                                        name="slug"
                                        id="slug"
                                        value="{{old ('slug',$product->slug)}}"
-                                       placeholder="{{old('category')}}"
+                                       placeholder="{{'Slug'}}"
                                        readonly>
                                 {!! $errors->first('slug', '<span class="help-block">:message</span>') !!}
                             </div>
@@ -93,7 +94,7 @@
                                                class="form-control"
                                                id="old_price"
                                                name="old_price"
-                                               value="{{$product->old_price}}"
+                                               value="{{old('old_price', $product->old_price)}}"
                                                placeholder="{{__('Product old price')}}"
                                                readonly>
                                         {!! $errors->first('oldPrice', '<span class="help-block">:message</span>') !!}
@@ -111,7 +112,7 @@
                                                class="form-control"
                                                id="actual_price"
                                                name="actual_price"
-                                               value="{{$product->actual_price}}"
+                                               value="{{old('actual_price', $product->actual_price)}}"
                                                placeholder="{{__('Product actual price')}}">
                                     </div>
                                 </div>
@@ -148,10 +149,7 @@
                                 <textarea type="text"
                                           class="form-control"
                                           name="description"
-                                          id="description"
-                                          placeholder="{{old('description')}}">
-                                       {{$product->description}}
-                                </textarea>
+                                          id="description">{{old('description', $product->description)}}</textarea>
                             </div>
 
                             <div class="form-group {{ $errors->has('details') ? 'has-error' : ''}}">
@@ -160,14 +158,13 @@
                                        class="form-control"
                                        name="details"
                                        id="details"
-                                       value="{{$product->details}}"
-                                       placeholder="{{old('details')}}">
+                                       value="{{old('details', $product->details)}}">
                             </div>
 
                             <div class="form-group {{ $errors->has('file') ? 'has-error' : ''}}">
                                 <label for="image">Imagen actual:
                                     <a>
-                                        <img src="{{asset($product->file)}}">
+                                        <img src="{{url($product->getProductImage())}}">
                                     </a>
                                 </label>
                             </div>
@@ -176,7 +173,7 @@
                                 <input type="file"
                                        name="file"
                                        id="file"
-                                       value="{{$product->file}}">
+                                       value="{{$product->getProductImage()}}">
                                 <p class="help-block">Imagen del producto</p>
                                 {!! $errors->first('image', '<span class="help-block">:message</span>') !!}
                             </div>
@@ -189,9 +186,14 @@
                                         <select class="form-control"
                                                 name="status"
                                                 id="status">
-                                            <option value="{{$product->status}}"> {{$product->status}}</option>
-                                            <option value="{{'ACTIVO'}}"> {{__('ACTIVO')}}</option>
-                                            <option value="{{'INACTIVO'}}"> {{__('INACTIVO')}}</option>
+                                            <option name="status"
+                                                    value="{{$active}}"
+                                                {{$active == old('status', $product->status) ? 'selected': ''}}
+                                            >@lang(\App\Constants\ProductStatus::STATUSES['0'])</option>
+                                            <option name="status"
+                                                    value="{{$inactive}}"
+                                                {{$inactive == old('status', $product->status) ? 'selected': ''}}
+                                            >@lang(\App\Constants\ProductStatus::STATUSES['1'])</option>
                                         </select>
                                     </div>
 

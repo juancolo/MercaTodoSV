@@ -40,25 +40,21 @@
                 <div class="col-md-4 shop-grid" style="padding-top: 40px">
                     <a href="#"><div class="text-center">Name: {{$product->name}}</div></a>
                         <div class="image">
-
-                                    @if ($product->file)
-
                                 <a href="">
-                                        <img src="{{$product->file}}" class="w-100">
+                                        <img src="{{url($product->getProductImage())}}" class="w-100">
                                         <div class="overlay">
                                         <div class="detail"> View Detail</div>
                                         </div>
                                 </a>
-                                    @endif
                         </div>
                                 <a class="text-center">{{$product->description}}</a>
-                                <a class="text-center">{{$product->category()->first()}}</a>
+                                <a class="text-center">{{$product->category->name}}</a>
                                 <div class="text-center">Price: {{$product->presentPrice()}}</div>
                     <br>
                 </div> <!-- end products -->
             @endforeach
     </div>
-        <div class="text-center button-container" align="center">
+        <div class="text-center button-container">
             <a href="#" class="button">View more products</a>
         </div>
 

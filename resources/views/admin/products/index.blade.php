@@ -61,7 +61,7 @@
                     </div>
                 </form>
                 <div>
-                    <h2>{{__('Products')}}<a href="{{route('product.create')}}">
+                    <h2>{{__('ProductStatus')}}<a href="{{route('product.create')}}">
 
                             <button type="button"
                                     class="btn btn-dark float-right"
@@ -101,7 +101,7 @@
                                 <th scope="row">{{$product->id}}</th>
 
                                 <td>
-                                    <img src="{{asset($product->file)}}" class="w-50 h-50" alt="">
+                                    <img src="{{asset($product->getProductImage())}}" class="w-50 h-50" alt="">
                                 </td>
                                 <td>{{$product->name}}</td>
                                 <td>{{$product->category->name}}</td>
