@@ -44,14 +44,6 @@ class PaginateTest extends TestCase
         $response->assertDontSee($this->product[9]->name);
         $response->assertDontSee($this->product[10]->name);
 
-        foreach ($response->json('links') as $link){
-            dump(urldecode($link));
-        }
-        dump($response->json('links'));
-        $response->assertJsonStructure([
-            'links' => ['first', 'last', 'prev', 'next']
-        ]);
-
         $response->assertJsonFragment([
             'first' => route('api.v1.products.index', ['page[size]' => 2, 'page[number]' => 1]),
             'last' => route('api.v1.products.index', ['page[size]' => 2, 'page[number]' => 8]),

@@ -4,13 +4,10 @@ namespace App\Providers;
 
 use App\Entities\Exports;
 use App\Entities\Imports;
-use App\JsonApi\JsonApiBuilder;
 use App\Observers\ExportsObserver;
 use App\Observers\ImportsObserver;
 use Dnetix\Redirection\PlacetoPay;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * @return void
+     *
      */
     public function boot()
     {

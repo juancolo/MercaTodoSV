@@ -6,13 +6,14 @@ use App\Entities\Product;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\ProductCollection;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::applySorts()
-            ->jsonPaginate();
+        $products = Product::where('name', 'like', Str::of(request('filters.name')))
+            ->applySorts()->jsonPaginate();
 
         return ProductCollection::make($products);
     }
