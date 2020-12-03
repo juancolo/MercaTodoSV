@@ -9,12 +9,13 @@ use Maatwebsite\Excel\Concerns\Exportable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
 class ProductsExport implements
     FromQuery,
     WithHeadings,
     ShouldAutoSize,
-    ShouldQueue
+    WithMapping
 {
     use Exportable;
 
@@ -25,7 +26,6 @@ class ProductsExport implements
     public function headings(): array
     {
         return [
-            'Id',
             'Name',
             'Slug',
             'Details',
@@ -44,7 +44,6 @@ class ProductsExport implements
     {
         return Product::query()
             ->select(
-                'id',
                 'name',
                 'slug',
                 'details',
@@ -54,6 +53,21 @@ class ProductsExport implements
                 'status',
                 'stock'
             );
+    }
+
+    public function map($product): array
+    {
+        return [
+            $product->name,
+            $product->slug,
+            $product->details,
+            $product->description,
+            $product->actual_price,
+            $product->category->name,
+            $product->status,
+            $product->stock
+        ];
+
     }
 
 }

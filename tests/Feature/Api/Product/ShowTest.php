@@ -28,21 +28,23 @@ class ShowTest extends TestCase
     {
         $product = Product::all()->last();
 
-        $this->getJson(route('api.v1.products.show', $product))
+        $this->jsonApi()->get(route('api.v1.products.read', $product))
             ->assertExactJson([
                 'data' =>
                     [
-                        'type' => 'product',
+                        'type' => 'products',
                         'id' => $product->getRouteKey(),
                         'attributes' => [
                             'name' => $product->name,
                             'slug' => $product->slug,
                             'details' => $product->details,
                             'category' => $product->category->name,
-                            'description' => $product->description
+                            'description' => $product->description,
+                            'created-at' => $product->created_at->toAtomString(),
+                            'updated-at' => $product->updated_at->toAtomString(),
                         ],
-                        'link' => [
-                            'self' => route('api.v1.products.show', $product)
+                        'links' => [
+                            'self' => route('api.v1.products.read', $product)
                         ]
                     ]
             ]);

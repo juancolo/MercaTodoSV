@@ -4,6 +4,7 @@
 namespace App\Concerns;
 
 
+use App\Constants\ProductStatus;
 use Illuminate\Validation\Rule;
 
 trait HasProductValidationRules
@@ -12,7 +13,7 @@ trait HasProductValidationRules
      * Get the validation rules that apply to the request.
      * @return array
      */
-    public function rules(): array
+    public function rules($record = null): array
     {
         return [
             'name' => [
@@ -34,7 +35,7 @@ trait HasProductValidationRules
             'category_id' => 'required|exists:categories,id',
             'tags.*' => 'exists:tags,id',
             'file' => 'image|mimes:jpeg,bmp,png',
-            'status' => Rule::in(['ACTIVO', 'INACTIVO'])
+            'status' => Rule::in([ProductStatus::ACTIVE, ProductStatus::INACTIVE])
         ];
     }
 }
