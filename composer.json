@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.2.5",
         "ext-openssl": "*",
+        "cloudcreativity/laravel-json-api": "V2.0",
         "darryldecode/cart": "^4.2",
         "dnetix/redirection": "^1.0",
         "fideloper/proxy": "^4.2",
@@ -25,6 +26,7 @@
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",
+        "cloudcreativity/json-api-testing": "^3.2",
         "facade/ignition": "^2.0",
         "fzaninotto/faker": "^1.9.1",
         "mockery/mockery": "^1.3.1",
