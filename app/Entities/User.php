@@ -2,8 +2,10 @@
 
 namespace App\Entities;
 
-use App\Constants\ProductStatus;
 use App\Constants\UserStatus;
+use App\Constants\ProductStatus;
+use Laravel\Passport\HasApiTokens;
+use App\Concerns\HasAdministrationRole;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -14,6 +16,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
+    use HasApiTokens;
+    use HasAdministrationRole;
 
     /**
      * @var array

@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use App\Entities\Product;
+use App\Policies\ProductPolicy;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Passport\Passport;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -12,8 +15,8 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $policies = [
-        // 'App\Model' => 'App\Policies\ModelPolicy',
+    protected array $policies = [
+        Product::class => ProductPolicy::class,
     ];
 
     /**
@@ -25,6 +28,10 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Passport::routes();
+
+        /*Gate::guessPolicyNamesUsing(function ($model){
+            return 'App\\Policies\\'.$model.'Policy';
+        });*/
     }
 }
