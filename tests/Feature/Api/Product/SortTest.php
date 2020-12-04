@@ -3,8 +3,10 @@
 namespace Tests\Feature\Api\Product;
 
 use Tests\TestCase;
+use App\Entities\User;
 use App\Entities\Product;
 use App\Entities\Category;
+use Laravel\Passport\Passport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SortTest extends TestCase
@@ -38,8 +40,20 @@ class SortTest extends TestCase
     }
 
     /** @test */
-    public function it_can_sort_product_by_name_asc()
+    public function an_unauthenticated_can_not_sort_products()
     {
+        $this->jsonApi()
+            ->filter(['sort' => 'name'])
+            ->get(route('api.v1.products.index'))
+            ->assertStatus(401)
+            ->assertDontSee($this->product2['name']);
+    }
+
+    /** @test */
+    public function an_authenticated_user_can_sort_product_by_name_asc()
+    {
+        $this->actingAsAuthUser();
+
         $url = route('api.v1.products.index', ['sort' => 'name']);
         $this->jsonApi()->get($url)->assertSeeInOrder([
             $this->product2['name'],
@@ -49,8 +63,10 @@ class SortTest extends TestCase
     }
 
     /** @test */
-    public function it_can_sort_product_by_name_desc()
+    public function an_authenticated_user_can_sort_product_by_name_desc()
     {
+        $this->actingAsAuthUser();
+
         $url = route('api.v1.products.index', ['sort' => '-name']);
         $this->jsonApi()->get($url)->assertSeeInOrder([
             $this->product1['name'],
@@ -60,8 +76,10 @@ class SortTest extends TestCase
     }
 
     /** @test */
-    public function it_can_sort_product_by_name_and_category()
+    public function an_authenticated_user_can_sort_product_by_name_and_category()
     {
+        $this->actingAsAuthUser();
+
         $url = route('api.v1.products.index', ['sort' => 'name,details']);
 
         $this->jsonApi()->get($url)->assertSeeInOrder([
@@ -80,11 +98,18 @@ class SortTest extends TestCase
     }
 
     /** @test */
-    public function it_can_not_sort_products_by_a_unknown_field()
+    public function an_authenticated_user_can_not_sort_products_by_a_unknown_field()
     {
+        $this->actingAsAuthUser();
+
         $url = route('api.v1.products.index', ['sort' => 'unknown']);
 
         $this->jsonApi()->get($url)->assertStatus(400);
+    }
 
+    public function actingAsAuthUser(): void
+    {
+        Passport::actingAs(
+            factory(User::class)->create());
     }
 }

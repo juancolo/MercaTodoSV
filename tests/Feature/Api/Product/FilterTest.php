@@ -2,18 +2,19 @@
 
 namespace Tests\Feature\Api\Product;
 
-use App\Entities\Category;
-use App\Entities\Product;
-use CloudCreativity\LaravelJsonApi\Testing\MakesJsonApiRequests;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Entities\User;
+use App\Entities\Product;
+use App\Entities\Category;
+use Laravel\Passport\Passport;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class FilterTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $product;
+    private $product2;
+    private $product1;
 
     protected function setUp(): void
     {
@@ -21,14 +22,14 @@ class FilterTest extends TestCase
 
         $category = factory(Category::class)->create();
 
-        $this->product = factory(Product::class)->create([
+        $this->product1 = factory(Product::class)->create([
             'name' => 'Food',
             'details' => 'Details 3',
             'created_at' => now()->month(8)->year(2019),
             'category_id' => $category->id
         ]);
 
-        factory(Product::class)->create([
+        $this->product2 = factory(Product::class)->create([
             'name' => 'Vehicle',
             'details' => 'Details 4',
             'created_at' => now()->month(7)->year(2020),
@@ -37,9 +38,18 @@ class FilterTest extends TestCase
     }
 
     /** @test */
-    public function can_filter_products_by_name()
+    public function an_unauthenticated_user_cant_filter_products()
     {
-        /*$url = route('api.v1.products.index', ['filters[name]' => 'Food']);*/
+        $this->jsonApi()
+            ->filter(['name' => 'Food'])
+            ->get(route('api.v1.products.index'))
+            ->assertStatus(401);
+    }
+
+    /** @test */
+    public function an_authenticated_user_can_filter_products_by_name()
+    {
+        $this->actingAsAuthUser();
 
         $this->jsonApi()
             ->filter(['name' => 'Food'])
@@ -51,8 +61,10 @@ class FilterTest extends TestCase
 
     /** @test */
 
-    public function can_filter_product_by_detail()
+    public function an_authenticated_user_can_filter_product_by_detail()
     {
+        $this->actingAsAuthUser();
+
         $this->jsonApi()
             ->filter(['details' => '3'])
             ->get(route('api.v1.products.index'))
@@ -63,8 +75,10 @@ class FilterTest extends TestCase
 
     /** @test */
 
-    public function can_filter_product_by_month()
+    public function an_authenticated_user_can_filter_product_by_month()
     {
+        $this->actingAsAuthUser();
+
         $this->jsonApi()
             ->filter(['month' => 8])
             ->get(route('api.v1.products.index'))
@@ -75,8 +89,10 @@ class FilterTest extends TestCase
 
     /** @test */
 
-    public function can_filter_product_by_year()
+    public function an_authenticated_user_can_filter_product_by_year()
     {
+        $this->actingAsAuthUser();
+
         $this->jsonApi()
             ->filter(['year' => 2020])
             ->get(route('api.v1.products.index'))
@@ -87,11 +103,19 @@ class FilterTest extends TestCase
 
     /** @test */
 
-    public function can_not_filter_product_by_unknown_field()
+    public function an_authenticated_user_can_not_filter_product_by_unknown_field()
     {
+        $this->actingAsAuthUser();
+
         $this->jsonApi()
             ->filter(['unknown' => 'unknown'])
             ->get(route('api.v1.products.index'))
             ->assertStatus(400);
+    }
+
+    public function actingAsAuthUser(): void
+    {
+        Passport::actingAs(
+            factory(User::class)->create());
     }
 }

@@ -2,10 +2,11 @@
 
 namespace Tests\Feature\Api\Product;
 
-use _HumbugBox50262afef792\React\Http\Io\UploadedFile;
 use Tests\TestCase;
+use App\Entities\User;
 use App\Entities\Product;
 use App\Entities\Category;
+use Laravel\Passport\Passport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CreateTest extends TestCase
@@ -21,8 +22,10 @@ class CreateTest extends TestCase
     }
 
     /** @test */
-    public function can_create_products()
+    public function an_authenticated_user_can_create_products_throw_the_api()
     {
+        $this->actingAsAuthUser();
+
         $this->withExceptionHandling();
         $product = factory(Product::class)->raw([
             'category_id' => $this->category->id,
@@ -39,17 +42,45 @@ class CreateTest extends TestCase
                     'attributes' => $product
                 ]
             ])
-            ->post(route('api.v1.products.create'))->assertCreated();
+            ->post(route('api.v1.products.create'))
+            ->assertCreated();
 
         $this->assertDatabaseHas('products', $product);
+    }
+
+    /** @test */
+    public function an_unauthenticated_user_can_not_create_products_throw_the_api()
+    {
+        $product = factory(Product::class)->raw([
+            'category_id' => $this->category->id,
+            'file' => null]);
+
+        $product = array_filter($product);
+
+        $this->assertDatabaseMissing('products', $product);
+
+        $this->jsonApi()
+            ->content([
+                'data' => [
+                    'type' => 'products',
+                    'attributes' => $product
+                ]
+            ])
+            ->post(route('api.v1.products.create'))
+            ->assertStatus(401);
+
+        $this->assertDatabaseMissing('products', $product);
     }
 
     /**
      * @test
      * @dataProvider  productRequireDataProvider
+     * @param $productInfo
      */
     public function some_information_is_required_to_create_a_product($productInfo)
     {
+        $this->actingAsAuthUser();
+
         $product = factory(Product::class)->raw([
             $productInfo => null]);
 
@@ -70,10 +101,13 @@ class CreateTest extends TestCase
     /**
      * @test
      * @dataProvider  productUniqueDataProvider
+     * @param $productInfo
      */
     public function some_information_has_to_be_unique_to_create_a_product($productInfo)
     {
-        $product = factory(Product::class)->create([
+        $this->actingAsAuthUser();
+
+        factory(Product::class)->create([
             $productInfo => 'same',
             'category_id' => $this->category]);
 
@@ -94,7 +128,7 @@ class CreateTest extends TestCase
         $this->assertDatabaseMissing('products', $product);
     }
 
-    public function productRequireDataProvider()
+    public function productRequireDataProvider(): array
     {
         return [
             ['name'],
@@ -106,11 +140,17 @@ class CreateTest extends TestCase
         ];
     }
 
-    public function productUniqueDataProvider()
+    public function productUniqueDataProvider(): array
     {
         return [
             ['name'],
             ['slug'],
         ];
+    }
+
+    public function actingAsAuthUser(): void
+    {
+        Passport::actingAs(
+            factory(User::class)->create());
     }
 }

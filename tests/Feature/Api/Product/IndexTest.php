@@ -2,35 +2,47 @@
 
 namespace Tests\Feature\Api\Product;
 
-use App\Entities\Category;
-use App\Entities\Product;
-use App\Http\Resources\ResourceObject;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Entities\User;
+use App\Entities\Product;
+use App\Entities\Category;
+use Laravel\Passport\Passport;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class IndexTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
 
-    private $category;
     private $products;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->category = factory(Category::class)->create();
-        $this->products = factory(Product::class, 3)->create(['category_id' => $this->category->id]);
+        $category = factory(Category::class)->create();
+        $this->products = factory(Product::class, 3)->create(['category_id' => $category->id]);
+    }
+
+    /** @test */
+    public function an_unauthenticated_user_cant_filter_products()
+    {
+        $this->jsonApi()
+            ->get(route('api.v1.products.index'))
+            ->assertStatus(401)
+            ->assertDontSee($this->products);
     }
 
     /**
      * @test
      */
-    public function can_fetch_all_product()
+    public function a_authenticated_user_can_fetch_all_product()
     {
+        $this->actingAsAuthUser();
+
         $products = $this->products;
-        $response = $this->jsonApi()->get(route('api.v1.products.index'));
+        $response = $this->jsonApi()
+            ->get(route('api.v1.products.index'));
 
         $response->assertJsonFragment([
             'data' => [
@@ -83,6 +95,12 @@ class IndexTest extends TestCase
                     ]
                 ],
             ]
-        ]);
+        ])->assertSee($this->products[0]['name']);
+    }
+
+    public function actingAsAuthUser()
+    {
+        Passport::actingAs(
+            factory(User::class)->create());
     }
 }

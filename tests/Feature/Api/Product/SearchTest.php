@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Api\Product;
 
+use App\Entities\User;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 use App\Entities\Product;
 use App\Entities\Category;
@@ -39,8 +41,20 @@ class SearchTest extends TestCase
     }
 
     /** @test */
-    public function can_search_products_by_name_and_details()
+    public function an_unauthenticated_can_not_search_products_by_name_and_details()
     {
+        $this->jsonApi()
+            ->filter(['search' => 'MercaTodo'])
+            ->get(route('api.v1.products.index'))
+            ->assertStatus(401)
+            ->assertDontSee('Details of the A product MercaTodo');;
+    }
+
+    /** @test */
+    public function an_authenticated_can_search_products_by_name_and_details()
+    {
+        $this->actingAsAuthUser();
+
         $this->jsonApi()
             ->filter(['search' => 'MercaTodo'])
             ->get(route('api.v1.products.index'))
@@ -50,13 +64,21 @@ class SearchTest extends TestCase
 
 
     /** @test */
-    public function can_search_products_by_name_and_details_with_multiple_terms()
+    public function an_authenticated_can_search_products_by_name_and_details_with_multiple_terms()
     {
+        $this->actingAsAuthUser();
+
         $this->jsonApi()
             ->filter(['search' => 'MercaTodo Evertec'])
             ->get(route('api.v1.products.index'))
             ->assertJsonCount(3, 'data')
             ->assertSee('Details of the A product MercaTodo')
             ->assertSee('Evertec');
+    }
+
+    public function actingAsAuthUser(): void
+    {
+        Passport::actingAs(
+            factory(User::class)->create());
     }
 }
