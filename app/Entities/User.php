@@ -2,16 +2,22 @@
 
 namespace App\Entities;
 
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Query\Builder;
+use App\Constants\UserStatus;
+use App\Constants\ProductStatus;
+use Laravel\Passport\HasApiTokens;
+use App\Concerns\HasAdministrationRole;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
+    use HasApiTokens;
+    use HasAdministrationRole;
 
     /**
      * @var array
@@ -21,7 +27,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'last_name',
         'email',
         'password',
-        'active',
+        'status',
         'role'
     ];
 
@@ -60,8 +66,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @param string|null $userInfo
      * @return Builder
      */
-    public static function scopeUserInfo($query, ?string $userInfo)
-
+    public static function scopeUserInfo(Builder $query, ?string $userInfo = null): Builder
     {
         if (null !== $userInfo) {
             return $query->where('first_name', 'like', "%$userInfo%")
@@ -69,5 +74,16 @@ class User extends Authenticatable implements MustVerifyEmail
                 ->orWhere('email', 'like', "%$userInfo%");
         }
         return $query;
+    }
+
+    public function scopeActiveUser(Builder $query)
+    {
+        return $query
+            ->where('status', 'like',UserStatus::ACTIVE);
+    }
+
+    public function status(): string
+    {
+        return ProductStatus::STATUSES[$this->status];
     }
 }

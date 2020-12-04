@@ -12,6 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 
@@ -61,6 +62,10 @@ class UsersExport implements
             ->orWhere('last_name', $this->search);
     }
 
+    /**
+     * @param mixed $user
+     * @return array
+     */
     public function map($user): array
     {
         return [
@@ -72,7 +77,11 @@ class UsersExport implements
         ];
     }
 
-    public function drawings()
+    /**
+     * @return Drawing
+     * @throws Exception
+     */
+    public function drawings(): Drawing
     {
         $drawing = new Drawing();
         $drawing->setName('Logo');

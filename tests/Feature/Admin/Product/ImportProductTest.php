@@ -2,9 +2,8 @@
 
 namespace Tests\Feature\Admin\Product;
 
-use App\Entities\Product;
-use App\Exports\ProductsExport;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Entities\Category;
+use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 use App\Entities\User;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -35,24 +34,35 @@ class ImportProductTest extends TestCase
             ->assertStatus(302)
             ->assertRedirect(route('login'));
     }
-
-    public function an_admin_can_export_a_user_xlsx_report()
+/*
+    public function an_admin_can_import_a_users_from_xlsx()
     {
-        $products = Product::all();
-        $this->ActingAsAdmin();
-        Excel::fake();
-        $this->post(route('product.export'))
-            ->assertStatus(200);
+        factory(Category::class, 20)->create();
 
-        Excel::assertDownloaded('products.xlsx', function (ProductsExport $export)
-        use ($products){
-            return $export->collection()->contains($products->random());
-        });
-    }
+        $this->ActingAsAdmin();
+
+        $importFile = $this->getUploadFile('products-import-file.xlsx');
+
+        $response = $this->post(route('product.import'), ['file' => $importFile]);
+
+        $response->assertOk();
+
+    }*/
 
     private function ActingAsAdmin()
     {
         $user = factory(User::class)->create(['role' => 'Administrador']);
         $this->actingAs($user);
+    }
+
+    /**
+     * @param string $originalName
+     * @return UploadedFile
+     */
+    private function getUploadFile(string $originalName): UploadedFile
+    {
+        $filePath = base_path('tests/Stubs/' . $originalName);
+
+        return new UploadedFile($filePath, $originalName, null, null, true);
     }
 }

@@ -15,7 +15,7 @@ Route::resource('/admin', 'Admin\UserController')
     ->parameter('admin', 'user');
 Route::get('/admin/user/export', 'Admin\ExportController@userExport')
     ->name('user.export');
-//Products Admin
+//ProductStatus Admin
 Route::post('/product/export', 'Admin\ExportController@productExport')
     ->name('product.export');
 Route::post('/product/import', 'Admin\ImportController@productImport')
@@ -59,4 +59,4 @@ Route::group(['prefix' => 'order'], function () {
         ->name('order.show');
 });
 
-
+Route::view('/form', 'layouts.admin.forms');

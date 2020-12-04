@@ -1,5 +1,6 @@
 <?php
 
+use App\Constants\ProductStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -25,10 +26,9 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('category_id');
             $table->unsignedInteger('stock')->default(0);
             $table->string('file', 200)->nullable();
-            $table->enum('status', ['ACTIVO', 'INACTIVO'])->default('ACTIVO');
+            $table->tinyInteger('status')->default(ProductStatus::ACTIVE);
             $table->timestamps();
 
-            //relations
             $table->foreign('category_id')->references('id')->on('categories')
             ->onDelete('cascade')
             ->onUpdate('cascade');

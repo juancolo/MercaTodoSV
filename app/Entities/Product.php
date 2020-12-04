@@ -2,10 +2,12 @@
 
 namespace App\Entities;
 
+use App\Constants\ProductStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -21,6 +23,10 @@ class Product extends Model
         'file',
         'status'
     ];
+
+    public $allowedSorts = ['name', 'details'];
+
+    public $type = 'products';
 
     /**
      * @return BelongsTo
@@ -59,7 +65,7 @@ class Product extends Model
      * @param string|null $productInfo
      * @return Builder
      */
-    public static function scopeProductInfo(Builder $query, ?string $productInfo): Builder
+    public static function scopeProductInfo(Builder $query, string $productInfo = null): Builder
     {
         if (null !== $productInfo) {
             return $query->where('name', 'like', "%$productInfo%")
@@ -75,7 +81,7 @@ class Product extends Model
      */
     public static function scopeActiveProduct(Builder $query): Builder
     {
-        return $query->where('status', 'like', 'ACTIVO');
+        return $query->where('status', 'like', 0);
     }
 
     /**
@@ -88,10 +94,89 @@ class Product extends Model
     }
 
     /**
+     * @param Builder $query
+     * @param $value
+     */
+    public function scopeName(Builder $query, $value)
+    {
+        $query->where('name', 'like', "%{$value}%");
+    }
+
+    /**
+     * @param Builder $query
+     * @param $value
+     */
+    public function scopeDetails(Builder $query, $value)
+    {
+        $query->where('details', 'like', "%{$value}%");
+    }
+
+    /**
+     * @param Builder $query
+     * @param $value
+     */
+    public function scopeMonth(Builder $query, $value)
+    {
+        $query->whereMonth('created_at', $value);
+    }
+
+    /**
+     * @param Builder $query
+     * @param $value
+     */
+    public function scopeYear(Builder $query, $value)
+    {
+        $query->whereYear('created_at', $value);
+    }
+
+    /**
+     * @param Builder $query
+     * @param $value
+     */
+    public function scopeSearch(Builder $query, $value)
+    {
+        foreach (Str::of($value)->explode(' ') as $value)
+        {
+            $query->orWhere('name', 'like', "%{$value}%")
+                ->orWhere('details', 'like', "%{$value}%");
+        }
+    }
+
+    /**
      * @return string
      */
     public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductImage(): string
+    {
+        if ($this->file == null) {
+            return 'img/logo.png';
+        }
+        return asset($this->file);
+    }
+
+    /**
+     * @return string
+     */
+    public function status(): string
+    {
+        return ProductStatus::STATUSES[$this->status];
+    }
+
+    public function fields()
+    {
+        return [
+            'name' => $this->name,
+            'slug' => $this->slug,
+            'details' => $this->details,
+            'category'=> $this->category->name,
+            'description' => $this->description
+        ];
     }
 }

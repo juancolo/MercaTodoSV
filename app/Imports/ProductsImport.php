@@ -5,38 +5,48 @@ namespace App\Imports;
 use App\Entities\Product;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\Importable;
+use Maatwebsite\Excel\Concerns\SkipsFailures;
+use Maatwebsite\Excel\Concerns\WithValidation;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
-use Maatwebsite\Excel\Row;
-use Maatwebsite\Excel\Concerns\OnEachRow;
-use Maatwebsite\Excel\Concerns\Importable;
-use Maatwebsite\Excel\Concerns\WithValidation;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class ProductsImport implements
-    OnEachRow,
+    ToModel,
     WithHeadingRow,
     WithValidation,
-    WithBatchInserts,
     WithChunkReading,
+    WithBatchInserts,
+    SkipsOnFailure,
     ShouldQueue
 {
     use Importable;
+    use SkipsFailures;
 
-    public function onRow(Row $row)
+    /**
+     * @var int
+     */
+    private int $rows = 0;
+
+    /**
+     * @param array $row
+     */
+    public function model(array $row)
     {
-        $row = $row->toArray();
+        ++$this->rows;
 
         Product::updateOrCreate(
             [
                 'name' => $row['name'],
+                'slug' => $row['slug'],
             ],
 
             [
-                'name' => $row['name'],
                 'actual_price' => $row['actual_price'],
                 'category_id' => $row['category_id'],
-                'slug' => $row['slug'],
                 'details' => $row['details'],
                 'description' => $row['description'],
                 'status' => $row['status'],
@@ -44,6 +54,9 @@ class ProductsImport implements
             ]);
     }
 
+    /**
+     * @return array
+     */
     public function rules(): array
     {
         return [
@@ -63,18 +76,27 @@ class ProductsImport implements
             'description' => 'min:3|max:200',
             'actual_price' => 'required|numeric|min:0|not_in:0',
             'old_price' => 'numeric|min:0|not_in:0',
+            'stock' => 'numeric|min:0|not_in:0',
             'category_id' => 'required|exists:categories,id',
             'status' => Rule::in(['ACTIVO', 'INACTIVO'])
         ];
     }
-    public function batchSize(): int
+
+    /**
+     * @return int
+     */
+    public function getRowCount(): int
     {
-        return 1000;
+        return $this->rows;
     }
 
     public function chunkSize(): int
     {
-      return 1000;
+        return 10000;
     }
 
+    public function batchSize(): int
+    {
+        return 10000;
+    }
 }

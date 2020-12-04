@@ -23,7 +23,9 @@ class UserController extends Controller
      */
     public function index(Request $request): View
     {
-        $users = User::UserInfo($request->input('search'))->paginate();
+        $users = User::ActiveUser()
+            ->UserInfo($request->input('search'))
+            ->paginate();
 
         return view('admin.users.index', compact('users', $users));
     }
@@ -38,11 +40,7 @@ class UserController extends Controller
 
     public function update(Request $request, User $user): RedirectResponse
     {
-        $user->first_name = $request->get('first_name');
-        $user->last_name = $request->get('last_name');
-        $user->email = $request->get('email');
-        $user->role = $request->get('role_id');
-        $user->save();
+        $user->update($request->all());
 
         return redirect()->route('admin.index')
             ->with('status', 'Usuario actualizado correctamente');

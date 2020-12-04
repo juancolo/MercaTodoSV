@@ -23,7 +23,7 @@
                                     <div class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
                                         <a class="dropdown-item" href="{{route('admin.index')}}" style="color: black;">{{__('Users Manage')}}</a>
                                         <a class="dropdown-item" href="#">{{__('Categories manage')}}</a>
-                                        <a class="dropdown-item" href="{{route('product.index')}}">{{__('Products manage')}}</a>
+                                        <a class="dropdown-item" href="{{route('product.index')}}">{{__('ProductStatus manage')}}</a>
                                     </div>
                                 </li>
                             @endif
