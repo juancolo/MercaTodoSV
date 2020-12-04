@@ -22,6 +22,30 @@ class CreateTest extends TestCase
     }
 
     /** @test */
+    public function an_unauthenticated_user_can_not_create_products_throw_the_api()
+    {
+        $product = factory(Product::class)->raw([
+            'category_id' => $this->category->id,
+            'file' => null]);
+
+        $product = array_filter($product);
+
+        $this->assertDatabaseMissing('products', $product);
+
+        $this->jsonApi()
+            ->content([
+                'data' => [
+                    'type' => 'products',
+                    'attributes' => $product
+                ]
+            ])
+            ->post(route('api.v1.products.create'))
+            ->assertStatus(401);
+
+        $this->assertDatabaseMissing('products', $product);
+    }
+
+    /** @test */
     public function an_authenticated_user_can_create_products_throw_the_api()
     {
         $this->actingAsAuthUser();
@@ -45,30 +69,6 @@ class CreateTest extends TestCase
             ->assertCreated();
 
         $this->assertDatabaseHas('products', $product);
-    }
-
-    /** @test */
-    public function an_unauthenticated_user_can_not_create_products_throw_the_api()
-    {
-        $product = factory(Product::class)->raw([
-            'category_id' => $this->category->id,
-            'file' => null]);
-
-        $product = array_filter($product);
-
-        $this->assertDatabaseMissing('products', $product);
-
-        $this->jsonApi()
-            ->content([
-                'data' => [
-                    'type' => 'products',
-                    'attributes' => $product
-                ]
-            ])
-            ->post(route('api.v1.products.create'))
-            ->assertStatus(401);
-
-        $this->assertDatabaseMissing('products', $product);
     }
 
     /**
@@ -142,7 +142,6 @@ class CreateTest extends TestCase
             'category_id' => $this->category->id,
             'file' => null]);
 
-        dd($product);
         $product = array_filter($product);
 
         $this->jsonApi()

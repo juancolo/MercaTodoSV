@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api\Product;
 
+use App\Constants\UserRoles;
 use App\Entities\User;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
@@ -29,6 +30,8 @@ class DeleteTest extends TestCase
     /** @test */
     public function an_unauthenticated_user_can_not_delete_products()
     {
+        $this->assertDatabaseHas('products',['name' => $this->product->name]);
+
         $this->jsonApi()
             ->content([
                 'data' => [
@@ -38,11 +41,34 @@ class DeleteTest extends TestCase
                 ])
             ->delete(route('api.v1.products.update', $this->product))
             ->assertStatus(401);
+
+        $this->assertDatabaseHas('products',['name' => $this->product->name]);
+
     }
 
+    /** @test */
+    public function power_user_can_not_delete_products()
+    {
+        Passport::actingAs(
+            factory(User::class)->create(['role'=> UserRoles::POWERUSER]));
+
+        $this->assertDatabaseHas('products',['name' => $this->product->name]);
+
+        $this->jsonApi()
+            ->content([
+                'data' => [
+                    'type' => 'products',
+                    'id' => $this->product->slug,
+                ]
+            ])
+            ->delete(route('api.v1.products.update', $this->product))
+            ->assertStatus(403);
+
+        $this->assertDatabaseHas('products', ['name' => $this->product->name]);
+    }
 
     /** @test */
-    public function an_authenticated_user_can_delete_products()
+    public function an_admin_user_can_delete_products()
     {
         $this->actingAsAuthUser();
 
@@ -65,6 +91,6 @@ class DeleteTest extends TestCase
     public function actingAsAuthUser(): void
     {
         Passport::actingAs(
-            factory(User::class)->create());
+            factory(User::class)->create(['role'=> UserRoles::ADMINISTRATOR]));
     }
 }

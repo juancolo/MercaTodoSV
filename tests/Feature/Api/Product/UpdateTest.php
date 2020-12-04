@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Api\Product;
 
+use App\Constants\UserRoles;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 use App\Entities\User;
 use App\Entities\Product;
@@ -81,6 +83,6 @@ class UpdateTest extends TestCase
     public function actingAsAuthUser(): void
     {
         Passport::actingAs(
-            factory(User::class)->create());
+            factory(User::class)->create(['role'=>UserRoles::ADMINISTRATOR]));
     }
 }
