@@ -32,7 +32,7 @@ trait HasProductValidationRules
 
             'details' => 'required|min:3|max:80',
             'description' => 'required|min:3|max:200',
-            'actual_price' => 'required|numeric|min:0|not_in:0',
+            'actual_price' => 'sometimes:required|numeric|min:0|not_in:0',
             'old_price' => 'numeric|min:0|not_in:0',
             'category_id' => 'required|exists:categories,id',
             'tags.*' => 'exists:tags,id',

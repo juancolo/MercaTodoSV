@@ -26,7 +26,6 @@ class CreateTest extends TestCase
     {
         $this->actingAsAuthUser();
 
-        $this->withExceptionHandling();
         $product = factory(Product::class)->raw([
             'category_id' => $this->category->id,
             'file' => null]);
@@ -143,6 +142,7 @@ class CreateTest extends TestCase
             'category_id' => $this->category->id,
             'file' => null]);
 
+        dd($product);
         $product = array_filter($product);
 
         $this->jsonApi()
