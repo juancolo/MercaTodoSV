@@ -128,6 +128,38 @@ class CreateTest extends TestCase
         $this->assertDatabaseMissing('products', $product);
     }
 
+    /**
+     * @test
+     * @dataProvider slugValidationProvider
+     * @param $slug
+     * @param $message
+     */
+    public function the_slug_field_can_not_have_some_special_charts($slug, $message)
+    {
+        $this->actingAsAuthUser();
+
+        $product = factory(Product::class)->raw([
+            'slug' => $slug,
+            'category_id' => $this->category->id,
+            'file' => null]);
+
+        $product = array_filter($product);
+
+        $this->jsonApi()
+            ->content([
+                'data' => [
+                    'type' => 'products',
+                    'attributes' => $product
+                ]
+            ])
+            ->post(route('api.v1.products.create'))
+            ->assertStatus(422)
+            ->assertSee(trans($message, ['attribute' =>'slug']))
+            ->assertSee('data\/attributes\/slug');
+
+        $this->assertDatabaseMissing('products', $product);
+    }
+
     public function productRequireDataProvider(): array
     {
         return [
@@ -148,9 +180,19 @@ class CreateTest extends TestCase
         ];
     }
 
+    public function slugValidationProvider(): array
+    {
+        return [
+            'Underscore validation' => ['under_scores', 'validation.no_underscores'],
+            'starting dashes validation' => ['-dashes', 'validation.starting_dashes'],
+            'ending dashes validation' => ['dashes-', 'validation.ending_dashes']
+        ];
+    }
+
     public function actingAsAuthUser(): void
     {
         Passport::actingAs(
             factory(User::class)->create());
     }
 }
+

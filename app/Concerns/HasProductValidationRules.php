@@ -4,8 +4,9 @@
 namespace App\Concerns;
 
 
-use App\Constants\ProductStatus;
+use App\Rules\Slug;
 use Illuminate\Validation\Rule;
+use App\Constants\ProductStatus;
 
 trait HasProductValidationRules
 {
@@ -24,6 +25,7 @@ trait HasProductValidationRules
 
             'slug' => [
                 'required',
+                new Slug(),
                 'unique:products',
                 'min:3', 'max:70',
                 'regex:/^[^\{\}\[\]\;\<\>]*$/'],

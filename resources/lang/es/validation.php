@@ -117,7 +117,7 @@ return [
     'uploaded'             => 'Subir :attribute ha fallado.',
     'url'                  => 'El formato :attribute es inválido.',
     'uuid'                 => 'El campo :attribute debe ser un UUID válido.',
-
+    'no_underscores'        => 'El campo :attribute no debe contener sub guiones.',
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
