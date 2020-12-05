@@ -44,7 +44,7 @@ class IndexTest extends TestCase
         $response = $this->jsonApi()
             ->get(route('api.v1.products.index'));
 
-        $response->assertJsonFragment([
+        $response->assertJson([
             'data' => [
                 [
                     'type' => 'products',

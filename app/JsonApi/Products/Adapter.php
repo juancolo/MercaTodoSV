@@ -2,13 +2,17 @@
 
 namespace App\JsonApi\Products;
 
+use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Builder;
+use CloudCreativity\LaravelJsonApi\Eloquent\BelongsTo;
 use CloudCreativity\LaravelJsonApi\Eloquent\AbstractAdapter;
 use CloudCreativity\LaravelJsonApi\Pagination\StandardStrategy;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Collection;
 
 class Adapter extends AbstractAdapter
 {
+    protected $includePaths = [
+        'categories' => 'category'
+    ];
 
     /**
      * Mapping of JSON API attribute field names to model keys.
@@ -42,6 +46,11 @@ class Adapter extends AbstractAdapter
     protected function filter($query, Collection $filters)
     {
         $this->filterWithScopes($query, $filters);
+    }
+
+    public function categories()
+    {
+        return $this->belongsTo('category');
     }
 
 }
