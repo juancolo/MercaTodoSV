@@ -40,8 +40,9 @@ class ShowTest extends TestCase
 
         $product = Product::all()->last();
 
-        $this->jsonApi()->get(route('api.v1.products.read', $product))
-            ->assertExactJson([
+        $this->jsonApi()
+            ->get(route('api.v1.products.read', $product))
+            ->assertJson([
                 'data' =>
                     [
                         'type' => 'products',

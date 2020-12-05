@@ -15,7 +15,7 @@ use HasProductValidationRules;
      * @var string[]|null
      *      the allowed paths, an empty array for none allowed, or null to allow all paths.
      */
-    protected $allowedIncludePaths = [];
+    protected $allowedIncludePaths = ['categories'];
 
     /**
      * The sort field names a client is allowed send.

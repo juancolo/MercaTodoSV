@@ -20,7 +20,7 @@ class Schema extends SchemaProvider
      */
     public function getId($resource)
     {
-        return (string) $resource->getRouteKey();
+        return (string)$resource->getRouteKey();
     }
 
     /**
@@ -33,10 +33,23 @@ class Schema extends SchemaProvider
             'name' => $product->name,
             'slug' => $product->slug,
             'details' => $product->details,
-            'category'=> $product->category->name,
+            'category' => $product->category->name,
             'description' => $product->description,
             'created-at' => $product->created_at->toAtomString(),
             'updated-at' => $product->updated_at->toAtomString(),
+        ];
+    }
+
+    public function getRelationships($product, $isPrimary, array $includeRelationships)
+    {
+        return [
+            'categories' => [
+                'related' => true,
+                'showSelf'=> true,
+                'data' => function () use ($product) {
+                    return $product->category;
+                }
+            ]
         ];
     }
 }
