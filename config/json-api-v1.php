@@ -67,6 +67,7 @@ return [
     */
     'resources' => [
         'products' => App\Entities\Product::class,
+        'categories'=> \App\Entities\Category::class,
     ],
 
     /*
