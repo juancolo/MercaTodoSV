@@ -2,13 +2,12 @@
 
 namespace Tests\Feature\Api\Product;
 
-use App\Constants\UserRoles;
-use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 use App\Entities\User;
 use App\Entities\Product;
 use App\Entities\Category;
-use Laravel\Passport\Passport;
+use App\Constants\UserRoles;
+use Laravel\Sanctum\Sanctum;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UpdateTest extends TestCase
@@ -82,7 +81,7 @@ class UpdateTest extends TestCase
 
     public function actingAsAuthUser(): void
     {
-        Passport::actingAs(
+        Sanctum::actingAs(
             factory(User::class)->create(['role'=>UserRoles::ADMINISTRATOR]));
     }
 }

@@ -2,11 +2,12 @@
 
 namespace Tests\Feature\Api\Product;
 
+use App\Constants\UserRoles;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 use App\Entities\User;
 use App\Entities\Product;
 use App\Entities\Category;
-use Laravel\Passport\Passport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CreateTest extends TestCase
@@ -104,7 +105,7 @@ class CreateTest extends TestCase
      */
     public function some_information_has_to_be_unique_to_create_a_product($productInfo)
     {
-        $this->actingAsAuthUser();
+       $this->actingAsAuthUser();
 
         factory(Product::class)->create([
             $productInfo => 'same',
@@ -190,8 +191,10 @@ class CreateTest extends TestCase
 
     public function actingAsAuthUser(): void
     {
-        Passport::actingAs(
-            factory(User::class)->create());
+        Sanctum::actingAs(
+            factory(User::class)->create([
+                'role' => UserRoles::ADMINISTRATOR
+            ]));
     }
 }
 

@@ -6,7 +6,7 @@ use Tests\TestCase;
 use App\Entities\User;
 use App\Entities\Product;
 use App\Entities\Category;
-use Laravel\Passport\Passport;
+use Laravel\Sanctum\Sanctum;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -65,7 +65,7 @@ class ShowTest extends TestCase
 
     public function actingAsAuthUser(): void
     {
-        Passport::actingAs(
+        Sanctum::actingAs(
             factory(User::class)->create());
     }
 }
