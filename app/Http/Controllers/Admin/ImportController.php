@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Jobs\NotifyAdminOfCompletedImport;
 use App\Jobs\NotifyAdminOfIncompleteImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ImportController extends Controller
 {
@@ -28,17 +29,15 @@ class ImportController extends Controller
                     $this->getValidationErrors($import->failures()))
             );
         } else {
-            $import->queue($request->file('file'))->chain([
-                new NotifyAdminOfCompletedImport(
-                    Auth::user(),
-                    'message'
-                )
-            ]);
+            Excel::queueImport(new ProductsImport(), $request->file('file'));
+                $this->dispatch(new NotifyAdminOfCompletedImport(
+                Auth::user(),
+                trans('products.messages.import.ready')));
         }
 
         return redirect()
             ->route('product.index')
-            ->with('message', '');
+            ->with('status', trans('products.messages.import.start'));
     }
 
     /**

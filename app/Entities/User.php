@@ -4,7 +4,7 @@ namespace App\Entities;
 
 use App\Constants\UserStatus;
 use App\Constants\ProductStatus;
-use Laravel\Passport\HasApiTokens;
+use Laravel\Sanctum\HasApiTokens;
 use App\Concerns\HasAdministrationRole;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
@@ -16,8 +16,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
-    use HasApiTokens;
     use HasAdministrationRole;
+    use HasApiTokens;
 
     /**
      * @var array
@@ -35,7 +35,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'remember_token',
     ];
 
     /**

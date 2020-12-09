@@ -6,8 +6,7 @@ use App\Constants\UserRoles;
 use App\Entities\Category;
 use App\Entities\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Laravel\Passport\Passport;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class IndexTest extends TestCase
@@ -44,7 +43,7 @@ class IndexTest extends TestCase
 
     public function actingAsAdmin()
     {
-        Passport::actingAs(
+        Sanctum::actingAs(
             factory(User::class)->create([
                 'role' => UserRoles::ADMINISTRATOR
             ])

@@ -3,16 +3,19 @@
 namespace App\Imports;
 
 use App\Entities\Product;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Bus\Queueable;
 use Illuminate\Validation\Rule;
+use App\Constants\ProductStatus;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
+use Maatwebsite\Excel\Concerns\WithUpserts;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Validators\Failure;
 
 class ProductsImport implements
     ToModel,
@@ -21,10 +24,11 @@ class ProductsImport implements
     WithChunkReading,
     WithBatchInserts,
     SkipsOnFailure,
-    ShouldQueue
+    WithUpserts
 {
     use Importable;
     use SkipsFailures;
+    use Queueable;
 
     /**
      * @var int
@@ -34,24 +38,19 @@ class ProductsImport implements
     /**
      * @param array $row
      */
-    public function model(array $row)
+    public function model(array $row): Product
     {
         ++$this->rows;
 
-        Product::updateOrCreate(
-            [
-                'name' => $row['name'],
-                'slug' => $row['slug'],
-            ],
-
-            [
-                'actual_price' => $row['actual_price'],
+        return new Product(
+            ['actual_price' => $row['actual_price'],
                 'category_id' => $row['category_id'],
                 'details' => $row['details'],
                 'description' => $row['description'],
                 'status' => $row['status'],
                 'stock' => $row['stock']
-            ]);
+            ]
+        );
     }
 
     /**
@@ -62,13 +61,11 @@ class ProductsImport implements
         return [
             'name' => [
                 'required',
-                'unique:products',
                 'min:3', 'max:70',
                 'regex:/^[^\{\}\[\]\;\<\>]*$/'],
 
             'slug' => [
                 'required',
-                'unique:products',
                 'min:3', 'max:70',
                 'regex:/^[^\{\}\[\]\;\<\>]*$/'],
 
@@ -78,7 +75,7 @@ class ProductsImport implements
             'old_price' => 'numeric|min:0|not_in:0',
             'stock' => 'numeric|min:0|not_in:0',
             'category_id' => 'required|exists:categories,id',
-            'status' => Rule::in(['ACTIVO', 'INACTIVO'])
+            'status' => Rule::in(ProductStatus::ARRAY)
         ];
     }
 
@@ -98,5 +95,23 @@ class ProductsImport implements
     public function batchSize(): int
     {
         return 10000;
+    }
+
+    public function uniqueBy(): string
+    {
+        return 'name';
+    }
+
+    public function onFailure(Failure ...$failures)
+    {
+        foreach ($failures as $failure) {
+            ErrorImport::create([
+                'import'    => trans('fields.products'),
+                'row'       => $failure->row(),
+                'attribute' => $failure->attribute(),
+                'value'     => implode(', ', $failure->values()),
+                'errors'    => implode(', ', $failure->errors()),
+            ]);
+        }
     }
 }

@@ -10,6 +10,19 @@ use CloudCreativity\LaravelJsonApi\Pagination\StandardStrategy;
 
 class Adapter extends AbstractAdapter
 {
+    protected $fillable = [
+        'name',
+        'slug',
+        'details',
+        'description',
+        'actual_price',
+        'old_price',
+        'category_id',
+        'file',
+        'status',
+        'stock'
+    ];
+
     protected $includePaths = [
         'categories' => 'category'
     ];
