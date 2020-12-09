@@ -5,8 +5,8 @@ namespace Tests\Feature\Api\Category;
 use Tests\TestCase;
 use App\Entities\User;
 use App\Entities\Category;
+use Laravel\Sanctum\Sanctum;
 use App\Constants\UserRoles;
-use Laravel\Passport\Passport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ShowTest extends TestCase
@@ -47,7 +47,7 @@ class ShowTest extends TestCase
 
     public function actingAsAdmin()
     {
-        Passport::actingAs(
+        Sanctum::actingAs(
             factory(User::class)->create([
                 'role' => UserRoles::ADMINISTRATOR
             ])
