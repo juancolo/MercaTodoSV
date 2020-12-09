@@ -2,10 +2,16 @@
 
 namespace Tests\Feature\Admin\Product;
 
-use App\Entities\Category;
-use Illuminate\Http\UploadedFile;
+use App\Imports\ProductsImport;
+use App\Jobs\NotifyAdminOfCompletedImport;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Queue;
+use Maatwebsite\Excel\Facades\Excel;
 use Tests\TestCase;
 use App\Entities\User;
+use App\Entities\Category;
+use App\Constants\UserRoles;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -40,20 +46,32 @@ class ImportProductTest extends TestCase
      */
     public function an_admin_can_import_a_users_from_xlsx()
     {
+        //Excel::fake();
         factory(Category::class, 20)->create();
-        $this->withoutExceptionHandling();
-        $this->ActingAsAdmin();
-        $importFile = $this->getUploadFile('products-import-file.xlsx');
-        //dd($importFile);
-        $response = $this->post(route('product.import'), ['file' => $importFile]);
 
-        $response->assertRedirect(route('product.index'));
+        $this->ActingAsAdmin();
+
+        $importFile = $this->getUploadFile('products-import-file.xlsx');
+
+        $this->post(route('product.import'), ['file' => $importFile]);
+
+        /*Excel::assertQueuedWithChain([
+            new NotifyAdminOfCompletedImport(Auth::user(), 'test'),
+        ]);*/
+
+        $this->assertDatabaseHas('products', [
+            'name' => 'Fake Name',
+            'slug' => 'fake-slug'
+        ]);
+
+
+        //$response->assertStatus(302);
 
     }
 
     private function ActingAsAdmin()
     {
-        $user = factory(User::class)->create(['role' => 'Administrador']);
+        $user = factory(User::class)->create(['role' => UserRoles::ADMINISTRATOR]);
         $this->actingAs($user);
     }
 

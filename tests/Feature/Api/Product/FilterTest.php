@@ -2,43 +2,123 @@
 
 namespace Tests\Feature\Api\Product;
 
-use App\Entities\Category;
-use App\Entities\Product;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Constants\UserRoles;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
+use App\Entities\User;
+use App\Entities\Product;
+use App\Entities\Category;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class FilterTest extends TestCase
 {
     use RefreshDatabase;
 
-    private $category;
+    private $product2;
+    private $product1;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->category = factory(Category::class)->create();
+        $category = factory(Category::class)->create();
 
-        factory(Product::class)->create([
+        $this->product1 = factory(Product::class)->create([
             'name' => 'Food',
-            'category_id' => $this->category->id
+            'details' => 'Details 3',
+            'created_at' => now()->month(8)->year(2019),
+            'category_id' => $category->id
         ]);
 
-        factory(Product::class)->create([
+        $this->product2 = factory(Product::class)->create([
             'name' => 'Vehicle',
-            'category_id' => $this->category->id
+            'details' => 'Details 4',
+            'created_at' => now()->month(7)->year(2020),
+            'category_id' => $category->id
         ]);
     }
 
     /** @test */
-    public function can_filter_products_by_name()
+    public function an_unauthenticated_user_cant_filter_products()
     {
-        $url = route('api.v1.products.index', ['filters[name]' => 'Food']);
+        $this->jsonApi()
+            ->filter(['name' => 'Food'])
+            ->get(route('api.v1.products.index'))
+            ->assertStatus(401);
+    }
 
-        $this->getJson($url)
+    /** @test */
+    public function an_authenticated_user_can_filter_products_by_name()
+    {
+        $this->actingAsAuthUser();
+
+        $this->jsonApi()
+            ->filter(['name' => 'Food'])
+            ->get(route('api.v1.products.index'))
             ->assertJsonCount(1, 'data')
             ->assertSee('Food')
             ->assertDontSee('Vehicle');
+    }
+
+    /** @test */
+
+    public function an_authenticated_user_can_filter_product_by_detail()
+    {
+        $this->actingAsAuthUser();
+
+        $this->jsonApi()
+            ->filter(['details' => '3'])
+            ->get(route('api.v1.products.index'))
+            ->assertJsonCount(1, 'data')
+            ->assertSee('Details 3')
+            ->assertDontSee('Details 4');
+    }
+
+    /** @test */
+
+    public function an_authenticated_user_can_filter_product_by_month()
+    {
+        $this->actingAsAuthUser();
+
+        $this->jsonApi()
+            ->filter(['month' => 8])
+            ->get(route('api.v1.products.index'))
+            ->assertJsonCount(1, 'data')
+            ->assertSee('Details 3')
+            ->assertDontSee('Details 4');
+    }
+
+    /** @test */
+
+    public function an_authenticated_user_can_filter_product_by_year()
+    {
+        $this->actingAsAuthUser();
+
+        $this->jsonApi()
+            ->filter(['year' => 2020])
+            ->get(route('api.v1.products.index'))
+            ->assertJsonCount(1, 'data')
+            ->assertSee('2020')
+            ->assertDontSee('2019');
+    }
+
+    /** @test */
+
+    public function an_authenticated_user_can_not_filter_product_by_unknown_field()
+    {
+        $this->actingAsAuthUser();
+
+        $this->jsonApi()
+            ->filter(['unknown' => 'unknown'])
+            ->get(route('api.v1.products.index'))
+            ->assertStatus(400);
+    }
+
+    public function actingAsAuthUser(): void
+    {
+        Sanctum::actingAs(
+            factory(User::class)->create([
+                'role' => UserRoles::ADMINISTRATOR
+            ]));
     }
 }

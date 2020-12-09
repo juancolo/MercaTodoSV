@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -24,6 +25,8 @@ class Product extends Model
     ];
 
     public $allowedSorts = ['name', 'details'];
+
+    public $type = 'products';
 
     /**
      * @return BelongsTo
@@ -91,6 +94,55 @@ class Product extends Model
     }
 
     /**
+     * @param Builder $query
+     * @param $value
+     */
+    public function scopeName(Builder $query, $value)
+    {
+        $query->where('name', 'like', "%{$value}%");
+    }
+
+    /**
+     * @param Builder $query
+     * @param $value
+     */
+    public function scopeDetails(Builder $query, $value)
+    {
+        $query->where('details', 'like', "%{$value}%");
+    }
+
+    /**
+     * @param Builder $query
+     * @param $value
+     */
+    public function scopeMonth(Builder $query, $value)
+    {
+        $query->whereMonth('created_at', $value);
+    }
+
+    /**
+     * @param Builder $query
+     * @param $value
+     */
+    public function scopeYear(Builder $query, $value)
+    {
+        $query->whereYear('created_at', $value);
+    }
+
+    /**
+     * @param Builder $query
+     * @param $value
+     */
+    public function scopeSearch(Builder $query, $value)
+    {
+        foreach (Str::of($value)->explode(' ') as $value)
+        {
+            $query->orWhere('name', 'like', "%{$value}%")
+                ->orWhere('details', 'like', "%{$value}%");
+        }
+    }
+
+    /**
      * @return string
      */
     public function getRouteKeyName(): string
@@ -115,5 +167,16 @@ class Product extends Model
     public function status(): string
     {
         return ProductStatus::STATUSES[$this->status];
+    }
+
+    public function fields()
+    {
+        return [
+            'name' => $this->name,
+            'slug' => $this->slug,
+            'details' => $this->details,
+            'category'=> $this->category->name,
+            'description' => $this->description
+        ];
     }
 }

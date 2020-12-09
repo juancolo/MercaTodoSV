@@ -3,48 +3,69 @@
 namespace Tests\Feature\Api\Product;
 
 use Tests\TestCase;
+use App\Entities\User;
 use App\Entities\Product;
 use App\Entities\Category;
+use Laravel\Sanctum\Sanctum;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ShowTest extends TestCase
 {
-    private $category;
-    private $products;
-
     use RefreshDatabase;
     use WithFaker;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->category = factory(Category::class)->create();
-        $this->products = factory(Product::class, 15)->create(['category_id' => $this->category->id]);
+        $category = factory(Category::class)->create();
+        factory(Product::class, 15)->create(['category_id' => $category->id]);
     }
 
     /** @test */
-    public function it_can_fetch_a_single_product()
+    public function an_unauthenticated_can_not_fetch_a_single_product()
     {
         $product = Product::all()->last();
 
-        $this->getJson(route('api.v1.products.show', $product))
-            ->assertExactJson([
+        $this->jsonApi()
+            ->filter(['sort' => 'name'])
+            ->get(route('api.v1.products.index', $product))
+            ->assertStatus(401);
+    }
+
+    /** @test */
+    public function an_authenticated_can_fetch_a_single_product()
+    {
+        $this->actingAsAuthUser();
+
+        $product = Product::all()->last();
+
+        $this->jsonApi()
+            ->get(route('api.v1.products.read', $product))
+            ->assertJson([
                 'data' =>
                     [
-                        'type' => 'product',
+                        'type' => 'products',
                         'id' => $product->getRouteKey(),
                         'attributes' => [
                             'name' => $product->name,
                             'slug' => $product->slug,
                             'details' => $product->details,
                             'category' => $product->category->name,
-                            'description' => $product->description
+                            'description' => $product->description,
+                            'created-at' => $product->created_at->toAtomString(),
+                            'updated-at' => $product->updated_at->toAtomString(),
                         ],
-                        'link' => [
-                            'self' => route('api.v1.products.show', $product)
+                        'links' => [
+                            'self' => route('api.v1.products.read', $product)
                         ]
                     ]
             ]);
+    }
+
+    public function actingAsAuthUser(): void
+    {
+        Sanctum::actingAs(
+            factory(User::class)->create());
     }
 }

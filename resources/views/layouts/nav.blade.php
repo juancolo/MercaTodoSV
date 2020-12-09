@@ -16,7 +16,7 @@
                     @auth
                         @if (Route::has('login'))
 
-                            @if (Auth::user()->role=='Administrador')
+                            @if (Auth::user()->role==\App\Constants\UserRoles::ADMINISTRATOR)
 
                                 <li>
                                     <a id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true">{{__('Admin')}}</a>
