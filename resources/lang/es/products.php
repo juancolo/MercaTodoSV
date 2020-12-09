@@ -3,9 +3,10 @@
 return[
   'messages'=>[
       'import' => [
+          'subject'=>'Importation status',
           'ready'=>':count products were import to the system successfully!',
-          'start'=>'the import has been send we will let you know in a mail',
-          'error'=>'the importation failed due a validation errors'
+          'error'=>'Import products failed due a validation error',
+          'greeting' => 'Hello :user here is the status of your import product process'
       ]
 
   ]

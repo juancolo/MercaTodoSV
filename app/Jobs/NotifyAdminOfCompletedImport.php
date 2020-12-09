@@ -20,15 +20,17 @@ class NotifyAdminOfCompletedImport implements ShouldQueue
      */
     private $user;
     private $message;
+    private $count;
 
     /**
+     * NotifyAdminOfCompletedImport constructor.
      * @param $user
-     * @param $message
+     * @param $count
      */
-    public function __construct($user, $message)
+    public function __construct($user, $count)
     {
         $this->user = $user;
-        $this->message = $message;
+        $this->count = $count;
     }
 
     /**
@@ -36,14 +38,8 @@ class NotifyAdminOfCompletedImport implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
-        Imports::create([
-            'type' => 'ProductStatus import',
-            'filePath' => $this->message,
-            'created_by' => $this->user->id
-        ]);
-
-        $this->user->notify(new ImportReady($this->message));
+       $this->user->notify(new ImportReady($this->count, $this->user));
     }
 }
