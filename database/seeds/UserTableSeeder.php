@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Constants\UserRoles;
 use App\Entities\User;
 use Illuminate\Database\Seeder;
 
@@ -22,7 +23,7 @@ class UserTableSeeder extends Seeder
         $admin->first_name = 'Juan';
         $admin->last_name = 'Colorado';
         $admin->email = 'juan2@merca.com';
-        $admin->role = 'Administrador';
+        $admin->role = UserRoles::ADMINISTRATOR;
         $admin->password = bcrypt('12341234');
 
         $admin->save();
@@ -32,7 +33,7 @@ class UserTableSeeder extends Seeder
         $client->first_name = 'Juan Cliente';
         $client->last_name = 'Colorado';
         $client->email = 'juan@merca.com';
-        $client->role = 'Cliente';
+        $client->role = UserRoles::CLIENT;
         $client->password = bcrypt('12341234');
 
         $client->save();

@@ -2,9 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use App\Entities\User;
 use Closure;
-use http\Env\Request;
+use App\Constants\UserRoles;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -19,7 +18,7 @@ class AdminCheck
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->role=='Administrador')
+        if (Auth::check() && Auth::user()->role===UserRoles::ADMINISTRATOR)
             return $next($request);
 
         return redirect()->route('client.landing');

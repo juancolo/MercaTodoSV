@@ -10,7 +10,7 @@ use CloudCreativity\LaravelJsonApi\Auth\AbstractAuthorizer;
 class Authorizer extends AbstractAuthorizer
 {
 
-    protected $guards = ['api'];
+    protected $guards = ['sanctum'];
     /**
      * Authorize a resource index request.
      *

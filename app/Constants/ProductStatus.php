@@ -12,4 +12,9 @@ interface ProductStatus
         self::ACTIVE => 'active',
         self::INACTIVE => 'inactive',
     ];
+
+    public const ARRAY = [
+      self::ACTIVE,
+      self::INACTIVE
+    ];
 }

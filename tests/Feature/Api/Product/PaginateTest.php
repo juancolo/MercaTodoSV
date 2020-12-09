@@ -2,12 +2,12 @@
 
 namespace Tests\Feature\Api\Product;
 
-use App\Entities\Category;
-use App\Entities\Product;
-use App\Entities\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Laravel\Passport\Passport;
 use Tests\TestCase;
+use App\Entities\User;
+use App\Entities\Product;
+use App\Entities\Category;
+use Laravel\Sanctum\Sanctum;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PaginateTest extends TestCase
 {
@@ -54,7 +54,7 @@ class PaginateTest extends TestCase
 
     public function actingAsAuthUser()
     {
-        Passport::actingAs(
+        Sanctum::actingAs(
             factory(User::class)->create());
     }
 }

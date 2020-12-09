@@ -1,31 +1,15 @@
 <?php
 
-namespace App\JsonApi\Products;
+namespace App\JsonApi\Categories;
 
-use Illuminate\Support\Collection;
-use Illuminate\Database\Eloquent\Builder;
-use CloudCreativity\LaravelJsonApi\Eloquent\BelongsTo;
+use App\Entities\Category;
 use CloudCreativity\LaravelJsonApi\Eloquent\AbstractAdapter;
 use CloudCreativity\LaravelJsonApi\Pagination\StandardStrategy;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 class Adapter extends AbstractAdapter
 {
-    protected $fillable = [
-        'name',
-        'slug',
-        'details',
-        'description',
-        'actual_price',
-        'old_price',
-        'category_id',
-        'file',
-        'status',
-        'stock'
-    ];
-
-    protected $includePaths = [
-        'categories' => 'category'
-    ];
 
     /**
      * Mapping of JSON API attribute field names to model keys.
@@ -48,7 +32,7 @@ class Adapter extends AbstractAdapter
      */
     public function __construct(StandardStrategy $paging)
     {
-        parent::__construct(new \App\Entities\Product(), $paging);
+        parent::__construct(new Category(), $paging);
     }
 
     /**
@@ -59,11 +43,6 @@ class Adapter extends AbstractAdapter
     protected function filter($query, Collection $filters)
     {
         $this->filterWithScopes($query, $filters);
-    }
-
-    public function categories()
-    {
-        return $this->belongsTo('category');
     }
 
 }
