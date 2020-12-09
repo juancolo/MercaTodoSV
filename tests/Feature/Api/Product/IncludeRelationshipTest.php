@@ -2,14 +2,13 @@
 
 namespace Tests\Feature\Api\Product;
 
-use App\Constants\UserRoles;
-use App\Entities\Category;
-use App\Entities\Product;
-use App\Entities\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Laravel\Passport\Passport;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
+use App\Entities\User;
+use App\Entities\Product;
+use App\Entities\Category;
+use App\Constants\UserRoles;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class IncludeRelationshipTest extends TestCase
 {
@@ -57,7 +56,7 @@ class IncludeRelationshipTest extends TestCase
 
     public function actingAsAdmin()
     {
-        Passport::actingAs(
+        Sanctum::actingAs(
             factory(User::class)->create([
                 'role' => UserRoles::ADMINISTRATOR
             ])

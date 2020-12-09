@@ -2,11 +2,11 @@
 
 namespace Tests\Feature\Api\Product;
 
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 use App\Entities\User;
 use App\Entities\Product;
 use App\Entities\Category;
-use Laravel\Passport\Passport;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -100,7 +100,7 @@ class IndexTest extends TestCase
 
     public function actingAsAuthUser()
     {
-        Passport::actingAs(
+        Sanctum::actingAs(
             factory(User::class)->create());
     }
 }

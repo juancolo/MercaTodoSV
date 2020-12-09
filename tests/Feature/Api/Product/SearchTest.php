@@ -2,11 +2,11 @@
 
 namespace Tests\Feature\Api\Product;
 
-use App\Entities\User;
-use Laravel\Passport\Passport;
 use Tests\TestCase;
+use App\Entities\User;
 use App\Entities\Product;
 use App\Entities\Category;
+use Laravel\Sanctum\Sanctum;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SearchTest extends TestCase
@@ -78,7 +78,7 @@ class SearchTest extends TestCase
 
     public function actingAsAuthUser(): void
     {
-        Passport::actingAs(
+        Sanctum::actingAs(
             factory(User::class)->create());
     }
 }

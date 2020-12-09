@@ -2,14 +2,13 @@
 
 namespace Tests\Feature\Api\Product;
 
-use App\Constants\UserRoles;
-use App\Entities\User;
-use Laravel\Passport\Passport;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
+use App\Entities\User;
 use App\Entities\Product;
 use App\Entities\Category;
+use App\Constants\UserRoles;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use function GuzzleHttp\Psr7\str;
 
 class DeleteTest extends TestCase
 {
@@ -49,7 +48,7 @@ class DeleteTest extends TestCase
     /** @test */
     public function power_user_can_not_delete_products()
     {
-        Passport::actingAs(
+        Sanctum::actingAs(
             factory(User::class)->create(['role'=> UserRoles::POWERUSER]));
 
         $this->assertDatabaseHas('products',['name' => $this->product->name]);
@@ -90,7 +89,7 @@ class DeleteTest extends TestCase
 
     public function actingAsAuthUser(): void
     {
-        Passport::actingAs(
+        Sanctum::actingAs(
             factory(User::class)->create(['role'=> UserRoles::ADMINISTRATOR]));
     }
 }
