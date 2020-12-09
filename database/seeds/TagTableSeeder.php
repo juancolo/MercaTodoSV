@@ -1,7 +1,6 @@
 <?php
 
-use App\Product;
-use App\Tag;
+use App\Entities\Tag;
 use Illuminate\Database\Seeder;
 
 class TagTableSeeder extends Seeder
@@ -14,13 +13,5 @@ class TagTableSeeder extends Seeder
     public function run()
     {
         factory(Tag::class, 20)->create();
-
-            /*->each(function (Tag $tag)
-        {
-            $tag->product()->save(factory(Product::class)->make());
-
-
-        });*/
-
     }
 }

@@ -4,7 +4,7 @@
 namespace App\Services;
 
 
-use App\Order;
+use App\Entities\Order;
 
 class PaymentData
 {
@@ -22,7 +22,6 @@ class PaymentData
 
         public function setPayment()
         {
-
             $payment = [
                 "buyer" => [
                     'name'          => $this->paymentInfo->first_name,

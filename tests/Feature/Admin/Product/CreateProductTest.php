@@ -2,13 +2,13 @@
 
 namespace Tests\Feature\Admin\Product;
 
-use App\Category;
-use App\Tag;
-use App\User;
-use App\Product;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Entities\Tag;
+use App\Entities\User;
+use App\Entities\Product;
+use App\Entities\Category;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 
 class CreateProductTest extends TestCase
@@ -34,11 +34,7 @@ class CreateProductTest extends TestCase
      */
     public function an_admin_can_create_a_product()
     {
-        $this->withoutExceptionHandling();
-
-        //Given => An a Authenticated User can Edit an existing product
         $this->ActingAsAdmin();
-        //When
 
         $category = factory(Category::class)->create(['name' => 'categoryTest']);
         $tag1 = factory(Tag::class)->create(['name' => 'tagTest1']);
@@ -57,7 +53,6 @@ class CreateProductTest extends TestCase
 
         $response = $this->post(route('product.store', $product));
 
-        //Then
         $this->assertDatabaseHas('products', [
             'name' => 'ProductTest',
             'slug' => 'producttest',
@@ -87,7 +82,6 @@ class CreateProductTest extends TestCase
 
     public function a_product_price_must_be_greater_than_zero()
     {
-        //Given => An a authenticated admin can edit an existing product
         $this->ActingAsAdmin();
         $category = factory(Category::class)->create(['name' => 'categoryTest']);
         $tag1 = factory(Tag::class)->create(['name' => 'tagTest1']);

@@ -2,7 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Order;
+use App\Entities\Order;
+use Dnetix\Redirection\PlacetoPay;
 use Illuminate\Console\Command;
 
 class CheckPaymentStatus extends Command
@@ -19,7 +20,7 @@ class CheckPaymentStatus extends Command
      *
      * @var string
      */
-    protected $description = 'Validated the payment status of the status';
+    protected $description = 'Validated the payment status of the pending orders';
 
     /**
      * Create a new command instance.
@@ -36,9 +37,21 @@ class CheckPaymentStatus extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(PlacetoPay $placetoPay)
     {
-        Order::where
+        $ordersToUpdate = Order::withoutFinalStatus()->get();
+            if ($ordersToUpdate->count() > 0) {
+                foreach ($ordersToUpdate as $order) {
+                    $status = $placetoPay
+                        ->query($order->requestId)
+                        ->status()
+                        ->status();
+                    if ($status == 'REJECTED' || $status == 'APPROVED') {
+                        $order->status = $status;
+                        $order->save();
+                    }
+                }
+            }
         return 0;
     }
 }
