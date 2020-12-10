@@ -55,9 +55,9 @@ class ImportProductTest extends TestCase
 
         $importFile = $this->getUploadFile('products-import-file.xlsx');
 
-
         $this->post(route('product.import'), ['file' => $importFile])
-            ->assertRedirect(route('product.index'));
+            ->assertRedirect(route('product.index'))
+            ->assertSessionHas('status', trans('products.messages.import.status'));
 
         $this->assertDatabaseHas('products', [
             'name' => 'Fake Name',
@@ -90,7 +90,8 @@ class ImportProductTest extends TestCase
         $importFile = $this->getUploadFile('products-import-file.xlsx');
 
         $this->post(route('product.import'), ['file' => $importFile])
-            ->assertRedirect(route('product.index'));
+            ->assertRedirect(route('product.index'))
+            ->assertSessionHas('status', trans('products.messages.import.status'));;
 
         $this->assertDatabaseHas('products', [
             'name' => 'Fake Name',
