@@ -10,7 +10,7 @@ return [
             'greeting' => 'Hello :user here is the status of your import product process'
         ],
         'export' => [
-            'status' => 'The import process is starting, we will send you a mail.',
+            'status' => 'The export process is starting, we will send you a mail.',
             'subject' => 'Export Status',
             'ready' => 'The export is all ready done',
             'greeting' => 'Export Status'

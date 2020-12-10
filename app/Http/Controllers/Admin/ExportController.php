@@ -30,7 +30,7 @@ class ExportController extends Controller
 
         return redirect()
             ->route('product.index')
-            ->with('status', 'The export product started. We will notify by email');
+            ->with('status', trans('products.messages.export.status'));
     }
 
     public function userExport(UsersExport $usersExport)
