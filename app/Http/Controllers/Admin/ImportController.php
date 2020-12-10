@@ -5,12 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Imports\ProductsImport;
 use App\Http\Requests\ImportRequest;
 use App\Jobs\CleanErrorsImportTable;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use App\Jobs\NotifyAdminOfCompletedImport;
-use App\Jobs\NotifyAdminOfIncompleteImport;
-use Maatwebsite\Excel\Facades\Excel;
 
 class ImportController extends Controller
 {
@@ -26,6 +24,7 @@ class ImportController extends Controller
             new CleanErrorsImportTable()
         ]);
 
-        return redirect(route('product.index'));
+        return redirect(route('product.index'))
+            ->with('status',trans('products.messages.import.status'));
     }
 }
