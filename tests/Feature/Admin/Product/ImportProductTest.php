@@ -2,13 +2,9 @@
 
 namespace Tests\Feature\Admin\Product;
 
-use App\Imports\ProductsImport;
-use App\Jobs\NotifyAdminOfCompletedImport;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Queue;
-use Maatwebsite\Excel\Facades\Excel;
 use Tests\TestCase;
 use App\Entities\User;
+use App\Entities\Product;
 use App\Entities\Category;
 use App\Constants\UserRoles;
 use Illuminate\Http\UploadedFile;
@@ -44,34 +40,70 @@ class ImportProductTest extends TestCase
     /**
      * @test
      */
-    public function an_admin_can_import_a_users_from_xlsx()
+    public function an_admin_can_create_import_users_from_xlsx()
     {
-        //Excel::fake();
         factory(Category::class, 20)->create();
 
         $this->ActingAsAdmin();
 
+        $this->assertDatabaseMissing('products', [
+            'name' => 'Fake Name',
+            'details' => "fake_details",
+            'description' => "fake_description",
+            'actual_price' => "1000"
+        ]);
+
         $importFile = $this->getUploadFile('products-import-file.xlsx');
 
-        $this->post(route('product.import'), ['file' => $importFile]);
 
-        /*Excel::assertQueuedWithChain([
-            new NotifyAdminOfCompletedImport(Auth::user(), 'test'),
-        ]);*/
+        $this->post(route('product.import'), ['file' => $importFile])
+            ->assertRedirect(route('product.index'));
 
         $this->assertDatabaseHas('products', [
             'name' => 'Fake Name',
-            'slug' => 'fake-slug'
+            'details' => "fake_details",
+            'description' => "fake_description",
+            'actual_price' => "1000",
         ]);
+    }
 
+    /**
+     * @test
+     */
+    public function an_admin_can_update_users_with_an_from_xlsx()
+    {
+        factory(Category::class, 20)->create();
 
-        //$response->assertStatus(302);
+        $this->ActingAsAdmin();
 
+        $product = [
+            'name' => 'Fake Name',
+            'details' => "old_fake_details",
+            'description' => "old_fake_description",
+            'actual_price' => "1000",
+            'category_id' => 1
+        ];
+
+        factory(Product::class)->create($product);
+        $this->assertDatabaseHas('products', $product);
+
+        $importFile = $this->getUploadFile('products-import-file.xlsx');
+
+        $this->post(route('product.import'), ['file' => $importFile])
+            ->assertRedirect(route('product.index'));
+
+        $this->assertDatabaseHas('products', [
+            'name' => 'Fake Name',
+            'details' => "fake_details",
+            'description' => "fake_description",
+            'actual_price' => "1000",
+        ]);
     }
 
     private function ActingAsAdmin()
     {
-        $user = factory(User::class)->create(['role' => UserRoles::ADMINISTRATOR]);
+        $user = factory(User::class)->create([
+            'role' => UserRoles::ADMINISTRATOR]);
         $this->actingAs($user);
     }
 
