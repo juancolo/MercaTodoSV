@@ -114,8 +114,7 @@ class ProductsImport implements
     public function uniqueBy(): array
     {
         return [
-            'name',
-            'slug'
+            'name'
         ];
     }
 
