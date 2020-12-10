@@ -64,13 +64,13 @@ class ExportProductTest extends TestCase
         Excel::assertQueued(date('d-m-Y', strtotime(now())) . '-products.xlsx');
     }
 
-    private function ActingAsAdmin()
+    private function ActingAsAdmin(): void
     {
         $user = factory(User::class)->create(['role' => UserRoles::ADMINISTRATOR]);
         $this->actingAs($user);
     }
 
-    public function extension()
+    public function extension(): array
     {
         return [
             'extension' => 'xlsx'
