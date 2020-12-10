@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Admin\Product;
 
+use App\Constants\UserRoles;
 use Tests\TestCase;
 use App\Entities\User;
 use App\Entities\Product;
@@ -32,7 +33,7 @@ class DeleteProductTest extends TestCase
      */
     public function an_admin_can_delete_a_product()
     {
-        $this->acting('Administrador');
+        $this->acting(UserRoles::ADMINISTRATOR);
         $this->assertDatabaseHas('products', ['name'=> $this->product->name]);
 
         $this->delete(route('product.destroy', $this->product))

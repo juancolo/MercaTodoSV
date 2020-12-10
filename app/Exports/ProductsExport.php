@@ -67,7 +67,6 @@ class ProductsExport implements
             $product->status,
             $product->stock
         ];
-
     }
 
 }

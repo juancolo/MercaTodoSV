@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Admin\Product;
 
+use App\Constants\UserRoles;
 use Tests\TestCase;
 use App\Entities\Tag;
 use App\Entities\User;
@@ -34,6 +35,7 @@ class CreateProductTest extends TestCase
      */
     public function an_admin_can_create_a_product()
     {
+        $this->withExceptionHandling();
         $this->ActingAsAdmin();
 
         $category = factory(Category::class)->create(['name' => 'categoryTest']);
@@ -47,8 +49,8 @@ class CreateProductTest extends TestCase
             'actual_price' => 1000,
             'description' => 'productdescription',
             'category_id' => $category->id,
-            'tags' => [ 0 => $tag1->id,
-                        1 => $tag2->id]
+            'tags' => [0 => $tag1->id,
+                1 => $tag2->id]
         ]);
 
         $response = $this->post(route('product.store', $product));
@@ -77,7 +79,7 @@ class CreateProductTest extends TestCase
     }
 
     /**
-    * @test
+     * @test
      */
 
     public function a_product_price_must_be_greater_than_zero()
@@ -87,35 +89,35 @@ class CreateProductTest extends TestCase
         $tag1 = factory(Tag::class)->create(['name' => 'tagTest1']);
         $tag2 = factory(Tag::class)->create(['name' => 'tagTest2']);
 
-        $product = ([
+        $product = [
             'name' => 'ProductTest',
             'slug' => 'producttest',
             'details' => 'productdetails',
-            'actualPrice' => 0,
+            'actual_price' => 0,
             'description' => 'productdescription',
             'category_id' => $category->id,
-            'tags' => [ 0 => $tag1->id,
-                        1 => $tag2->id]
-        ]);
+            'tags' => [0 => $tag1->id,
+                1 => $tag2->id]
+        ];
 
         $response = $this->post(route('product.store', $product));
 
         $response->assertSessionHasErrors('actual_price');
-
     }
 
-    public function productCreation(){
-            return [
-                'name' => 'ProductTest',
-                'slug' => 'producttest',
-                'details' => 'productdetails',
-                'description' => 'productdescription'
-            ];
+    public function productCreation()
+    {
+        return [
+            'name' => 'ProductTest',
+            'slug' => 'producttest',
+            'details' => 'productdetails',
+            'description' => 'productdescription'
+        ];
     }
 
     private function ActingAsAdmin()
     {
-        $user = factory(User::class)->create(['role' => 'Administrador']);
+        $user = factory(User::class)->create(['role' => UserRoles::ADMINISTRATOR]);
         $this->actingAs($user);
     }
 
