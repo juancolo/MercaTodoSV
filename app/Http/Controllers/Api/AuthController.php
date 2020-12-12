@@ -25,12 +25,12 @@ class AuthController extends Controller
             return response()->json([
                 'status_code' => 200,
                 'accesses_token' => $token,
-                'token_type' => 'Bearer'
+                'token_type' => trans('api.toke.type')
             ]);
         } else {
             return response()->json([
                 'status_code' => 403,
-                'message' => 'dont be stupid'
+                'message' => trans('api.login.auth_failed')
             ]);
         }
     }

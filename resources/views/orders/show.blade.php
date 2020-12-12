@@ -3,7 +3,7 @@
 @section('content')
 
         <div class="featured-section">
-            <div class="container" style="padding-top: 20px">
+            <div class="container" style="padding-top: 20px" >
                 <h2>{{__('ORDERS')}}</h2>
                     @if($orders->count() > 0)
                         @foreach($orders as $order)
@@ -18,7 +18,7 @@
                                         <h6 class="card-title">{{__('Pay: '.$order->PresentPrice())}}</h6>
                                         <p class="card-text">{{__('This payment was done at '.$order->updated_at)}}</p>
 
-                                        @if($order->status == 'FAILED' || $order->status == 'REJECTED'||$order->status == 'PENDING')
+                                        @if($order->status == \App\Constants\OrderStatus::FAILED || $order->status == \App\Constants\OrderStatus::PENDING)
 
                                             <form action="{{route('payment.redone', $order)}}" method="POST">
                                                 @csrf
@@ -39,6 +39,6 @@
                         </div>
                     @endif
             </div>
+            {{$orders->appends(request()->only('search'))->links()}}
         </div>
-
 @endsection

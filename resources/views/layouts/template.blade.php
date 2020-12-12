@@ -88,7 +88,7 @@
                             @auth
                             @if (Route::has('login'))
 
-                                @if (Auth::user()->role=='Administrador')
+                                @if (Auth::user()->role==UserRoles::ADMINISTRATOR)
 
                                     <li class="nav-item">
                                         <a class="nav-link" href="{{route('admin.index')}}">Administrador</a>

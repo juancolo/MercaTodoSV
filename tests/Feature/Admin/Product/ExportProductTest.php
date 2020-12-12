@@ -2,14 +2,13 @@
 
 namespace Tests\Feature\Admin\Product;
 
+use Maatwebsite\Excel\Facades\Excel;
 use Tests\TestCase;
 use App\Entities\User;
 use App\Entities\Product;
 use App\Entities\Category;
-use App\Exports\ProductsExport;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Constants\UserRoles;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ExportProductTest extends TestCase
@@ -55,10 +54,8 @@ class ExportProductTest extends TestCase
      */
     public function an_admin_can_export_a_user_xlsx_report()
     {
-        Excel::fake();
-        Notification::fake();
         $this->ActingAsAdmin();
-
+        Excel::fake();
         $this->post(route('product.export'), $this->extension())
             ->assertStatus(302)
             ->assertRedirect(route('product.index'))
@@ -69,13 +66,13 @@ class ExportProductTest extends TestCase
         Excel::assertStored(date('d-m-Y', strtotime(now())).'-products.xlsx',);
     }
 
-    private function ActingAsAdmin()
+    private function ActingAsAdmin(): void
     {
-        $user = factory(User::class)->create(['role' => 'Administrador']);
+        $user = factory(User::class)->create(['role' => UserRoles::ADMINISTRATOR]);
         $this->actingAs($user);
     }
 
-    public function extension()
+    public function extension(): array
     {
         return [
             'extension' => 'xlsx'

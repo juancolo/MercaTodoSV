@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ecomerce;
 use Exception;
 use App\Entities\User;
 use App\Entities\Order;
+use Illuminate\Database\Events\TransactionBeginning;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
 use App\Services\PaymentData;
@@ -70,8 +71,6 @@ class PaymentController extends Controller
             $response = $placetopay->request($payment->setPayment());
 
             if ($response->isSuccessful()) {
-                $response->processUrl();
-
                 $order->requestId = $response->requestId;
                 $order->processUrl = $response->processUrl;
                 $order->status = $response->status()->status();
@@ -103,7 +102,8 @@ class PaymentController extends Controller
 
         $this->cartService->getACartFromUser()->clear();
 
-        return view('webcheckout.endTransaction', compact('order'));
+        return view('webcheckout.end_transaction', compact('order'))
+            ->with('status', trans());
     }
 
     /**

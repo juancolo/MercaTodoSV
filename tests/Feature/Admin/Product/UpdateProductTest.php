@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Admin\Product;
 
+use App\Constants\UserRoles;
 use App\Entities\Product;
 use App\Http\Requests\Product\UpdateProductRequest;
 use Tests\TestCase;
@@ -21,7 +22,7 @@ class UpdateProductTest extends TestCase
     public function admins_can_update_an_existing_product()
     {
         $this->withoutExceptionHandling();
-        $user = factory(User::class)->create(['role' => 'Administrador']);
+        $user = factory(User::class)->create(['role' => UserRoles::ADMINISTRATOR]);
 
         $this->actingAs($user);
         $product = factory(Product::class)->create(

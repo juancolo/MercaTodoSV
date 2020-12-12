@@ -9,7 +9,7 @@ class EndTransactionTest extends TestCase
     /**
      * @test
     */
-    public function testExample()
+    public function client_can_see_the_order_()
     {
     }
 }

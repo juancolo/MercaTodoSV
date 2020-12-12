@@ -2,15 +2,25 @@
 
 namespace App\Policies;
 
-
-use App\Entities\Order;
 use App\Entities\User;
+use App\Entities\Order;
+use App\Constants\UserRoles;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class OrderPolicy
 {
     use HandlesAuthorization;
 
+    /**
+     * @param $user
+     * @return bool
+     */
+    public function before($user): bool
+    {
+        if ($user->hasRole(UserRoles::ADMINISTRATOR)) {
+            return true;
+        }
+    }
 
     /**
      * @param User $user
@@ -22,11 +32,13 @@ class OrderPolicy
 
     /**
      * @param User $user
+     * @param Order $order
      * @return mixed
      */
-    public function view(User $user)
+    public function view(User $user, Order $order)
     {
-        return $user->id;
+        return $user->id === $order->user_id
+            || $user->hasPermissionTo('View orders');
     }
 
     /**

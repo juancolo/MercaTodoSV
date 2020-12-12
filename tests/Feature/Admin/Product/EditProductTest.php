@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Admin\Product;
 
+use App\Constants\UserRoles;
 use Tests\TestCase;
 use App\Entities\Tag;
 use App\Entities\User;
@@ -49,7 +50,7 @@ class EditProductTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $user = factory(User::class)->create(['role' => 'Administrador']);
+        $user = factory(User::class)->create(['role' => UserRoles::ADMINISTRATOR]);
 
         $this->actingAs($user);
         $product = $this->CreateProduct
