@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Ecomerce;
 use App\Entities\Order;
 use Illuminate\View\View;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -14,16 +13,19 @@ class OrderController extends Controller
         $this->middleware('auth');
     }
 
-    public function create($request)
-    {
-
-    }
     /**
+     * @param Order $orders
      * @return View
      */
-    public function show(): View
+    public function show(Order $orders): View
     {
-        $orders = Order::where('user_id', Auth::id())->get();
+        $orders = $orders->allowed()
+            ->paginate(3);
         return view('orders.show', compact('orders'));
+    }
+
+    public function delete()
+    {
+
     }
 }

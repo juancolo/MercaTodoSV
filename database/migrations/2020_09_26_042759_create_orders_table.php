@@ -1,5 +1,6 @@
 <?php
 
+use App\Constants\OrderStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +18,7 @@ class CreateOrdersTable extends Migration
             $table->bigIncrements('id');
             $table->uuid('reference')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->enum('status', ['OK','PENDING', 'FAILED', 'APPROVED', 'APPROVED_PARTIAL','PARTIAL_EXPIRED', 'REJECTED', 'PENDING_VALIDATION', 'REFUNDED' ])->default('PENDING');
+            $table->enum('status', [OrderStatus::STATUSES ])->default(OrderStatus::PENDING);
             $table->string('first_name', 70);
             $table->string('last_name', 70);
             $table->string('email', 124);

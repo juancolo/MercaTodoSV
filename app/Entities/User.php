@@ -5,6 +5,7 @@ namespace App\Entities;
 use App\Constants\UserStatus;
 use App\Constants\ProductStatus;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 use App\Concerns\HasAdministrationRole;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
@@ -15,6 +16,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
+    use HasRoles;
     use Notifiable;
     use HasAdministrationRole;
     use HasApiTokens;

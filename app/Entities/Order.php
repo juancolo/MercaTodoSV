@@ -75,4 +75,27 @@ class Order extends Model
             ->orWhere('status', "IN_PROCESS");
     }
 
+    /**
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeOrdersToShow(Builder $query): Builder
+    {
+        return $query
+            ->select('reference', 'status', 'user_id', 'total' )
+            ->with('user');
+    }
+
+    /**
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeAllowed(Builder $query): Builder
+    {
+        if (auth()->user()->can('view', $this))
+        {
+            return $query;
+        }
+        return $query->where('user_id', auth()->id());
+    }
 }

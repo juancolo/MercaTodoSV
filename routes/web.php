@@ -12,7 +12,8 @@ Auth::routes(['verify' => true]);
 
 //User Admin
 Route::resource('/admin', 'Admin\UserController')
-    ->parameter('admin', 'user');
+    ->parameter('admin', 'user')
+    ->except('show');
 Route::get('/admin/user/export', 'Admin\ExportController@userExport')
     ->name('user.export');
 //ProductStatus Admin
@@ -59,4 +60,6 @@ Route::group(['prefix' => 'order'], function () {
         ->name('order.show');
 });
 
-Route::view('/form', 'layouts.admin.forms');
+Route::resource('admin/order', 'Admin\OrdersController@index')
+    ->except('create', 'show', 'delete');
+
