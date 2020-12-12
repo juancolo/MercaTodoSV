@@ -6,6 +6,6 @@ abstract class BaseRepository
 {
     public function repository()
     {
-        return'test';
+        return'test2';
 }
 }
