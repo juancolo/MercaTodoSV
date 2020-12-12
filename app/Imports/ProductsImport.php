@@ -26,7 +26,6 @@ class ProductsImport implements
     WithChunkReading,
     WithBatchInserts,
     SkipsOnFailure,
-    WithUpserts,
     ShouldQueue
 {
     use Importable;
@@ -40,14 +39,17 @@ class ProductsImport implements
     /**
      * @param array $row
      */
-    public function model(array $row): Product
+    public function model(array $row)
     {
         ++$this->rows;
 
-        return new Product(
+        Product::updateOrCreate(
             [
                 'name' => $row['name'],
                 'slug' => $row['name'],
+
+            ],
+            [
                 'actual_price' => $row['actual_price'],
                 'category_id' => $row['category_id'],
                 'details' => $row['details'],
@@ -106,16 +108,6 @@ class ProductsImport implements
     public function batchSize(): int
     {
         return 10000;
-    }
-
-    /**
-     * @return array
-     */
-    public function uniqueBy(): array
-    {
-        return [
-            'name'
-        ];
     }
 
     /**
