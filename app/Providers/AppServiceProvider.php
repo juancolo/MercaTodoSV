@@ -34,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Exports::observe( ExportsObserver::class);
-        ::observe( ImportsObserver::class);
+        Imports::observe( ImportsObserver::class);
         LaravelJsonApi::defaultApi('v1');
     }
 }
