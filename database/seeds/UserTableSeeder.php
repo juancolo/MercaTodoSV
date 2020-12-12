@@ -36,6 +36,8 @@ class UserTableSeeder extends Seeder
         $admin->save();
 
         $admin->assignRole($adminRole);
+        $admin->hasPermissionTo($deleteProductsPermission);
+        $admin->hasPermissionTo($viewOrdersPermission);
 
         $powerUser = new User();
         $powerUser->first_name = 'PowerUser Mercatodo';

@@ -19,7 +19,8 @@ class OrderController extends Controller
      */
     public function show(Order $orders): View
     {
-        $orders = $orders->allowed()->get();
+        $orders = $orders->allowed()
+            ->paginate(3);
         return view('orders.show', compact('orders'));
     }
 

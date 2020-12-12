@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-
 use App\Entities\User;
 use App\Entities\Order;
 use App\Constants\UserRoles;
@@ -38,7 +37,8 @@ class OrderPolicy
      */
     public function view(User $user, Order $order)
     {
-        return $user->id === $order->user_id;
+        return $user->id === $order->user_id
+            || $user->hasPermissionTo('View orders');
     }
 
     /**

@@ -56,10 +56,6 @@
                         <button type="submit"
                                 class="btn btn-info float-right"
                                 form="userExport"
-
-                                {{--data-toggle="modal"
-                                data-target="#exportModal"
-                                data-route="{{route('user.export')}}"--}}
                                 style="padding: 10px 50px; margin-right: 10px"><i class="fa fa-download"></i>
                         </button>
                         <input type="hidden" name="search" id="search" value="{{request('search')}}">
