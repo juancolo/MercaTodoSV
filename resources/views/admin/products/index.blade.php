@@ -54,7 +54,7 @@
                         <div class="input-group-append">
                             <button class="btn btn-navbar" style="margin-top: 40px;">
                                 <i class="fa fa-search" style="text-shadow: 0 0 3px #000;"></i>
-                                <button class="btn btn-primary" href="{{route('product.index')}}"
+                                <button class="btn btn-primary" href="{{route('product.index', ['search' => null])}}"
                                         style="margin-top: 40px">{{__('Clean')}}</button>
                             </button>
                         </div>

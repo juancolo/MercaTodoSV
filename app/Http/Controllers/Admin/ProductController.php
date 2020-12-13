@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use Exception;
 use App\Entities\Tag;
+use Illuminate\Support\Facades\File;
 use Illuminate\View\View;
 use App\Entities\Product;
 use App\Entities\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+use App\Repository\ProductRepository;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
@@ -17,12 +19,16 @@ use App\Http\Requests\Product\UpdateProductRequest;
 
 class ProductController extends Controller
 {
+    protected ProductRepository $productRepo;
+
     /**
      * CategoryController constructor.
      * Validate user is an admin and is authenticated
+     * @param ProductRepository $productRepo
      */
-    public function __construct()
+    public function __construct(ProductRepository $productRepo)
     {
+        $this->productRepo = $productRepo;
         $this->middleware('admin');
         $this->middleware('auth');
     }
@@ -34,10 +40,7 @@ class ProductController extends Controller
      */
     public function index(Request $request): View
     {
-        $products = Product::with('category')
-            ->ProductInfo($request->input('search'))
-            ->paginate();
-
+        $products = $this->productRepo->getProductIndex($request);
         return view('admin.products.index', compact('products'));
     }
 
@@ -60,19 +63,11 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request): RedirectResponse
     {
-        $product = Product::create($request->validated());
-
-        $product->tags()->sync($request->input('tags'));
-        $product->save();
-
-        if ($request->file('file')) {
-            $file = $request->file('file')->store('images');
-            $product->file = Storage::url($file);
-            $product->save();
-        }
+        $this->productRepo->create($request->all());
 
         return redirect()
-            ->route('product.index');
+            ->route('product.index')
+            ->with('message', trans('products.messages.create.created'));
     }
 
     /**
@@ -101,20 +96,11 @@ class ProductController extends Controller
      */
     public function update(Product $product, UpdateProductRequest $request): RedirectResponse
     {
-        $product->update($request->all());
-        $product->tags()->sync($request->input('tags'));
+        $this->productRepo->update($product, $request->all());
 
-        if ($request->file('file')) {
-            if ($product->file) {
-                Storage::delete($product->file);
-            }
-
-            $file = $request->file('file')->store('images');
-            $product->file = Storage::url($file);
-            $product->save();
-        }
-        return redirect()->route('product.index')
-            ->with('status', 'Producto actualizado correctamente');
+        return redirect()
+            ->route('product.index')
+            ->with('status', trans('products.messages.update.updated'));
     }
 
     /**
@@ -124,9 +110,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product): RedirectResponse
     {
-        Storage::delete($product->file);
-        $product->delete();
-
+       $this->productRepo->delete($product);
         return redirect()
             ->route('product.index')
             ->with('status', 'Se ha eliminado el producto correctamente');
