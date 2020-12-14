@@ -5,16 +5,14 @@ namespace App\Http\Controllers\Ecomerce;
 use Exception;
 use App\Entities\User;
 use App\Entities\Order;
-use Illuminate\Database\Events\TransactionBeginning;
 use Illuminate\View\View;
-use Illuminate\Support\Str;
 use App\Services\PaymentData;
 use App\Services\CartService;
 use Illuminate\Routing\Redirector;
 use Dnetix\Redirection\PlacetoPay;
 use Illuminate\Support\Facades\Log;
+use App\Repository\OrderRepository;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\Foundation\Application;
@@ -26,12 +24,15 @@ class PaymentController extends Controller
 {
     /**
      * @var CartService
+     * * @var OrderRepository
      */
-    private $cartService;
+    private CartService $cartService;
+    protected OrderRepository $orderRepo;
 
-    public function __construct(CartService $cartService)
+    public function __construct(CartService $cartService, OrderRepository $orderRepo)
     {
         $this->cartService = $cartService;
+        $this->orderRepo = $orderRepo;
     }
 
     /**
@@ -51,19 +52,9 @@ class PaymentController extends Controller
      * @param PaymentInfoRequest $request
      * @return Application|RedirectResponse|Redirector
      */
-    public function store(PlacetoPay $placetopay, PaymentInfoRequest $request): RedirectResponse
+    public function store(PlacetoPay $placetopay, PaymentInfoRequest $request)
     {
-        $orderData = array_merge($request->all(), [
-            'reference' => substr(Str::uuid()->toString(), 0, 10),
-            'user_id' => Auth::id(),
-            'total' => $this->cartService->getACartFromUser()->getTotal()
-        ]);
-
-        $order = Order::create($orderData);
-
-        foreach ($this->cartService->getAContentCartFromAUser() as $product) {
-            $order->products()->attach($product['id']);
-        }
+        $order = $this->orderRepo->createOrder($request->all());
 
         try {
             $payment = new PaymentData($order);
