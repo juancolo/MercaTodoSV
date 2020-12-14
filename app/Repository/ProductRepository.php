@@ -3,7 +3,6 @@
 
 namespace App\Repository;
 
-
 use App\Entities\Product;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Pagination\LengthAwarePaginator;

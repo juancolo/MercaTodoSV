@@ -94,16 +94,16 @@ class PaymentController extends Controller
         $this->cartService->getACartFromUser()->clear();
 
         return view('webcheckout.end_transaction', compact('order'))
-            ->with('status', trans());
+            ->with('status', trans('e-comerce.end_transaction'));
     }
 
     /**
      * @param PlacetoPay $placetopay
      * @param Order $order
-     * @return Application|RedirectResponse|Redirector
+     * @return RedirectResponse
      * @throws PlacetoPayException
      */
-    public function reDonePayment(PlacetoPay $placetopay, Order $order)
+    public function reDonePayment(PlacetoPay $placetopay, Order $order): RedirectResponse
     {
         $payment = new PaymentData($order);
         $response = $placetopay->request($payment->setPayment());
