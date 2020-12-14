@@ -51,12 +51,13 @@
                                value="{{request('search')}}"
                                aria-label="search"
                                style="margin-top: 40px">
-                        <div class="input-group-append">
-                            <button class="btn btn-navbar" style="margin-top: 40px;">
-                                <i class="fa fa-search" style="text-shadow: 0 0 3px #000;"></i>
-                                <button class="btn btn-primary" href="{{route('product.index', ['search' => null])}}"
-                                        style="margin-top: 40px">{{__('Clean')}}</button>
-                            </button>
+                        <div class="button-group">
+                            <div class="input-group-append">
+                                <button class="btn btn-navbar" style="margin-top: 32px;">
+                                    <i class="fa fa-search" style="text-shadow: 0 0 3px #000;"></i>
+                                    <a class="btn btn-primary" href="{{route('admin.index')}}">{{__('Clean')}}</a>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </form>

@@ -6,15 +6,19 @@ use Exception;
 use App\Entities\User;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
+use App\Repository\UserRepository;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 
 class UserController extends Controller
 {
-    public function __construct()
+    protected UserRepository $userRepo;
+
+    public function __construct(UserRepository $userRepo)
     {
         $this->middleware('admin');
         $this->middleware('auth');
+        $this->userRepo = $userRepo;
     }
 
     /**
@@ -23,9 +27,7 @@ class UserController extends Controller
      */
     public function index(Request $request): View
     {
-        $users = User::ActiveUser()
-            ->UserInfo($request->input('search'))
-            ->paginate();
+        $users = $this->userRepo->getUserIndex($request);
 
         return view('admin.users.index', compact('users', $users));
     }
@@ -40,7 +42,7 @@ class UserController extends Controller
 
     public function update(Request $request, User $user): RedirectResponse
     {
-        $user->update($request->all());
+        $this->userRepo->update($user, $request->all());
 
         return redirect()->route('admin.index')
             ->with('status', 'Usuario actualizado correctamente');

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use Exception;
 use App\Entities\Tag;
-use Illuminate\Support\Facades\File;
 use Illuminate\View\View;
 use App\Entities\Product;
 use App\Entities\Category;
@@ -12,7 +11,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use App\Repository\ProductRepository;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
 
