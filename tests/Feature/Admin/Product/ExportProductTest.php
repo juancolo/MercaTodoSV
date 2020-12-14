@@ -61,15 +61,12 @@ class ExportProductTest extends TestCase
 
         $this->post(route('product.export'), $this->extension())
             ->assertStatus(302)
-            ->assertRedirect(route('product.index'));
+            ->assertRedirect(route('product.index'))
+            ->assertSessionHas('status', trans('products.messages.export.status'));
 
-        Excel::assertQueued(date('d-m-Y', strtotime(now())).'-products.xlsx', function (ProductsExport $export) {
-            return $export->query()->get()->contains($this->products->random());
-        });
+        Excel::assertQueued(date('d-m-Y', strtotime(now())).'-products.xlsx');
 
-        Excel::assertStored(date('d-m-Y', strtotime(now())).'-products.xlsx', function (ProductsExport $export) {
-            return $export->query()->get()->contains($this->products->random());
-        });
+        Excel::assertStored(date('d-m-Y', strtotime(now())).'-products.xlsx',);
     }
 
     private function ActingAsAdmin()

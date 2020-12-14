@@ -24,7 +24,8 @@
         "lcobucci/jwt": "3.3.3",
         "maatwebsite/excel": "^3.1",
         "phpoffice/phpspreadsheet": "^1.15",
-        "predis/predis": "^1.1"
+        "predis/predis": "^1.1",
+        "staudenmeir/laravel-upsert": "^1.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",

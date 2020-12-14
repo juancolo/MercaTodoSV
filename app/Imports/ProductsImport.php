@@ -3,19 +3,21 @@
 namespace App\Imports;
 
 use App\Entities\Product;
+use App\Entities\ErrorImport;
 use Illuminate\Bus\Queueable;
 use Illuminate\Validation\Rule;
 use App\Constants\ProductStatus;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Validators\Failure;
 use Maatwebsite\Excel\Concerns\Importable;
-use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\WithUpserts;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
-use Maatwebsite\Excel\Validators\Failure;
 
 class ProductsImport implements
     ToModel,
@@ -24,11 +26,11 @@ class ProductsImport implements
     WithChunkReading,
     WithBatchInserts,
     SkipsOnFailure,
-    WithUpserts
+    WithUpserts,
+    ShouldQueue
 {
     use Importable;
     use SkipsFailures;
-    use Queueable;
 
     /**
      * @var int
@@ -43,7 +45,10 @@ class ProductsImport implements
         ++$this->rows;
 
         return new Product(
-            ['actual_price' => $row['actual_price'],
+            [
+                'name' => $row['name'],
+                'slug' => $row['name'],
+                'actual_price' => $row['actual_price'],
                 'category_id' => $row['category_id'],
                 'details' => $row['details'],
                 'description' => $row['description'],
@@ -87,30 +92,45 @@ class ProductsImport implements
         return $this->rows;
     }
 
+    /**
+     * @return int
+     */
     public function chunkSize(): int
     {
         return 10000;
     }
 
+    /**
+     * @return int
+     */
     public function batchSize(): int
     {
         return 10000;
     }
 
-    public function uniqueBy(): string
+    /**
+     * @return array
+     */
+    public function uniqueBy(): array
     {
-        return 'name';
+        return [
+            'name'
+        ];
     }
 
-    public function onFailure(Failure ...$failures)
+    /**
+     * @param Failure ...$failures
+     * @return void
+     */
+    public function onFailure(Failure ...$failures): void
     {
         foreach ($failures as $failure) {
             ErrorImport::create([
-                'import'    => trans('fields.products'),
-                'row'       => $failure->row(),
+                'import' => trans('products.messages.import.start'),
+                'row' => $failure->row(),
                 'attribute' => $failure->attribute(),
-                'value'     => implode(', ', $failure->values()),
-                'errors'    => implode(', ', $failure->errors()),
+                'values' => implode(', ', $failure->values()),
+                'errors' => implode(', ', $failure->errors()),
             ]);
         }
     }

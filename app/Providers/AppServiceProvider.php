@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Entities\ErrorImport;
 use App\Entities\Exports;
 use App\Entities\Imports;
 use App\Observers\ExportsObserver;
@@ -34,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Exports::observe( ExportsObserver::class);
-        Imports::observe( ImportsObserver::class);
+        ErrorImport::observe( ImportsObserver::class);
         LaravelJsonApi::defaultApi('v1');
     }
 }
