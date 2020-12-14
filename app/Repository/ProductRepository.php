@@ -56,7 +56,9 @@ class ProductRepository extends BaseRepositories
     {
         parent::update($object, $data);
 
-        $object->tags()->sync($data['tags']);
+        if (key_exists('tags', $data)){
+            $object->tags()->sync($data['tags']);
+        }
 
         if (key_exists('file', $data)) {
             if ($object->file) {

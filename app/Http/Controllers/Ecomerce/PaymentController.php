@@ -83,9 +83,9 @@ class PaymentController extends Controller
     /**
      * @param PlacetoPay $placetopay
      * @param Order $order
-     * @return Application|Factory|View
+     * @return View
      */
-    public function endTransaction(PlacetoPay $placetopay, Order $order)
+    public function endTransaction(PlacetoPay $placetopay, Order $order): View
     {
         $response = $placetopay->query($order->requestId);
         $order->status = $response->status()->status();
