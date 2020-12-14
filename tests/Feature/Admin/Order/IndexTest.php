@@ -20,7 +20,7 @@ class IndexTest extends TestCase
             'role' => UserRoles::ADMINISTRATOR
         ]));
 
-        $this->get(route('orders.index'))
+        $this->get(route('orders.index'))->dump()
             ->assertOk();
     }
 }

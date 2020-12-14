@@ -29,8 +29,8 @@ class OrdersController extends Controller
      */
     public function index(): View
     {
-        $this->orderRepo->getOrderForAdmin();
-        
+        $orders = $this->orderRepo->getOrderForAdmin();
+
         return view('admin.orders.index', compact('orders'));
     }
 }
