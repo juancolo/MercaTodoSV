@@ -24,8 +24,4 @@ class OrderController extends Controller
         return view('orders.show', compact('orders'));
     }
 
-    public function delete()
-    {
-
-    }
 }

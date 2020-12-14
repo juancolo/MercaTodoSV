@@ -14,6 +14,15 @@ return [
             'subject' => 'Export Status',
             'ready' => 'The export is all ready done',
             'greeting' => 'Export Status'
+        ],
+        'create' => [
+            'created' => 'The product was created successfully!'
+        ],
+        'update' => [
+            'updated' => 'The product was updated successfully!'
+        ],
+        'delete' => [
+            'deleted' => 'The product was deleted successfully!'
         ]
     ]
 ];

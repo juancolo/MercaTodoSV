@@ -4,13 +4,33 @@ namespace App\Http\Controllers\Admin;
 
 use App\Entities\Order;
 use App\Http\Controllers\Controller;
+use App\Repository\OrderRepository;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\View\View;
 
 class OrdersController extends Controller
 {
-    public function index()
+    /**
+     * @var OrderRepository
+     */
+    private OrderRepository $orderRepo;
+
+    /**
+     * OrdersController constructor.
+     * @param OrderRepository $orderRepo
+     */
+    public function __construct(OrderRepository $orderRepo)
     {
-        $orders = Order::ordersToShow()
-            ->paginate();
-     return view('admin.orders.index', compact('orders'));
+        $this->orderRepo = $orderRepo;
+    }
+
+    /**
+     * @return View
+     */
+    public function index(): View
+    {
+        $orders = $this->orderRepo->getOrderForAdmin();
+
+        return view('admin.orders.index', compact('orders'));
     }
 }

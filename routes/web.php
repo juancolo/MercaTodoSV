@@ -16,6 +16,8 @@ Route::resource('/admin', 'Admin\UserController')
     ->except('show');
 Route::get('/admin/user/export', 'Admin\ExportController@userExport')
     ->name('user.export');
+Route::resource('/orders','Admin\OrdersController' )
+    ->only('index');
 //ProductStatus Admin
 Route::post('/product/export', 'Admin\ExportController@productExport')
     ->name('product.export');
@@ -60,6 +62,4 @@ Route::group(['prefix' => 'order'], function () {
         ->name('order.show');
 });
 
-Route::resource('admin/order', 'Admin\OrdersController@index')
-    ->except('create', 'show', 'delete');
 

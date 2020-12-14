@@ -70,7 +70,7 @@ class ImportProductTest extends TestCase
     /**
      * @test
      */
-    public function an_admin_can_update_users_with_an_from_xlsx()
+    public function an_admin_can_update_products_with_an_xlsx()
     {
         factory(Category::class, 20)->create();
 
@@ -78,6 +78,7 @@ class ImportProductTest extends TestCase
 
         $product = [
             'name' => 'Fake Name',
+            'slug' => 'Fake Name',
             'details' => "old_fake_details",
             'description' => "old_fake_description",
             'actual_price' => "1000",

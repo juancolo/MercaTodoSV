@@ -32,8 +32,8 @@ trait HasProductValidationRules
 
             'details' => 'required|min:3|max:80',
             'description' => 'required|min:3|max:200',
-            'actual_price' => 'sometimes:required|numeric|min:0|not_in:0',
-            'old_price' => 'numeric|min:0|not_in:0',
+            'actual_price' => 'sometimes:required|numeric|min:0|not_in:0|between:100,10000000.00',
+            'old_price' => 'numeric|min:0|not_in:0!|between:100,10000000.00',
             'category_id' => 'required|exists:categories,id',
             'tags.*' => 'exists:tags,id',
             'file' => 'image|mimes:jpeg,bmp,png',

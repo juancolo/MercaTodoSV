@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Store\Order;
 
+use App\Constants\OrderStatus;
 use Tests\TestCase;
 use App\Entities\User;
 use Tests\Feature\OrderTest;
@@ -29,7 +30,7 @@ class ShowTest extends TestCase
         $this->actingAs($this->ActingAsClient());
 
         $user = Auth::id();
-        $order = OrderTest::createOrder($user, 'APPROVED');
+        $order = OrderTest::createOrder($user, OrderStatus::APPROVED);
 
         $this->get(route('order.show', $user))
             ->assertStatus(200)
@@ -40,12 +41,12 @@ class ShowTest extends TestCase
     }
 
     /** @test */
-    public function if_order_has_pending_status_it_should_show_the_redone_payment_button()
+    public function if_order_has_failed_status_it_should_show_the_redone_payment_button()
     {
         $this->actingAs($this->ActingAsClient());
 
         $user = Auth::id();
-        $order = OrderTest::createOrder($user, 'PENDING');
+        $order = OrderTest::createOrder($user, OrderStatus::FAILED);
 
         $this->get(route('order.show', $user))
             ->assertStatus(200)
