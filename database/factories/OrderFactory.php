@@ -25,6 +25,7 @@ $factory->define(Order::class, function (Faker $faker) {
         'total' => $faker->numberBetween(500, 1000),
         'currency' => 'COP',
         'requestId' => $faker->sentence,
-        'processUrl' => $faker->url
+        'processUrl' => $faker->url,
+        'created_at'=> $faker->dateTimeThisMonth()
         ];
 });
