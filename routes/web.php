@@ -16,6 +16,8 @@ Route::resource('/admin', 'Admin\UserController')
     ->except('show');
 Route::get('/admin/user/export', 'Admin\ExportController@userExport')
     ->name('user.export');
+Route::get('reports/{report}', 'Admin\ReportController@show')
+    ->name('report.show');
 //ProductStatus Admin
 Route::post('/product/export', 'Admin\ExportController@productExport')
     ->name('product.export');

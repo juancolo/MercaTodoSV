@@ -2,6 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
+use App\Constants\OrderStatus;
 use App\Entities\Order;
 use Faker\Generator as Faker;
 use Illuminate\Validation\Rule;
@@ -10,7 +11,7 @@ $factory->define(Order::class, function (Faker $faker) {
     return [
         'reference' => $faker->name,
         'user_id' => $faker->numberBetween(1,10),
-        'status' =>$faker->randomElement(['OK','PENDING', 'FAILED', 'APPROVED', 'APPROVED_PARTIAL','PARTIAL_EXPIRED', 'REJECTED', 'PENDING_VALIDATION', 'REFUNDED' ]),
+        'status' =>$faker->randomElement(OrderStatus::STATUSES),
         'first_name' => $faker->name,
         'last_name' => $faker->name,
         'email' =>$faker->email,
@@ -24,6 +25,7 @@ $factory->define(Order::class, function (Faker $faker) {
         'total' => $faker->numberBetween(500, 1000),
         'currency' => 'COP',
         'requestId' => $faker->sentence,
-        'processUrl' => $faker->url
+        'processUrl' => $faker->url,
+        'created_at'=> $faker->dateTimeThisMonth()
         ];
 });
