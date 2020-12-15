@@ -44,8 +44,8 @@
                                style="margin-top: 40px">
                         <div class="button-group">
                             <div class="input-group-append">
-                                <button class="btn btn-navbar" style="margin-top: 40px; margin-bottom: 40px;">
-                                    <i class="fa fa-search"></i>
+                                <button class="btn btn-navbar" style="margin-top: 32px;">
+                                    <i class="fa fa-search" style="text-shadow: 0 0 3px #000;"></i>
                                     <a class="btn btn-primary" href="{{route('admin.index')}}">{{__('Clean')}}</a>
                                 </button>
                             </div>
@@ -57,10 +57,6 @@
                         <button type="submit"
                                 class="btn btn-info float-right"
                                 form="userExport"
-
-                                {{--data-toggle="modal"
-                                data-target="#exportModal"
-                                data-route="{{route('user.export')}}"--}}
                                 style="padding: 10px 50px; margin-right: 10px"><i class="fa fa-download"></i>
                         </button>
                         <input type="hidden" name="search" id="search" value="{{request('search')}}">

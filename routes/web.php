@@ -61,4 +61,3 @@ Route::group(['prefix' => 'order'], function () {
     Route::get('/show', 'Ecomerce\OrderController@show')
         ->name('order.show');
 });
-
