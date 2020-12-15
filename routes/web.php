@@ -16,8 +16,8 @@ Route::resource('/admin', 'Admin\UserController')
     ->except('show');
 Route::get('/admin/user/export', 'Admin\ExportController@userExport')
     ->name('user.export');
-Route::get('reports/{report}', 'Admin\ReportController@show')
-    ->name('report.show');
+Route::resource('/orders','Admin\OrdersController' )
+    ->only('index');
 //ProductStatus Admin
 Route::post('/product/export', 'Admin\ExportController@productExport')
     ->name('product.export');
@@ -61,6 +61,7 @@ Route::group(['prefix' => 'order'], function () {
     Route::get('/show', 'Ecomerce\OrderController@show')
         ->name('order.show');
 });
+
 
 Route::resource('admin/order', 'Admin\OrdersController@index')
     ->except('create', 'show', 'delete');
