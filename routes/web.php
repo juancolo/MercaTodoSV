@@ -62,7 +62,3 @@ Route::group(['prefix' => 'order'], function () {
         ->name('order.show');
 });
 
-
-Route::resource('admin/order', 'Admin\OrdersController@index')
-    ->except('create', 'show', 'delete');
-

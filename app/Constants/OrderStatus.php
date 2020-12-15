@@ -9,7 +9,7 @@ interface OrderStatus
     public const OK = 'ok';
     public const PENDING = 'pending';
     public const FAILED = 'failed';
-    public const APPROVED = 'aproved';
+    public const APPROVED = 'approved';
     public const APPROVED_PARTIAL = 'approved_partial';
     public const REJECTED = 'rejected';
     public const PARTIAL_EXPIRED = 'partial_expired';
